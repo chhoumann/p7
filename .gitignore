@@ -1,0 +1,26 @@
+# Ignore build files for LaTeX.
+*~
+*.aux
+*.dvi
+*.toc
+*.bbl
+*.blg
+*.gz
+*.out
+*.thm
+*.ps
+*.idx
+*.ilg
+*.ind
+*-blx.bib
+*.fdb_latexmk
+*.fls
+*.log
+*.run.xml
+*.tdo
+*.xdv
+*.DS_Store
+
+# Ignore PDF files.
+*.pdf
+code/web-app/saved_arima.pkl
