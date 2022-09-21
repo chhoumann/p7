@@ -18,14 +18,55 @@ const Home: NextPage = () => {
 
         <main className="container mx-auto h-full">
           <div className="flex flex-row gap-4 items-center justify-center h-full">
-            <div className="border-2 w-1/2 h-3/4 flex flex-col">
-              <textarea className="h-5/6 p-2" />
+            <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
+              <textarea className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0" />
               <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
-                <button className="rounded-lg bg-sky-500 px-4 py-2 text-white font-semibold">Attempt</button>
-                <button className="rounded-lg bg-green-500 px-4 py-2 text-white font-semibold">Submit</button>
+                <button className="rounded-lg bg-sky-500 px-4 py-2 text-white font-semibold">
+                  Attempt
+                </button>
+                <button className="rounded-lg bg-green-500 px-4 py-2 text-white font-semibold">
+                  Submit
+                </button>
               </div>
             </div>
-            <div className="border-2 w-1/2 h-3/4"></div>
+            <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
+              <div className="w-full items-center justify-around flex">
+                <span className="w-1/2 text-center p-4 border-r font-semibold text-[#005CC5] cursor-pointer">
+                  Instructions
+                </span>
+                <span className="w-1/2 text-center p-4 border-l font-semibold text-gray-500 bg-gray-200 cursor-pointer">
+                  Result
+                </span>
+              </div>
+              <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
+                <strong>SHORT INTRODUCTION</strong>
+                <p>
+                  Understanding general language structure and syntax is
+                  important. Therefore, we begin with a short example of invalid
+                  code.
+                  <br />
+                  <br />
+                  PROBLEM FORMULATION HERE
+                  <br />
+                  Find the issue in the code on the left.
+                </p>
+                <br />
+                <strong>ADDITIONAL TIPS</strong>
+                <br />
+                This is not Rust.
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                hej
+              </div>
+            </div>
           </div>
         </main>
       </div>
