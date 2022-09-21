@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  api_server:
+    build: ./api_server
+    ports: 
+      - "3001:3001"
+    volumes:
+      - ./api_server:/usr/src/app
+    links:
+      - db
+    # diesel infer_schema macro gives warnings with this flag.
+    # environment:
+    #   - CARGO_INCREMENTAL=1
+    command: bash -c "bash ./wait-for-it.sh db:5432 -q -- diesel setup && cargo watch -x run"
