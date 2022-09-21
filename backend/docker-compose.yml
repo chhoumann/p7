@@ -1,8 +1,8 @@
-version: "3.8"
+version: "3.3"
 services: 
-  server:
-    image: "rust:latest"
+  dev:
+    image: "rust:1.47"
     volumes:
-      - ./src:/src
+      - ./projects:/projects
     environment:
-      - USER=DOCKER 
+      - USER=DOCKER
