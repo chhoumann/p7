@@ -1,8 +1,8 @@
 version: "3.3"
 services: 
-  dev:
+  webserver:
     image: "rust:1.47"
     volumes:
-      - ./projects:/projects
+      - ./webserver:/webserver
     environment:
       - USER=DOCKER
