@@ -79,7 +79,7 @@ function Tab({
       } cursor-pointer`}
       onClick={onClick}
     >
-      Instructions
+      {text}
     </span>
   );
 }
