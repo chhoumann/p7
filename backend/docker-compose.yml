@@ -1,8 +1,0 @@
-version: "3.3"
-services: 
-  webserver:
-    image: "rust:1.47"
-    volumes:
-      - ./webserver:/webserver
-    environment:
-      - USER=DOCKER
