@@ -1,7 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
+
+enum TabState {
+  Instructions,
+  Result,
+}
 
 const Home: NextPage = () => {
+  const [tab, setTab] = useState<TabState>(TabState.Instructions);
+
   return (
     <>
       <Head>
@@ -31,40 +39,20 @@ const Home: NextPage = () => {
             </div>
             <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
               <div className="w-full items-center justify-around flex">
-                <span className="w-1/2 text-center p-4 border-r font-semibold text-[#005CC5] cursor-pointer">
-                  Instructions
-                </span>
-                <span className="w-1/2 text-center p-4 border-l font-semibold text-gray-500 bg-gray-200 cursor-pointer">
-                  Result
-                </span>
+                <Tab
+                  text="Instructions"
+                  selected={tab === TabState.Instructions}
+                  onClick={() => setTab(TabState.Instructions)}
+                />
+                <Tab
+                  text="Results"
+                  selected={tab === TabState.Result}
+                  onClick={() => setTab(TabState.Result)}
+                />
               </div>
               <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
-                <strong>SHORT INTRODUCTION</strong>
-                <p>
-                  Understanding general language structure and syntax is
-                  important. Therefore, we begin with a short example of invalid
-                  code.
-                  <br />
-                  <br />
-                  PROBLEM FORMULATION HERE
-                  <br />
-                  Find the issue in the code on the left.
-                </p>
-                <br />
-                <strong>ADDITIONAL TIPS</strong>
-                <br />
-                This is not Rust.
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                hej
+                {tab === TabState.Instructions && <Instructions />}
+                {tab === TabState.Result && <Results />}
               </div>
             </div>
           </div>
@@ -73,5 +61,62 @@ const Home: NextPage = () => {
     </>
   );
 };
+
+function Tab({
+  text,
+  selected,
+  onClick,
+}: {
+  text: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <span
+      className={`w-1/2 text-center p-4 font-semibold ${
+        selected ? "text-[#005CC5]" : "text-gray-500 bg-gray-200"
+      } cursor-pointer`}
+      onClick={onClick}
+    >
+      Instructions
+    </span>
+  );
+}
+
+function Instructions() {
+  return (
+    <>
+      <strong>SHORT INTRODUCTION</strong>
+      <p>
+        Understanding general language structure and syntax is important.
+        Therefore, we begin with a short example of invalid code.
+        <br />
+        <br />
+        PROBLEM FORMULATION HERE
+        <br />
+        Find the issue in the code on the left.
+      </p>
+      <br />
+      <strong>ADDITIONAL TIPS</strong>
+      <br />
+      This is not Rust.
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      hej
+    </>
+  );
+}
+
+function Results() {
+  return <>0 tests passed.</>;
+}
 
 export default Home;
