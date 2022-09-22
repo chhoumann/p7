@@ -20,8 +20,8 @@ const Home: NextPage = () => {
   >(
     (variables) => {
       return ky
-        .post("https://p7-workers.up.railway.app/haskell", {
-          json: { code: variables.codeInput },
+        .post("/api/haskell", {
+          json: { code: "testing" },
         })
         .json();
     },
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
                   className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
                   onClick={() =>
                     mutation.mutate({
-                      codeInput: codebox.current?.textContent ?? "",
+                      codeInput: codebox.current?.textContent ?? "test",
                     })
                   }
                 >
