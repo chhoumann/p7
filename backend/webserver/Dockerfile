@@ -7,4 +7,8 @@ COPY . .
 ENV PORT=/PORT
 RUN echo PORT
 
+apk add rustup
+apk add gcc
+apk add build-base
+
 CMD ["cargo", "run", "--release"] 
