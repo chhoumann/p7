@@ -25,9 +25,9 @@ const Home: NextPage = () => {
           </div>
         </nav>
 
-        <main className="container mx-auto h-full">
-          <div className="flex flex-row gap-4 items-center justify-center h-full">
-            <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
+        <main className="mx-auto h-full w-full">
+          <div className="flex flex-row gap-8 items-center justify-center h-full w-full px-10">
+            <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
               <textarea className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0" />
               <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
                 <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
                 </button>
               </div>
             </div>
-            <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
+            <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
               <div className="w-full items-center justify-around flex">
                 <Tab
                   text="Instructions"
