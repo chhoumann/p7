@@ -4,7 +4,7 @@ use std::env;
 
 
 fn set_env() -> u16{
-    let key = "PORT";
+    let key = "$PORT";
 
     match env::var(key){
         Ok(val) => val.parse::<u16>().unwrap(),
