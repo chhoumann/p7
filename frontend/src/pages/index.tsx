@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRef, useState } from "react";
 import { useMutation } from "react-query";
+import ky from "ky";
 
 enum TabState {
   Instructions,
@@ -12,19 +13,22 @@ const Home: NextPage = () => {
   const [tab, setTab] = useState<TabState>(TabState.Instructions);
   const codebox = useRef<HTMLTextAreaElement>(null);
 
-  const mutation = useMutation<{stdout: string}, unknown, {codeInput: string}>((variables) => {
-    return fetch("https://p7-workers.up.railway.app/haskell", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        code: variables.codeInput,
-      }),
-    }).then(res => res.json());
-  }, {
-    onSuccess: () => setTab(TabState.Result)
-  });
+  const mutation = useMutation<
+    { stdout: string },
+    unknown,
+    { codeInput: string }
+  >(
+    (variables) => {
+      return ky
+        .post("https://p7-workers.up.railway.app/haskell", {
+          json: { code: variables.codeInput },
+        })
+        .json();
+    },
+    {
+      onSuccess: () => setTab(TabState.Result),
+    }
+  );
 
   return (
     <>
@@ -54,7 +58,11 @@ const Home: NextPage = () => {
                 </button>
                 <button
                   className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
-                  onClick={() => mutation.mutate({codeInput: codebox.current?.textContent ?? ""})}
+                  onClick={() =>
+                    mutation.mutate({
+                      codeInput: codebox.current?.textContent ?? "",
+                    })
+                  }
                 >
                   Submit
                 </button>
@@ -75,7 +83,9 @@ const Home: NextPage = () => {
               </div>
               <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
                 {tab === TabState.Instructions && <Instructions />}
-                {tab === TabState.Result && <Results res={mutation.data?.stdout} />}
+                {tab === TabState.Result && (
+                  <Results res={mutation.data?.stdout} />
+                )}
               </div>
             </div>
           </div>
@@ -138,13 +148,10 @@ function Instructions() {
   );
 }
 
-function Results({res}: {res?: string}) {
-  if (!res)
-    return (<>0 tests passed.</>);
-  
-    return (<>
-      {res}
-    </>)
+function Results({ res }: { res?: string }) {
+  if (!res) return <>0 tests passed.</>;
+
+  return <>{res}</>;
 }
 
 export default Home;
