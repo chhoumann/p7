@@ -1,4 +1,4 @@
-FROM rust:alpine
+FROM rust
 # Runs on build
 # CMD runs when you call docker run
 WORKDIR /api
@@ -7,8 +7,10 @@ COPY . .
 ENV PORT=/PORT
 RUN echo PORT
 
-apk add rustup
-apk add gcc
-apk add build-base
+RUN apk add rustup
+RUN apk add gcc
+RUN apk add build-base
+
+ENV PATH=#{user-home-abs-path}/.cargo/bin:"$PATH"
 
 CMD ["cargo", "run", "--release"] 
