@@ -4,6 +4,7 @@ FROM rust:alpine
 WORKDIR /api
 #Copy webserver folder to container 
 COPY . .
-ENV PORT /PORT
+ENV PORT=/PORT
+RUN echo PORT
 
 CMD ["cargo", "run", "--release"] 

@@ -1,6 +1,4 @@
 fn main() {
-    let lorem = env!("PORT");
-    println!("{}", lorem);
-    println!("Hello, world!");
-
+    let port = env!("PORT");
+    println!("Exposed port is: {}", port);
 }
