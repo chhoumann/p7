@@ -1,4 +1,4 @@
-use rocket::serde::{Deserialize, json::Json};
+use rocket::serde::{Deserialize, json::Json, Serialize};
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::{Request, Response};
@@ -23,14 +23,16 @@ impl Fairing for CORS {
 }
 
 #[derive(Deserialize)]
+#[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 struct Task {
     code: String,
 }
 
 #[post("/haskell", format="json", data = "<task>")]
-fn new(task: Json<Task>) -> String{ 
-     format!("Hello: {:?}", task.code)
+fn new(task: Json<Task>) -> Json<Task>{ 
+    let object = task;
+    Json(Task { code: object.code.to_string() })
  }
 
 #[macro_use] extern crate rocket;
