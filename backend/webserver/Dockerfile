@@ -7,4 +7,4 @@ COPY . .
 ENV PORT=/PORT
 RUN echo PORT
 
-CMD ["cargo", "run", "--release"] 
+CMD ["cargo", "run"] 
