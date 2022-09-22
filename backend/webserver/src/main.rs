@@ -8,7 +8,7 @@ struct Task {
 
 #[post("/haskell", format="json", data = "<task>")]
 fn new(task: Json<Task>) -> String{ 
-     format!("Hello: {}", task.code)
+     format!("Hello: {:?}", task.code)
  }
 
 #[macro_use] extern crate rocket;
@@ -20,5 +20,5 @@ fn index() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index]).mount("/haskell", routes![new])
+    rocket::build().mount("/", routes![index]).mount("/", routes![new])
 }
