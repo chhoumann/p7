@@ -1,14 +1,14 @@
 \chapter{Introduction} \label{chap:introduction}
-On the 1st semester of the Software Master’s Degree at \aau{} the programming paradigms course currently has a problem where most of the attending students failed the course last time it was held. This led to a large survey being sent out and a student task force being assembled to grasp the main flaws with how the course was structured. Here a large part of the students mentioned a lack of expertise in the programming languages taught in the course and a lack of possibilities for actively training their skills during the semester. 
+On the 1st semester of the Software Master’s Degree at \aau{} the Programming Paradigms course currently has a problem where most of the attending students failed the course last time it was held. This led to a survey being sent out and a student task force being assembled to grasp the main flaws with how the course was structured. Here a large part of the students mentioned a lack of expertise in the programming languages taught in the course and a lack of possibilities for actively training their skills during the semester. 
 
 
-With this knowledge in mind, \aau{} chose to restructure the course with a larger focus on practical programming as opposed to the more classic lectures that are usually used at universities. To support this way of teaching, the course lectures have been moved to a more classical classroom setup but with a monitor at each table and a main monitor at the lecture desk. This is meant to allow the students to more easily work together in groups while working on the shared monitor and allowing the lectures to view and share the groups monitors allowing actual implementations by the students to be used for classroom discussions. 
+With this in mind, \aau{} chose to restructure the course entirely. The course now focuses on a single programming language instead of multiple. Furthermore, a larger focus is on practical programming as opposed to the more classic lectures that are usually used at universities. To support this way of teaching, the course lectures have been moved to a more classical classroom setup but with a monitor at each table and a main monitor at the lecture desk. This is meant to allow the students to more easily work together in groups while working on the shared monitor and allowing the lectures to view and share the groups monitors allowing actual implementations by the students to be used for classroom discussions. 
 
 
-This way of solving the problem brings its problems with it, however. As all students are using their own local environments for solving the exercises at hand, other students cannot revisit the exercise solutions discussed as these are not shared, making it hard to revisit them later. Furthermore, it can be hard to remember concrete implementations as well as verify whether your own implementation is correct and lives up to the requirements of the exercise. In fact, it is not uncommon for people to accidentally misunderstand an exercise and therefore implement the wrong solution.  
+This way of solving the pass rate problem brings its problems with it, however. As all students are using their own local development environments for solving the exercises at hand, other students cannot revisit the exercise solutions discussed as these are not shared, making it hard to revisit them later. Furthermore, it can be hard to remember concrete implementations as well as verify whether your own implementation is correct and lives up to the requirements of the exercise. In fact, it is not uncommon for people to accidentally misunderstand an exercise and therefore implement the wrong solution.  
 
-\section{Initial Problem} 
-\aau's current restructuring of the course already seems like a major improvement over the former structure but as mentioned it still suffers from a few notable problems.
+\section{Initial Problem} \label{sec:Initial Problem}
+\aau's current restructuring of the course already seems like a major improvement over the former structure but as mentioned it still suffers from a few notable problems all related to the execution exercise sessions:
 \begin{itemize}
 	\item No way to revisit discussed solutions
 	\item No way to verify that an implementation is correct
@@ -20,7 +20,13 @@ This way of solving the problem brings its problems with it, however. As all stu
 	\end{itemize}
 \end{itemize}
 
-To try and solve these problems we would like to develop a website targeted toward the professor that enables him to gain a better overview during exercise sessions and therefore allows him to improve the quality of the sessions. To facilitate this, we imagine a website that should allow the professor to:
+Summarising the main problems that have risen after the switch to a more practical exercise-focused teaching environment an initial problem statement can be written.
+\begin{displayquote}
+How can a tool which facilitates a more streamlined user experience for the students while functioning as a feedback loop for the professor allowing them to better structure the course based on statistics gathered from the students' exercise statistics be developed?
+\end{displayquote} 
+
+\subsection{Minimal Viable Product}
+Considering that the students attending the course are all using different Operating systems the simplest way to develop a tool that would be available for all would be to create a web application. To facilitate the problems mentioned in \ref{sec:Initial Problem} we imagine a website that allows the users to complete the following tasks:
 \begin{itemize}
 	\item The professor should be able to create a syllabus with the exercises that students are expected to solve
 	\begin{itemize}
@@ -40,7 +46,6 @@ To try and solve these problems we would like to develop a website targeted towa
 	\item The professor should be able to see each students code
 \end{itemize}
 
-\subsection{MVP}
 The presented features were then prioritized by a group of students to construct a minimal viable product (MVP) that could be tested and used to verify if the presented product would provide anything useful to the course. Since the MVP is meant to be used as a demo product that allows for additional input to be gathered only the minimum number of functionalities needed were included.
 
 \begin{displayquote}
