@@ -2,6 +2,7 @@ use error_chain::error_chain;
 use std::collections::HashSet;
 use std::io::Write;
 use std::env;
+use std::os::raw;
 use std::path::Path;
 use std::process::{Command, Stdio};
 
@@ -14,15 +15,22 @@ error_chain!{
     }
 }
 
-fn main() -> Result<()> {
-    let mut ghc = Command::new("ghc").stdin(Stdio::piped())
-        .args(["-o", "test", "test.hs"])
-        .spawn()?;
-        //.stderr(Stdio::piped())
-        //.stdout(Stdio::piped())
-    
-    ghc.wait();
+fn main() {
+    let output = compile_file().unwrap();
+    println!("{}", output);
+}
 
+fn compile_file() -> Result<String> {
+    let ghc_command = Command::new("ghc")
+        .args(["-o", "test", "test.hs"])
+        .output()
+        .expect("failed to run ghc");
+    
+    if !ghc_command.status.success() {
+        let err = String::from_utf8(ghc_command.stderr)?;
+        error_chain::bail!("Failed to run ghc:\n {}", err)
+    }
+    
     let current_dir = env::current_dir()?;
     let path = Path::new(&current_dir).join("test.exe")
         .into_os_string()
@@ -31,18 +39,18 @@ fn main() -> Result<()> {
 
     let run_command = Command::new(path)
         .output()
-        .expect("failed to execute process");
+        .expect("failed to execute compiled program");
+    
+    if !run_command.status.success() {
+        let err = String::from_utf8(run_command.stderr)?;
+        error_chain::bail!("Failed to run compiled program:\n {}", err)
+    }
     
     let output = run_command.stdout;
     let raw_output = String::from_utf8(output)?;
-    let words = raw_output.split_whitespace()
-        .map(|s| s.to_lowercase())
-        .collect::<HashSet<_>>();
     
     println!("{}", raw_output);
-    // println!("Found {} unique words:", words.len());
-    // println!("{:#?}", words);
-    
-    Ok(())
+
+    Ok(raw_output)
 }
 
