@@ -1,10 +1,7 @@
 use error_chain::error_chain;
-use std::collections::HashSet;
-use std::io::Write;
 use std::env;
-use std::os::raw;
 use std::path::Path;
-use std::process::{Command, Stdio};
+use std::process::Command;
 
 
 error_chain!{
@@ -49,8 +46,6 @@ fn compile_file() -> Result<String> {
     let output = run_command.stdout;
     let raw_output = String::from_utf8(output)?;
     
-    println!("{}", raw_output);
-
     Ok(raw_output)
 }
 
