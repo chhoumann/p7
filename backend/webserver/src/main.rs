@@ -32,7 +32,12 @@ struct Task {
 #[post("/haskell", format="json", data = "<task>")]
 fn new(task: Json<Task>) -> Json<Task>{ 
     let object = task;
-    Json(Task { code: object.code.to_string() })
+    let res = Json(Task { code: object.code.to_string() });
+    
+    // This struct will contain the result of parsing the json:
+    println!("{}", res.code);
+
+    return res
  }
 
 #[macro_use] extern crate rocket;
