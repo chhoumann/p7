@@ -44,7 +44,7 @@ fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> 
 /// Compiles the given file at `code_file_path`, and outputs the executable at `executable_path`.
 fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> {
     let ghc_command = Command::new("ghc")
-        .args(["-o", executable_path, code_file_path])
+        .args(["-O0", "-o", executable_path, code_file_path])
         .output()
         .expect("failed to run ghc");
     
