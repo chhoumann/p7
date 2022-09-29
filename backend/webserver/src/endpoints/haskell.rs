@@ -1,14 +1,7 @@
 use rocket::serde::{json::Json};
 use crate::domain::task::Task;
+use crate::domain::code_runner_result::CodeRunnerResult;
 use crate::services::{code_runner, write_struct};
-use rocket::serde::{Deserialize, Serialize};
-
-#[derive(Deserialize)]
-#[derive(Serialize)]
-#[serde(crate = "rocket::serde")]
-pub struct CodeRunnerResult {
-    pub output: String
-}
 
 #[post("/haskell", format="json", data = "<task>")]
 pub fn new(task: Json<Task>) -> Json<CodeRunnerResult>{ 
