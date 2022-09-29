@@ -1,9 +1,12 @@
-use std::env;
+use std::fs::File;
+use std::io::prelude::*;
 use std::path::Path;
 use std::process::Command;
 use error_chain::error_chain;
 
-const DIRECTORY_NAME : &str = "haskell-code";
+const TEMP_DIRECTORY_NAME : &str = "haskell-code";
+const TEMP_FILE_NAME : &str = "test";
+const CODE_FILE_EXTENSION : &str = ".hs";
 
 error_chain!{
     errors { CmdError }
@@ -13,23 +16,35 @@ error_chain!{
     }
 }
 
-/// Compiles and runs the given file in the "haskell-directory" folder.
-/// 
-/// # Arguments
-/// * `file_name` - The name of the file (without file extension!).
-/// * `file_extension` - The file extension (i.e. .hs).
-/// 
-/// # Examples
-/// ```
-/// let res = code_runner::compile_file("test", ".hs").unwrap();
-/// ```
-pub fn compile_file(file_name : &str, file_extension : &str) -> Result<String> {
-    let file_name_with_extension = format!("{}{}", file_name, file_extension);
-    let file_path = Path::new(DIRECTORY_NAME).join(file_name_with_extension).into_os_string().into_string().unwrap();
-    let output_path = Path::new(DIRECTORY_NAME).join(file_name).into_os_string().into_string().unwrap();
+/// Executes the Haskell code in the string `code` and returns stdout.
+pub fn execute(code : String) -> Result<String> {
+    let executable_path = Path::new(TEMP_DIRECTORY_NAME)
+        .join(TEMP_FILE_NAME)
+        .into_os_string()
+        .into_string()
+        .unwrap(); // example: "haskell-code/test"
 
+    let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/test.hs"
+    
+    write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
+
+    return compile_file(&code_file_path, &executable_path)
+}
+
+/// Writes given code to a file at path `code_file_path`.
+fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> { 
+    let mut file = File::create(code_file_path)?;
+    file.write_all(code.as_bytes())?;
+
+    drop(file);
+
+    Ok(())
+}
+
+/// Compiles the given file at `code_file_path`, and outputs the executable at `executable_path`.
+fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> {
     let ghc_command = Command::new("ghc")
-        .args(["-o", &output_path, &file_path])
+        .args(["-o", executable_path, code_file_path])
         .output()
         .expect("failed to run ghc");
     
@@ -38,12 +53,6 @@ pub fn compile_file(file_name : &str, file_extension : &str) -> Result<String> {
         error_chain::bail!("Failed to run ghc:\n {}", err)
     }
     
-    let current_dir = env::current_dir()?;
-    let executable_path = Path::new(&current_dir).join(DIRECTORY_NAME).join(file_name)
-        .into_os_string()
-        .into_string()
-        .unwrap();
-
     let run_command = Command::new(executable_path)
         .output()
         .expect("failed to execute compiled program");
