@@ -27,8 +27,9 @@ pub fn execute(code : String) -> Result<String> {
     let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/test.hs"
     
     write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
+    compile_file(&code_file_path, &executable_path).expect("Could not compile file!");
 
-    return compile_file(&code_file_path, &executable_path)
+    return run_file(&executable_path)
 }
 
 /// Writes given code to a file at path `code_file_path`.
@@ -42,7 +43,7 @@ fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> 
 }
 
 /// Compiles the given file at `code_file_path`, and outputs the executable at `executable_path`.
-fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> {
+fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
     let ghc_command = Command::new("ghc")
         .args(["-O0", "-o", executable_path, code_file_path])
         .output()
@@ -54,6 +55,10 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> 
         error_chain::bail!(err)
     }
     
+    Ok(())
+}
+
+fn run_file(executable_path : &str) -> Result<String> {
     let run_command = Command::new(executable_path)
         .output()
         .expect("failed to execute compiled program");
