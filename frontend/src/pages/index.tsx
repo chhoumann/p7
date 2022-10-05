@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 enum TabState {
   Instructions,
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
             <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
               <textarea className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0" />
               <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
-                <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
+                <button onClick={() => Submit_request(tab)} className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
                   Attempt
                 </button>
                 <button className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold">
@@ -118,6 +118,21 @@ function Instructions() {
 
 function Results() {
   return <>0 tests passed.</>;
+}
+
+async function Submit_request(values:TabState) {
+
+  const data = {values};
+  const request = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  };
+
+  let result = await fetch ("http://localhost:3000/haskell", request)
+                      .then(reponse => reponse.json());
+  
+  return result
 }
 
 export default Home;
