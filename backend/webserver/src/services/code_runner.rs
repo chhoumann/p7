@@ -60,7 +60,7 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> 
     
     if !run_command.status.success() {
         let err = String::from_utf8(run_command.stderr)?;
-        error_chain::bail!(err)
+        panic!("Could not run executable created from compiled program: {}", err);
     }
     
     let output = run_command.stdout;
@@ -73,10 +73,6 @@ fn format_haskell_stdout(output : &str) -> String {
     let mut split_output : Vec<&str> = output.split("\r\n").collect();
     split_output[0] = "";
     split_output[1] = "An error occurred:\r\n";
-
-    for s in &split_output {
-        println!("{}", s);
-    }
 
     return split_output.iter().map(|s| s.to_string()).collect()
 }
