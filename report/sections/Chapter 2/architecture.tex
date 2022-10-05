@@ -1,23 +1,37 @@
 \section{Architecture}
-To achieve the goal presented in section ..., we need to build a scalable program architecture.
-To this end, we sketched our idea for the program architecture in the diagram shown in figure \ref{fig:...}.
+Describe the following:
+1. The system must be able to provide a suitable UI for the user, but should not use their computer for anything else 
+2. The system must be able to provide some way to execute haskell code and assert whether or not the code is correct. 
+3. .... therefore we choose to split the system into multiple subsystem, each being responsible for providing different functionalities to the full system and can run independently of one another. 
+4. .... by doing this we gain.....
 
-% Insert figure here
+% Why do we choose the front end we do --- why do we have the 'front end backend?' --- Is the front end system only on the client? No? Why not?
 
-The primary responsibility of the application is to act as a hub for a professor to create a syllabus related to specific programming courses.
-The professor must be able to create exercises and specify expected output required to solve the given exercise.
+\subsection{Back-end system}
+The backend system is responsible for providing the heavy lifting for the other subsystems. %
+Some of the responsibilities for this subsystem is persistence of information, authentication of users, and compiling and executing haskell code.
 
-Students can then enroll in the courses created by the professor, giving them access to the syllabus.
-Once enrolled, students are able to view and attempt to solve the exercises contained within the syllabus.
+\subsubsection{Code runner}
+Our system needs to be able to compile and run haskell code. To accomodate this, a code runner module has been implement in a layered architecture describing the dependencies of components.
+Each component can depend only on components on a lower or same level. 
+The component is implemented as a HTTP server as seen on Figure \ref{fig:code_runner}.
+Whenever the server recieves a HTTP request, a service request is sent to a \textit{code runner} service.
+This service in turn writes the content recieved to a Haskell file and invokes the GHC compiler, giving the haskell file as input.
+If the compilation of the haskell file fails, the code runner will send the GHC compiler's compilation error as response to the service user.
+If the file compiles successfully the code runner will then run the executable file and fetch the produced output of the program.
+This output is then sent to the service user.
+Finally, the response from the code runner, whether successful or not, is redirected back to the client, providing them with information about the compilation and execution.
 
-The goal is then to give the professor an overview of how well each student performed.
-This is facilitated through a board, accessible only to the professor, which shows which exercises were solved, which exercises were not solved, and different statistics such as how much time was spent on each exercise.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{sections/Chapter 2/pics/P7 arch-Backend - HS compiler.drawio.png}
+    \caption[]{The layered architecture of the code runner component for the back end system.}
+    \label{fig:code_runner}
+\end{figure}
 
-\subsection{Front-end}
-
-of the front-end is to submit the user's code to the back-end, and display the result of running the code.
-
+\subsection{Front-end system}
 
 \subsubsection{UI}
-Something about UI here.
+
+\subsubsection{UI business layer}
