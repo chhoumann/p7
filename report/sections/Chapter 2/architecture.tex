@@ -12,8 +12,8 @@ The backend system is responsible for providing the heavy lifting for the other 
 Some of the responsibilities for this subsystem is persistence of information, authentication of users, and compiling and executing haskell code.
 
 \subsubsection{Code runner}
-Our system needs to be able to compile and run haskell code. To accomodate this, a code runner module has been implement in a layered architecture describing the dependencies of components.
-Each component can depend only on components on a lower or same level. 
+Our system needs to be able to compile and run haskell code. To accomodate this, a code runner module has been implement in a layered architecture (\ref{røde aalborg}).
+For this type of architecture each component can depend only on components on a lower or same level. 
 The component is implemented as a HTTP server as seen on Figure \ref{fig:code_runner}.
 Whenever the server recieves a HTTP request, a service request is sent to a \textit{code runner} service.
 This service in turn writes the content recieved to a Haskell file and invokes the GHC compiler, giving the haskell file as input.
