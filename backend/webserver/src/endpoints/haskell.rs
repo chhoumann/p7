@@ -15,8 +15,19 @@ pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json
         .into_inner();
     
     let code = json_exercise_submission.code;
-    let output = code_runner::execute(code).unwrap();
+    let result = code_runner::execute(code);
 
-    return Json(CodeRunnerResponse { output: output })
+    let output = match result {
+        Ok(output) => Json(CodeRunnerResponse { 
+            success: true,
+            result: output
+        }),
+        Err(error_message) => Json(CodeRunnerResponse { 
+            success: false, 
+            result: error_message.to_string()
+        })
+    };
+
+    return output
  }
 

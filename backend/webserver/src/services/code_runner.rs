@@ -49,8 +49,9 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> 
         .expect("failed to run ghc");
     
     if !ghc_command.status.success() {
-        let err = String::from_utf8(ghc_command.stderr)?;
-        error_chain::bail!("Failed to run ghc:\n {}", err)
+        let mut err = String::from_utf8(ghc_command.stderr)?;
+        err = format_haskell_stdout(&err);
+        error_chain::bail!(err)
     }
     
     let run_command = Command::new(executable_path)
@@ -59,11 +60,23 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> 
     
     if !run_command.status.success() {
         let err = String::from_utf8(run_command.stderr)?;
-        error_chain::bail!("Failed to run compiled program:\n {}", err)
+        error_chain::bail!(err)
     }
     
     let output = run_command.stdout;
     let raw_output = String::from_utf8(output)?;
     
     Ok(raw_output)
+}
+
+fn format_haskell_stdout(output : &str) -> String {
+    let mut split_output : Vec<&str> = output.split("\r\n").collect();
+    split_output[0] = "";
+    split_output[1] = "An error occurred:\r\n";
+
+    for s in &split_output {
+        println!("{}", s);
+    }
+
+    return split_output.iter().map(|s| s.to_string()).collect()
 }
