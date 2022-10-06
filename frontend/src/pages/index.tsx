@@ -14,14 +14,14 @@ const Home: NextPage = () => {
   const codebox = useRef<HTMLTextAreaElement>(null);
 
   const mutation = useMutation<
-    { stdout: string },
+    { success: boolean; result: string },
     unknown,
     { codeInput: string }
   >(
-    (variables) => {
+    ({ codeInput }) => {
       return ky
         .post("/api/haskell", {
-          json: { code: "testing" },
+          json: { code: codeInput },
         })
         .json();
     },
@@ -29,6 +29,11 @@ const Home: NextPage = () => {
       onSuccess: () => setTab(TabState.Result),
     }
   );
+
+  // Ensure user isn't on results tab in an invalid state (no results).
+  if (!mutation.isSuccess && tab === TabState.Result) {
+    setTab(TabState.Instructions);
+  }
 
   return (
     <>
@@ -60,7 +65,7 @@ const Home: NextPage = () => {
                   className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
                   onClick={() =>
                     mutation.mutate({
-                      codeInput: codebox.current?.textContent ?? "test",
+                      codeInput: codebox.current?.value ?? "test",
                     })
                   }
                 >
@@ -79,12 +84,16 @@ const Home: NextPage = () => {
                   text="Results"
                   selected={tab === TabState.Result}
                   onClick={() => setTab(TabState.Result)}
+                  disabled={!mutation.isSuccess}
                 />
               </div>
               <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
                 {tab === TabState.Instructions && <Instructions />}
-                {tab === TabState.Result && (
-                  <Results res={mutation.data?.stdout} />
+                {tab === TabState.Result && mutation.isSuccess && (
+                  <Results
+                    result={mutation.data?.result}
+                    success={mutation.data?.success}
+                  />
                 )}
               </div>
             </div>
@@ -98,18 +107,20 @@ const Home: NextPage = () => {
 function Tab({
   text,
   selected,
+  disabled,
   onClick,
 }: {
   text: string;
   selected: boolean;
+  disabled?: boolean;
   onClick: () => void;
 }) {
   return (
     <span
       className={`w-1/2 text-center p-4 font-semibold ${
         selected ? "text-[#005CC5]" : "text-gray-500 bg-gray-200"
-      } cursor-pointer`}
-      onClick={onClick}
+      } ${disabled ? "" : "cursor-pointer"}`}
+      onClick={disabled ? () => false : onClick}
     >
       {text}
     </span>
@@ -134,24 +145,23 @@ function Instructions() {
       <br />
       This is not Rust.
       <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      hej
     </>
   );
 }
 
-function Results({ res }: { res?: string }) {
-  if (!res) return <>0 tests passed.</>;
+function Results({ result, success }: { result?: string; success?: boolean }) {
+  if (!result || !success) return <></>;
 
-  return <>{res}</>;
+  return (
+    <div className="flex flex-col w-full">
+      <span className="w-full text-center text-3xl">{success ? "Success!" : "Code failed to run"}</span>
+
+      <div className="my-8" />
+
+      <span className="text-xl">Output</span>
+      <code className="bg-gray-100 p-2 rounded-lg">{result}</code>
+    </div>
+  );
 }
 
 export default Home;
