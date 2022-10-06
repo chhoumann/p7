@@ -1,9 +1,12 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use std::process::Command;
+use std::process::{Command, Stdio};
 use error_chain::error_chain;
+use std::time::Duration;
+use wait_timeout::ChildExt;
 
+const TIME_OUT : u64 = 10;
 const TEMP_DIRECTORY_NAME : &str = "haskell-code";
 const TEMP_FILE_NAME : &str = "test";
 const CODE_FILE_EXTENSION : &str = ".hs";
@@ -48,7 +51,7 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
         .args(["-O0", "-o", executable_path, code_file_path])
         .output()
         .expect("failed to run ghc");
-    
+
     if !ghc_command.status.success() {
         let mut err = String::from_utf8(ghc_command.stderr)?;
         err = format_haskell_stdout(&err);
@@ -59,19 +62,26 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
 }
 
 fn run_file(executable_path : &str) -> Result<String> {
-    let run_command = Command::new(executable_path)
-        .output()
-        .expect("failed to execute compiled program");
-    
-    if !run_command.status.success() {
-        let err = String::from_utf8(run_command.stderr)?;
-        panic!("Could not run executable created from compiled program: {}", err);
-    }
-    
-    let output = run_command.stdout;
-    let raw_output = String::from_utf8(output)?;
-    
-    Ok(raw_output)
+    let mut child = Command::new(executable_path)
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+
+    let secs = Duration::from_secs(TIME_OUT);
+
+    return match child.wait_timeout(secs).unwrap() {
+        Some(_status) => {
+            let mut s = String::new();
+            child.stdout.unwrap().read_to_string(&mut s).unwrap();
+
+            Ok(s)
+        },
+        None => {
+            child.kill().unwrap();
+            child.wait().unwrap();
+            error_chain::bail!("Code execution timed out.")
+        }
+    };
 }
 
 fn format_haskell_stdout(output : &str) -> String {
