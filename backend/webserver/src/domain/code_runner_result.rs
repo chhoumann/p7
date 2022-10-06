@@ -4,5 +4,6 @@ use rocket::serde::{Deserialize, Serialize};
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct CodeRunnerResponse {
-    pub output: String
+    pub success: bool,
+    pub result: String
 }

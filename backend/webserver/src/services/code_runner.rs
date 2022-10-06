@@ -27,8 +27,9 @@ pub fn execute(code : String) -> Result<String> {
     let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/test.hs"
     
     write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
+    compile_file(&code_file_path, &executable_path).expect("Could not compile file!");
 
-    return compile_file(&code_file_path, &executable_path)
+    return run_file(&executable_path)
 }
 
 /// Writes given code to a file at path `code_file_path`.
@@ -42,28 +43,41 @@ fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> 
 }
 
 /// Compiles the given file at `code_file_path`, and outputs the executable at `executable_path`.
-fn compile_file(code_file_path: &str, executable_path : &str) -> Result<String> {
+fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
     let ghc_command = Command::new("ghc")
         .args(["-O0", "-o", executable_path, code_file_path])
         .output()
         .expect("failed to run ghc");
     
     if !ghc_command.status.success() {
-        let err = String::from_utf8(ghc_command.stderr)?;
-        error_chain::bail!("Failed to run ghc:\n {}", err)
+        let mut err = String::from_utf8(ghc_command.stderr)?;
+        err = format_haskell_stdout(&err);
+        error_chain::bail!(err)
     }
     
+    Ok(())
+}
+
+fn run_file(executable_path : &str) -> Result<String> {
     let run_command = Command::new(executable_path)
         .output()
         .expect("failed to execute compiled program");
     
     if !run_command.status.success() {
         let err = String::from_utf8(run_command.stderr)?;
-        error_chain::bail!("Failed to run compiled program:\n {}", err)
+        panic!("Could not run executable created from compiled program: {}", err);
     }
     
     let output = run_command.stdout;
     let raw_output = String::from_utf8(output)?;
     
     Ok(raw_output)
+}
+
+fn format_haskell_stdout(output : &str) -> String {
+    let mut split_output : Vec<&str> = output.split("\r\n").collect();
+    split_output[0] = "";
+    split_output[1] = "An error occurred:\r\n";
+
+    return split_output.iter().map(|s| s.to_string()).collect()
 }
