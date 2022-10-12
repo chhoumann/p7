@@ -42,11 +42,11 @@ RUN \
 ARG GHC=8.10.7
 ARG CABAL=latest
 
-# install GHC and cabal
+# Install GHC and cabal
 RUN \
     ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
     ghcup -v install cabal --isolate /usr/local/bin --force ${CABAL}
 
 RUN mkdir haskell-code
 
-CMD ["cargo", "run"]
+CMD ["cargo", "run", "--release", "--verbose", "--jobs", "1"]
