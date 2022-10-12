@@ -24,6 +24,7 @@ RUN \
         gnupg2 \
         apt-transport-https \
         gcc \
+        gcc-multilib \
         autoconf \
         automake \
         build-essential
