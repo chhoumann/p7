@@ -3,24 +3,50 @@ FROM rust
 workdir /api
 COPY . .
 
-# https://github.com/judge0/compilers/blob/master/Dockerfile
-# Check for latest version here: https://www.haskell.org/ghc/download.html
-ENV HASKELL_VERSIONS \
-      8.8.1
-RUN set -xe && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends libgmp-dev libtinfo5 && \
-    rm -rf /var/lib/apt/lists/* && \
-    for VERSION in $HASKELL_VERSIONS; do \
-      curl -fSsL "https://downloads.haskell.org/~ghc/$VERSION/ghc-$VERSION-x86_64-deb8-linux.tar.xz" -o /tmp/ghc-$VERSION.tar.xz && \
-      mkdir /tmp/ghc-$VERSION && \
-      tar -xf /tmp/ghc-$VERSION.tar.xz -C /tmp/ghc-$VERSION --strip-components=1 && \
-      rm /tmp/ghc-$VERSION.tar.xz && \
-      cd /tmp/ghc-$VERSION && \
-      ./configure \
-        --prefix=/usr/local/ghc-$VERSION && \
-      make -j$(nproc) install && \
-      rm -rf /tmp/*; \
-    done
+# Install GHC and other dependencies. Source: maintainer of GHCup, as seen below.
+# https://stackoverflow.com/questions/67680726/installing-haskells-cabal-or-ghcup-inside-a-dockerfile-wont-work
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Berlin
 
-CMD ["cargo", "run"]
+# install dependencies
+RUN \
+    apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        libnuma-dev \
+        zlib1g-dev \
+        libgmp-dev \
+        libgmp10 \
+        git \
+        wget \
+        lsb-release \
+        software-properties-common \
+        gnupg2 \
+        apt-transport-https \
+        gcc \
+        gcc-multilib \
+        autoconf \
+        automake \
+        build-essential
+
+# install gpg keys
+ARG GPG_KEY=7784930957807690A66EBDBE3786C5262ECB4A3F
+RUN gpg --batch --keyserver keys.openpgp.org --recv-keys $GPG_KEY
+
+# install ghcup
+RUN \
+    curl https://downloads.haskell.org/~ghcup/x86_64-linux-ghcup > /usr/bin/ghcup && \
+    chmod +x /usr/bin/ghcup && \
+    ghcup config set gpg-setting GPGStrict
+
+ARG GHC=8.10.7
+ARG CABAL=latest
+
+# Install GHC and cabal
+RUN \
+    ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
+    ghcup -v install cabal --isolate /usr/local/bin --force ${CABAL}
+
+RUN mkdir haskell-code
+
+CMD ["cargo", "run", "--release", "--verbose", "--jobs", "1"]
