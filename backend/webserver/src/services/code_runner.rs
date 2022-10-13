@@ -29,13 +29,19 @@ pub fn execute(code : String) -> Result<String> {
         .join(TEMP_FILE_NAME)
         .into_os_string()
         .into_string()
-        .unwrap(); // example: "haskell-code/test"
+        .unwrap(); // example: "haskell-code/code"
 
-    let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/test.hs"
+    let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/code.hs"
     
     write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
-    compile_file(&code_file_path, &executable_path).expect("Could not compile file!");
+    
+    // Attempt to compile the file
+    match compile_file(&code_file_path, &executable_path) {
+        Ok(output) => output,
+        Err(error_message) => error_chain::bail!(error_message)
+    }
 
+    // Run the compiled Haskell file and remove the created directory afterwards
     let result = run_file(&executable_path);
 
     clean_up_code_dir(&dir);
