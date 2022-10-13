@@ -45,11 +45,15 @@ pub fn execute(code : String) -> Result<String> {
 
     clean_up_code_dir(&dir);
 
+    println!("Successfully compiled and ran code.");
+
     return result
 }
 
 /// Writes given code to a file at path `code_file_path`.
 fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> { 
+    println!("Writing code to file...");
+
     let mut file = File::create(code_file_path)?;
     file.write_all(code.as_bytes())?;
 
@@ -60,6 +64,8 @@ fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> 
 
 /// Compiles the given file at `code_file_path`, and outputs the executable at `executable_path`.
 fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
+    println!("Compiling file...");
+
     let ghc_command = Command::new("ghc")
         .args(["-O0", "-o", executable_path, code_file_path])
         .output()
@@ -75,6 +81,8 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
 }
 
 fn run_file(executable_path : &str) -> Result<String> {
+    println!("Running executable...");
+
     let mut child = Command::new(executable_path)
         .stdout(Stdio::piped())
         .spawn()
