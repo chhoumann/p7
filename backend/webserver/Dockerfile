@@ -1,4 +1,4 @@
-FROM rust
+FROM rust:latest
 
 workdir /api
 COPY . .
@@ -47,6 +47,6 @@ RUN \
     ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
     ghcup -v install cabal --isolate /usr/local/bin --force ${CABAL}
 
-RUN mkdir haskell-code
+RUN ["cargo", "build", "--release", "--verbose", "--jobs", "1"]
 
-CMD ["cargo", "run", "--release", "--verbose", "--jobs", "1"]
+CMD ["./target/release/web_server"]
