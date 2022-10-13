@@ -104,7 +104,7 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
     Ok(())
 }
 
-fn set_timeout(mut command: Child, duration: u64) -> Result<String> {
+fn set_process_timeout(mut command: Child, duration: u64) -> Result<String> {
     let secs = Duration::from_secs(duration);
 
     return match command.wait_timeout(secs).unwrap() {
