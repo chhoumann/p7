@@ -36,9 +36,8 @@ pub fn execute(code : String) -> Result<String> {
     write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
     
     // Attempt to compile the file
-    match compile_file(&code_file_path, &executable_path) {
-        Ok(output) => output,
-        Err(error_message) => error_chain::bail!(error_message)
+    if let Err(e) = compile_file(&code_file_path, &executable_path) {
+        error_chain::bail!(e)
     }
 
     // Run the compiled Haskell file and remove the created directory afterwards
