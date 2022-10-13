@@ -3,7 +3,7 @@ import ky from "ky";
 import z from "zod";
 import { env } from "../../env/server.mjs";
 
-const examples = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
 
   const parsedRequestBody = z
