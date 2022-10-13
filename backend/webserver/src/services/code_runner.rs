@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use std::process::{Command, Stdio, Child, ExitStatus};
+use std::process::{Command, Stdio, Child};
 use error_chain::error_chain;
 use std::time::Duration;
 use wait_timeout::ChildExt;
@@ -50,6 +50,8 @@ pub fn execute(code : String, test : String) -> Result<String> {
     
     if !runhaskell_command.status.success() {
         // note: tests that fail flush to stdout and not stderr
+        //TODO we still need to handle if compilation fails! If the compilation fails, we still need stderr
+
         let err = String::from_utf8(runhaskell_command.stdout)?;
         error_chain::bail!(err)
     }
@@ -104,27 +106,6 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
     Ok(())
 }
 
-fn set_process_timeout(mut command: Child, duration: u64) -> Result<String> {
-    let secs = Duration::from_secs(duration);
-
-    return match command.wait_timeout(secs).unwrap() {
-        Some(_status) => {
-            let mut s = String::new();
-            command.stdout.unwrap().read_to_string(&mut s).unwrap();
-            Ok(s)
-        },
-        None => {
-            kill(command)
-        }
-    };
-}
-
-fn kill(mut command: Child) -> Result<String>{
-    command.kill().unwrap();
-    command.wait().unwrap();
-    error_chain::bail!("Code execution timed out.")
-}
-
 fn run_file(executable_path : &str) -> Result<String> {
     println!("Running executable...");
 
@@ -165,4 +146,26 @@ fn format_haskell_stdout(output : String) -> String {
 
 fn clean_up_code_dir(dir : &str) {
     std::fs::remove_dir_all(dir).unwrap();
+}
+
+
+fn set_timeout(mut command: Child, duration: u64) -> Result<String> {
+    let secs = Duration::from_secs(duration);
+
+    return match command.wait_timeout(secs).unwrap() {
+        Some(_status) => {
+            let mut s = String::new();
+            command.stdout.unwrap().read_to_string(&mut s).unwrap();
+            Ok(s)
+        },
+        None => {
+            kill(command)
+        }
+    };
+}
+
+fn kill(mut command: Child) -> Result<String>{
+    command.kill().unwrap();
+    command.wait().unwrap();
+    error_chain::bail!("Code execution timed out.")
 }
