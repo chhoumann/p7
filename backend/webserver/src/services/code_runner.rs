@@ -62,7 +62,7 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
 
     if !ghc_command.status.success() {
         let mut err = String::from_utf8(ghc_command.stderr)?;
-        err = format_haskell_stdout(&err);
+        err = format_haskell_stdout(err);
         error_chain::bail!(err)
     }
     
@@ -92,12 +92,18 @@ fn run_file(executable_path : &str) -> Result<String> {
     };
 }
 
-fn format_haskell_stdout(output : &str) -> String {
+fn format_haskell_stdout(output : String) -> String {
     let mut split_output : Vec<&str> = output.split("\r\n").collect();
-    split_output[0] = "";
-    split_output[1] = "An error occurred:\r\n";
 
-    return split_output.iter().map(|s| s.to_string()).collect()
+    if split_output.len() >= 2 {
+        split_output[0] = "";
+        split_output[1] = "An error occurred:\r\n";
+
+        return split_output.iter().map(|s| s.to_string()).collect()
+    }
+    else {
+        return output
+    }
 }
 
 fn clean_up_code_dir(dir : &str) {
