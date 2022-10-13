@@ -13,7 +13,7 @@ pub fn generate_dir() -> String {
 }
 
 fn create_code_directory() -> String {
-    let dir_name = create_code_dir();
+    let dir_name = generate_code_dir_name();
     
     fs::create_dir(&dir_name)
         .expect(&format!("Could not create directory \"{}\"!", dir_name));
@@ -21,7 +21,7 @@ fn create_code_directory() -> String {
     return dir_name
 }
 
-fn create_code_dir() -> String {
+fn generate_code_dir_name() -> String {
     let mut dir_name : String;
 
     loop {
