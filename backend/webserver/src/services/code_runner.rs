@@ -40,14 +40,14 @@ pub fn execute(code : String, test : String) -> Result<String> {
     let dir = dir_generator::generate_dir();
 
     generate_file(&dir, TEMP_CODE_FILE_NAME, &code);
-    let test_path = generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
-
+    generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
+    
     let runhaskell_command = Command::new("runhaskell")
-        .env("GHC_PACKAGE_PATH", dir)
-        .arg(test_path)
+        .current_dir(dir)
+        .arg(format!("{}{}", TEMP_TEST_FILE_NAME, CODE_FILE_EXTENSION))
         .output()
         .unwrap();
-   
+    
     if !runhaskell_command.status.success() {
         let err = String::from_utf8(runhaskell_command.stderr)?;
         error_chain::bail!(err)
@@ -60,7 +60,7 @@ pub fn execute(code : String, test : String) -> Result<String> {
     return Ok(result)
 }
 
-fn generate_file(dir : &str, file_name : &str, content : &str) -> String {
+fn generate_file(dir : &str, file_name : &str, content : &str) {
     let path = Path::new(dir)
         .join(file_name)
         .into_os_string()
@@ -71,8 +71,6 @@ fn generate_file(dir : &str, file_name : &str, content : &str) -> String {
     
     write_code_to_file(content, &file_path)
         .expect("Could not write to file!");
-
-    return file_path
 }
 
 /// Writes given code to a file at path `code_file_path`.
