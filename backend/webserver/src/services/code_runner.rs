@@ -43,19 +43,20 @@ pub fn execute(code : String, test : String) -> Result<String> {
     generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
     
     let runhaskell_command = Command::new("runhaskell")
-        .current_dir(dir)
+        .current_dir(&dir)
         .arg(format!("{}{}", TEMP_TEST_FILE_NAME, CODE_FILE_EXTENSION))
         .output()
         .unwrap();
     
     if !runhaskell_command.status.success() {
-        let err = String::from_utf8(runhaskell_command.stderr)?;
+        // note: tests that fail flush to stdout and not stderr
+        let err = String::from_utf8(runhaskell_command.stdout)?;
         error_chain::bail!(err)
     }
     
     let result = String::from_utf8(runhaskell_command.stdout).unwrap();
-
-    // clean_up_code_dir(&dir);
+    
+    clean_up_code_dir(&dir);
 
     return Ok(result)
 }
