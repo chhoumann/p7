@@ -24,7 +24,7 @@ Figure xxx shows the planned architecture of the platform.
 \subsection{Back-end system}
 \subsubsection{Code runner}
 Our system needs to be able to compile and run haskell code on back-end and verify whether this code is syntactically correct or not.
-To accomodate this, a code runner module has been implement in a layered architecture (\cite{røde aalborg}).
+To accomodate this, a code runner module has been implement in a layered architecture (~\cite{roede_aalborg}).
 For this type of architecture each component can depend only on components on a lower or same level, thus if component A is on a lower level than component B, component A cannot use component B.
 The component is implemented as a HTTP server as seen on Figure \ref{fig:code_runner}.
 Whenever the server recieves a HTTP request, a service request is sent to a \textit{code runner} service that in turn writes the content recieved to a Haskell file and invokes the GHC compiler.
