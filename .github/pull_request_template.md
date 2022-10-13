@@ -2,8 +2,8 @@
 _What did you add / change?_
 
 # Explanation
-_Explain why this was implemented._
+_Briefly explain how this was implemented._
 
 
 # Outcome
-_What is the benefit of this PR?_
+_What is the benefit of this PR? Why make the change?_
