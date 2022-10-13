@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
-use std::process::{Command, Stdio};
+use std::process::{Command, Stdio, Child, ExitStatus};
 use error_chain::error_chain;
 use std::time::Duration;
 use wait_timeout::ChildExt;
@@ -102,6 +102,27 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
     }
     
     Ok(())
+}
+
+fn set_timeout(mut command: Child, duration: u64) -> Result<String> {
+    let secs = Duration::from_secs(duration);
+
+    return match command.wait_timeout(secs).unwrap() {
+        Some(_status) => {
+            let mut s = String::new();
+            command.stdout.unwrap().read_to_string(&mut s).unwrap();
+            Ok(s)
+        },
+        None => {
+            kill(command)
+        }
+    };
+}
+
+fn kill(mut command: Child) -> Result<String>{
+    command.kill().unwrap();
+    command.wait().unwrap();
+    error_chain::bail!("Code execution timed out.")
 }
 
 fn run_file(executable_path : &str) -> Result<String> {
