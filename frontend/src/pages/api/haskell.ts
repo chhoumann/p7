@@ -3,7 +3,7 @@ import ky from "ky";
 import z from "zod";
 import { env } from "../../env/server.mjs";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const route = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = req.body;
 
   const parsedRequestBody = z
@@ -42,4 +42,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default examples;
+export default route;
