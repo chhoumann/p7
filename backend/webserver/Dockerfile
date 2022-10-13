@@ -49,4 +49,6 @@ RUN \
 
 RUN mkdir haskell-code
 
-CMD ["cargo", "run", "--release", "--verbose", "--jobs", "1"]
+RUN ["cargo", "build", "--release", "--verbose", "--jobs", "1"]
+
+CMD ["cargo", "run", "--release"]
