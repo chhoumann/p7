@@ -3,18 +3,16 @@ use std::path::Path;
 
 const CONTAINER_DIR_NAME : &str = "haskell-code";
 
-fn main() {
+pub fn generate_dir() -> String {
     if !Path::new(CONTAINER_DIR_NAME).is_dir() {
         fs::create_dir(CONTAINER_DIR_NAME)
             .expect(&format!("Could not create directory \"{}\"!", CONTAINER_DIR_NAME));
     }
 
-    let dir = create_code_directory();
-
-    println!("{}", dir);
+    return create_code_directory()
 }
 
-pub fn create_code_directory() -> String {
+fn create_code_directory() -> String {
     let dir_name = create_code_dir();
     
     fs::create_dir(&dir_name)

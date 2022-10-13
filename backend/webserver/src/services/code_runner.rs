@@ -6,9 +6,10 @@ use error_chain::error_chain;
 use std::time::Duration;
 use wait_timeout::ChildExt;
 
+use super::dir_generator;
+
 const TIME_OUT : u64 = 10;
-const TEMP_DIRECTORY_NAME : &str = "haskell-code";
-const TEMP_FILE_NAME : &str = "test";
+const TEMP_FILE_NAME : &str = "code";
 const CODE_FILE_EXTENSION : &str = ".hs";
 
 error_chain!{
@@ -19,9 +20,12 @@ error_chain!{
     }
 }
 
+
 /// Executes the Haskell code in the string `code` and returns stdout.
 pub fn execute(code : String) -> Result<String> {
-    let executable_path = Path::new(TEMP_DIRECTORY_NAME)
+    let dir = dir_generator::generate_dir();
+
+    let executable_path = Path::new(&dir)
         .join(TEMP_FILE_NAME)
         .into_os_string()
         .into_string()
@@ -32,7 +36,11 @@ pub fn execute(code : String) -> Result<String> {
     write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
     compile_file(&code_file_path, &executable_path).expect("Could not compile file!");
 
-    return run_file(&executable_path)
+    let result = run_file(&executable_path);
+
+    clean_up_code_dir(&dir);
+
+    return result
 }
 
 /// Writes given code to a file at path `code_file_path`.
@@ -90,4 +98,8 @@ fn format_haskell_stdout(output : &str) -> String {
     split_output[1] = "An error occurred:\r\n";
 
     return split_output.iter().map(|s| s.to_string()).collect()
+}
+
+fn clean_up_code_dir(dir : &str) {
+    std::fs::remove_dir_all(dir).unwrap();
 }
