@@ -15,7 +15,7 @@ pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json
         .into_inner();
     
     let code = json_exercise_submission.code;
-    let result = code_runner::execute(code);
+    let result = code_runner::execute(code, String::from("This is the test"));
 
     let output = match result {
         Ok(output) => Json(CodeRunnerResponse { 

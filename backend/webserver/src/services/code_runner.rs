@@ -9,8 +9,22 @@ use wait_timeout::ChildExt;
 use super::dir_generator;
 
 const TIME_OUT : u64 = 10;
-const TEMP_FILE_NAME : &str = "code";
+const TEMP_CODE_FILE_NAME : &str = "code";
+const TEMP_TEST_FILE_NAME : &str = "test";
 const CODE_FILE_EXTENSION : &str = ".hs";
+
+const TEST_CODE : &str = r#"
+import Test.Hspec
+import Test.QuickCheck
+import Code (add)
+import Control.Exception (evaluate)
+
+main :: IO ()
+main = hspec $ do
+  describe "add" $ do
+    it "should evaluate 2 + 2 = 4" $ do
+      add 2 2 `shouldBe` (4 :: Int)
+"#;
 
 error_chain!{
     errors { CmdError }
@@ -22,32 +36,43 @@ error_chain!{
 
 
 /// Executes the Haskell code in the string `code` and returns stdout.
-pub fn execute(code : String) -> Result<String> {
+pub fn execute(code : String, test : String) -> Result<String> {
     let dir = dir_generator::generate_dir();
 
-    let executable_path = Path::new(&dir)
-        .join(TEMP_FILE_NAME)
+    generate_file(&dir, TEMP_CODE_FILE_NAME, &code);
+    let test_path = generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
+
+    let runhaskell_command = Command::new("runhaskell")
+        .env("GHC_PACKAGE_PATH", dir)
+        .arg(test_path)
+        .output()
+        .unwrap();
+   
+    if !runhaskell_command.status.success() {
+        let err = String::from_utf8(runhaskell_command.stderr)?;
+        error_chain::bail!(err)
+    }
+    
+    let result = String::from_utf8(runhaskell_command.stdout).unwrap();
+
+    // clean_up_code_dir(&dir);
+
+    return Ok(result)
+}
+
+fn generate_file(dir : &str, file_name : &str, content : &str) -> String {
+    let path = Path::new(dir)
+        .join(file_name)
         .into_os_string()
         .into_string()
         .unwrap(); // example: "haskell-code/code"
 
-    let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/code.hs"
+    let file_path = format!("{}{}", path, CODE_FILE_EXTENSION); // example: "haskell-code/code.hs"
     
-    write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
-    
-    // Attempt to compile the file
-    if let Err(e) = compile_file(&code_file_path, &executable_path) {
-        error_chain::bail!(e)
-    }
+    write_code_to_file(content, &file_path)
+        .expect("Could not write to file!");
 
-    // Run the compiled Haskell file and remove the created directory afterwards
-    let result = run_file(&executable_path);
-
-    clean_up_code_dir(&dir);
-
-    println!("Successfully compiled and ran code.");
-
-    return result
+    return file_path
 }
 
 /// Writes given code to a file at path `code_file_path`.
