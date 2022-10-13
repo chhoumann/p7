@@ -41,26 +41,30 @@ pub fn execute(code : String, test : String) -> Result<String> {
 
     generate_file(&dir, TEMP_CODE_FILE_NAME, &code);
     generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
-    
+
+    println!("Running tests using runhaskell...");
+
     let runhaskell_command = Command::new("runhaskell")
         .current_dir(&dir)
         .arg(format!("{}{}", TEMP_TEST_FILE_NAME, CODE_FILE_EXTENSION))
         .output()
         .unwrap();
-    
+
+    let stdout = String::from_utf8(runhaskell_command.stdout).unwrap();
+
     if !runhaskell_command.status.success() {
         // note: tests that fail flush to stdout and not stderr
-        //TODO we still need to handle if compilation fails! If the compilation fails, we still need stderr
+        let stderr = String::from_utf8(runhaskell_command.stderr).unwrap();
 
-        let err = String::from_utf8(runhaskell_command.stdout)?;
-        error_chain::bail!(err)
+        println!("Test failed!\nstdout: {}\nstderr: {}", stdout, stderr);
+
+        error_chain::bail!(stdout)
     }
-    
-    let result = String::from_utf8(runhaskell_command.stdout).unwrap();
-    
+
+    println!("Test succeeded!");
     clean_up_code_dir(&dir);
 
-    return Ok(result)
+    return Ok(stdout)
 }
 
 fn generate_file(dir : &str, file_name : &str, content : &str) {
@@ -71,14 +75,14 @@ fn generate_file(dir : &str, file_name : &str, content : &str) {
         .unwrap(); // example: "haskell-code/code"
 
     let file_path = format!("{}{}", path, CODE_FILE_EXTENSION); // example: "haskell-code/code.hs"
-    
+
     write_code_to_file(content, &file_path)
         .expect("Could not write to file!");
 }
 
 /// Writes given code to a file at path `code_file_path`.
-fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> { 
-    println!("Writing code to file...");
+fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> {
+    println!("Writing code to file {}...", code_file_path);
 
     let mut file = File::create(code_file_path)?;
     file.write_all(code.as_bytes())?;
@@ -102,7 +106,7 @@ fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
         err = format_haskell_stdout(err);
         error_chain::bail!(err)
     }
-    
+
     Ok(())
 }
 
