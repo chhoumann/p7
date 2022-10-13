@@ -51,4 +51,4 @@ RUN mkdir haskell-code
 
 RUN ["cargo", "build", "--release", "--verbose", "--jobs", "1"]
 
-CMD ["cargo", "run", "--release"]
+CMD ["./target/release/web_server"]
