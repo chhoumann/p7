@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useMutation } from "react-query";
+import ky from "ky";
 
 enum TabState {
   Instructions,
@@ -9,6 +11,29 @@ enum TabState {
 
 const Home: NextPage = () => {
   const [tab, setTab] = useState<TabState>(TabState.Instructions);
+  const codebox = useRef<HTMLTextAreaElement>(null);
+
+  const mutation = useMutation<
+    { success: boolean; result: string },
+    unknown,
+    { codeInput: string }
+  >(
+    ({ codeInput }) => {
+      return ky
+        .post("/api/haskell", {
+          json: { code: codeInput },
+        })
+        .json();
+    },
+    {
+      onSuccess: () => setTab(TabState.Result),
+    }
+  );
+
+  // Ensure user isn't on results tab in an invalid state (no results).
+  if (!mutation.isSuccess && tab === TabState.Result) {
+    setTab(TabState.Instructions);
+  }
 
   return (
     <>
@@ -28,12 +53,22 @@ const Home: NextPage = () => {
         <main className="mx-auto h-full w-full">
           <div className="flex flex-row gap-8 items-center justify-center h-full w-full px-10">
             <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
-              <textarea className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0" />
+              <textarea
+                ref={codebox}
+                className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0"
+              />
               <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
                 <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
                   Attempt
                 </button>
-                <button className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold">
+                <button
+                  className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
+                  onClick={() =>
+                    mutation.mutate({
+                      codeInput: codebox.current?.value ?? "test",
+                    })
+                  }
+                >
                   Submit
                 </button>
               </div>
@@ -49,11 +84,17 @@ const Home: NextPage = () => {
                   text="Results"
                   selected={tab === TabState.Result}
                   onClick={() => setTab(TabState.Result)}
+                  disabled={!mutation.isSuccess}
                 />
               </div>
               <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
                 {tab === TabState.Instructions && <Instructions />}
-                {tab === TabState.Result && <Results />}
+                {tab === TabState.Result && mutation.isSuccess && (
+                  <Results
+                    result={mutation.data?.result}
+                    success={mutation.data?.success}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -66,18 +107,20 @@ const Home: NextPage = () => {
 function Tab({
   text,
   selected,
+  disabled,
   onClick,
 }: {
   text: string;
   selected: boolean;
+  disabled?: boolean;
   onClick: () => void;
 }) {
   return (
     <span
       className={`w-1/2 text-center p-4 font-semibold ${
         selected ? "text-[#005CC5]" : "text-gray-500 bg-gray-200"
-      } cursor-pointer`}
-      onClick={onClick}
+      } ${disabled ? "" : "cursor-pointer"}`}
+      onClick={disabled ? () => false : onClick}
     >
       {text}
     </span>
@@ -102,22 +145,23 @@ function Instructions() {
       <br />
       This is not Rust.
       <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      hej
     </>
   );
 }
 
-function Results() {
-  return <>0 tests passed.</>;
+function Results({ result, success }: { result?: string; success?: boolean }) {
+  if (!result || !success) return <></>;
+
+  return (
+    <div className="flex flex-col w-full">
+      <span className="w-full text-center text-3xl">{success ? "Success!" : "Code failed to run"}</span>
+
+      <div className="my-8" />
+
+      <span className="text-xl">Output</span>
+      <code className="bg-gray-100 p-2 rounded-lg">{result}</code>
+    </div>
+  );
 }
 
 export default Home;
