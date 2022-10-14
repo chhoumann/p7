@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRef, useState } from "react";
 import { useMutation } from "react-query";
 import ky from "ky";
+import { trpc } from "../utils/trpc";
 
 enum TabState {
   Instructions,
@@ -13,25 +14,12 @@ const Home: NextPage = () => {
   const [tab, setTab] = useState<TabState>(TabState.Instructions);
   const codebox = useRef<HTMLTextAreaElement>(null);
 
-  const mutation = useMutation<
-    { success: boolean; result: string },
-    unknown,
-    { codeInput: string }
-  >(
-    ({ codeInput }) => {
-      return ky
-        .post("/api/haskell", {
-          json: { code: codeInput },
-        })
-        .json();
-    },
-    {
-      onSuccess: () => setTab(TabState.Result),
-    }
-  );
+  const mutation = trpc.useMutation("code.haskell", {
+    onSuccess: () => setTab(TabState.Result)
+  })
 
   // Ensure user isn't on results tab in an invalid state (no results).
-  if (!mutation.isSuccess && tab === TabState.Result) {
+  if (mutation.isError && tab === TabState.Result) {
     setTab(TabState.Instructions);
   }
 
@@ -65,7 +53,7 @@ const Home: NextPage = () => {
                   className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
                   onClick={() =>
                     mutation.mutate({
-                      codeInput: codebox.current?.value ?? "test",
+                      code: codebox.current?.value ?? "test",
                     })
                   }
                 >
