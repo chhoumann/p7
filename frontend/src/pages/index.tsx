@@ -1,8 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRef, useState } from "react";
-import { useMutation } from "react-query";
-import ky from "ky";
 import { trpc } from "../utils/trpc";
 
 enum TabState {
