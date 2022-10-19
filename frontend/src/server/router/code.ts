@@ -16,10 +16,10 @@ export const codeRouter = createRouter()
         async resolve({ input }) {
             try {
                 const webserverResponse = await ky
-                .post(`${env.WEBSERVER_ADDRESS}/haskell`, {
-                    json: { code: input.code },
-                })
-                .json();
+                    .post(`${env.WEBSERVER_ADDRESS}/haskell`, {
+                        json: { code: input.code },
+                    })
+                    .json();
 
                 const parsedResponse = z
                 .object({
@@ -32,7 +32,7 @@ export const codeRouter = createRouter()
                     return { success: false, result: parsedResponse.error.message };
                 }
 
-                return { ...parsedResponse.data };
+                return parsedResponse.data;
             } catch (error) {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
