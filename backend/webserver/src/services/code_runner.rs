@@ -12,19 +12,6 @@ const TIME_OUT : u64 = 10;
 const TEMP_CODE_FILE_NAME : &str = "code.hs";
 const TEMP_TEST_FILE_NAME : &str = "test.hs";
 
-const TEST_CODE : &str = r#"
-import Test.Hspec
-import Test.QuickCheck
-import Code (add)
-import Control.Exception (evaluate)
-
-main :: IO ()
-main = hspec $ do
-  describe "add" $ do
-    it "should evaluate 2 + 2 = 4" $ do
-      add 2 2 `shouldBe` (4 :: Int)
-"#;
-
 error_chain!{
     errors { CmdError }
     foreign_links {
@@ -33,14 +20,13 @@ error_chain!{
     }
 }
 
-
 /// Executes the Haskell code in the string `code` and returns stdout.
-pub fn execute(code : String, test : String) -> Result<String> {
+pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
     // Generate temp directory and code files containing the code and associated test
     let dir = dir_generator::generate_dir();
 
-    generate_file(&dir, TEMP_CODE_FILE_NAME, &code);
-    generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
+    generate_file(&dir, TEMP_CODE_FILE_NAME, &exercise_code);
+    generate_file(&dir, TEMP_TEST_FILE_NAME, &test_code);
 
     println!("Running tests using runhaskell...");
 
