@@ -1,7 +1,8 @@
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::{prelude::*, Stdout};
 use std::path::Path;
-use std::process::{Command, Stdio, Child};
+use std::process::{Command, Stdio, Child, ExitStatus, ChildStdin, ChildStdout, ChildStderr};
+use std::thread::Thread;
 use error_chain::error_chain;
 use std::time::Duration;
 use wait_timeout::ChildExt;
@@ -44,17 +45,17 @@ pub fn execute(code : String, test : String) -> Result<String> {
 
     println!("Running tests using runhaskell...");
 
-    let runhaskell_command = Command::new("runhaskell")
+    let runhaskell_process = Command::new("runhaskell")
         .current_dir(&dir)
         .arg(format!("{}{}", TEMP_TEST_FILE_NAME, CODE_FILE_EXTENSION))
         .output()
         .unwrap();
 
-    let stdout = String::from_utf8(runhaskell_command.stdout).unwrap();
+    let stdout = String::from_utf8(runhaskell_process.stdout).unwrap();
 
-    if !runhaskell_command.status.success() {
+    if !runhaskell_process.status.success() {
         // note: tests that fail flush to stdout and not stderr
-        let stderr = String::from_utf8(runhaskell_command.stderr).unwrap();
+        let stderr = String::from_utf8(runhaskell_process.stderr).unwrap();
 
         println!("Test failed!\nstdout: {}\nstderr: {}", stdout, stderr);
 
@@ -153,19 +154,25 @@ fn clean_up_code_dir(dir : &str) {
 }
 
 
-fn set_timeout(mut command: Child, duration: u64) -> Result<String> {
-    let secs = Duration::from_secs(duration);
+fn kill_after_duration(mut command: Child, duration: u64) -> std::thread::JoinHandle<(Option<ChildStdout>, Option<ChildStderr>)> {
 
-    return match command.wait_timeout(secs).unwrap() {
-        Some(_status) => {
-            let mut s = String::new();
-            command.stdout.unwrap().read_to_string(&mut s).unwrap();
-            Ok(s)
-        },
-        None => {
-            kill(command)
+    return std::thread::spawn(move || {
+        for i in 0..duration {
+            if let Ok(Some(_)) = command.try_wait() {
+                print!("{i}");
+                return (command.stdout, command.stderr);
+            }
+
+            if let Err(e) = command.try_wait() {
+                print!("ØV");
+                return (command.stdout, command.stderr);
+            }
+            std::thread::sleep(std::time::Duration::from_secs(1))
         }
-    };
+
+        command.kill().unwrap();
+        return (None, None)
+    });
 }
 
 fn kill(mut command: Child) -> Result<String>{
@@ -173,3 +180,62 @@ fn kill(mut command: Child) -> Result<String>{
     command.wait().unwrap();
     error_chain::bail!("Code execution timed out.")
 }
+
+
+
+
+
+pub fn execute2(code : String, test : String) -> Result<String> {
+    let dir = dir_generator::generate_dir();
+
+    generate_file(&dir, TEMP_CODE_FILE_NAME, &code);
+    generate_file(&dir, TEMP_TEST_FILE_NAME, TEST_CODE);
+    
+    let runhaskell_process = Command::new("runhaskell")
+        .current_dir(&dir)
+        .arg(format!("{}{}", TEMP_TEST_FILE_NAME, CODE_FILE_EXTENSION))
+        .spawn().unwrap();
+
+
+    let runhaskell_with_timeout = kill_after_duration(runhaskell_process, 10);
+
+    let result = runhaskell_with_timeout.join();
+    
+    
+    let result = match result {
+        Ok((stdout, stderr)) => {
+            match (stdout, stderr) {
+            
+                (Some(mut out), None) => {
+                    let mut buf = String::new();
+                    let _ = out.read_to_string(&mut buf);
+                    buf
+                },
+                (None, Some(mut err)) => {
+                    let mut buf = String::new();
+                    let _ = err.read_to_string(&mut buf);
+                    buf
+                },
+                (Some(mut out), Some(mut err)) => {
+
+                    let mut buf_err = String::new();
+                    let _ = err.read_to_string(&mut buf_err);
+
+                    let mut buf_out = String::new();
+                    let _ = out.read_to_string(&mut buf_out);
+
+                    
+                    format!("Stdout: {}  \nStderr: {}", buf_out, buf_err)
+                },
+                (None, None) => String::from("TIMEOUT! The process ran for too long!")
+            }
+        },
+        Err(_) => panic!("Could not perform timeout! Joining threads failed!")
+    
+        
+    };
+    
+   return Ok(result)
+}
+
+
