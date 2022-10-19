@@ -106,19 +106,6 @@ fn get_output(runhaskell_process : Child) -> String {
     return output
 }
 
-fn format_haskell_stdout(output : String) -> String {
-    let mut split_output : Vec<&str> = output.split("\r\n").collect();
-
-    if split_output.len() < 2 {
-        return output
-    }
-
-    split_output[0] = "";
-    split_output[1] = "An error occurred:\r\n";
-
-    return split_output.iter().map(|s| s.to_string()).collect()
-}
-
 fn clean_up_code_dir(dir : &str) {
     std::fs::remove_dir_all(dir).unwrap();
 }
