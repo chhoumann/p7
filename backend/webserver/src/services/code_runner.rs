@@ -1,9 +1,8 @@
 use std::fs::File;
-use std::io::{prelude::*, Stdout};
+use std::io::{prelude::*};
 use std::path::Path;
-use std::process::{Command, Stdio, Child, ExitStatus, ChildStdin, ChildStdout, ChildStderr};
-use std::thread::Thread;
-use error_chain::{error_chain, ExitCode};
+use std::process::{Command, Stdio, Child, ChildStdin, ChildStdout, ChildStderr};
+use error_chain::{error_chain};
 use std::time::Duration;
 use wait_timeout::ChildExt;
 
