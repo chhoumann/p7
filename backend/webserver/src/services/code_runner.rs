@@ -14,7 +14,7 @@ const TEMP_TEST_FILE_NAME : &str = "test.hs";
 
 const TEST_CODE : &str = r#"
 import Test.Hspec
-import Tet.QuickCheck
+import Test.QuickCheck
 import Code (add)
 import Control.Exception (evaluate)
 
