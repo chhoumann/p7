@@ -1,12 +1,34 @@
 \chapter{Introduction} \label{chap:introduction}
-On the 1st semester of the Software Master’s Degree at \aau{}, the Programming Paradigms course had a problem; most attending students failed the course last year. 
+The Haskell programming language is purely functional\cite{} and builds upon the lambda calculus model of computation \cite{}.
+Unlike many other programming languages, Haskell can both be interpreted or compiled into an executable binary file.
+It is a statically typed language implementing many mathematical constructs such as currying, set-builder notation, recursive definitions of both types and functions, and more.
+This allows the programmer to create concise solutions that would normally be quite verbose in other programming paradigms.
+Therefore, many companies such as Meta and Galois use Haskell for cryptography, avionics monitoring and spam filtering.
+Thus Haskell and other languages within the functional programming paradigm are useful tools for software engineers.
+
+
+Haskell is taught on the 1st semester of the Software Master's Degree at \aau{} in the Programming Paradigms course.
+Most students attending this course failed in the past.
 This resulted in a survey being sent out, and a student task force being assembled to understand the issues that caused the high failure rate.
 Here, many students mentioned not feeling experienced enough with the programming languages used in the course to teach the functional and logical programming paradigms.
 
 
 Consequently, \aau{} chose to restructure the course entirely. 
-Rather than teaching many different programming languages within the functional and logical programming paradigms, the course was restructured to focus on functional programming in Haskell.
+Rather than teaching many different programming languages within the functional and logical programming paradigms, the course was restructured to focus only on Haskell.
 Furthermore, the course now features more practical programming exercises with classroom discussion in-between, rather than traditional lectures followed by a separate exercise session.
 Supporting this way of teaching, the course lectures have been moved to a more classical classroom setup.
 By using a shared monitor at each table, multiple students can work together in groups to solve given problem sets.
 In addition, a primary monitor at the lecture desk enables the professor to view and share other groups' monitors such that student solutions can be used for classroom discussions. 
+
+
+\section{Problem analysis}
+Following the restructuring of the Programming Paradigms course, new problems arose.
+Since students use their own local development environments for programming exercises, other students cannot revisit the discussed exercise solutions created by other groups. 
+This makes it difficult to reflect on and learn from other students' solutions.
+Furthermore, it is difficult to verify whether one's own solution is correct and lives up to the requirements of the exercise.
+In fact, it is not uncommon for people to misunderstand an exercise and therefore implement an incorrect solution.
+Additionally, the system used to connect to and use the monitors in the classroom does not support any Linux-based operating systems, resulting in many students being unable to share their solutions on the monitor.
+Feedback is often slow since students must wait for teaching assistants to answer questions from many groups - these questions are often the same, or of similar nature.
+Often, students end up waiting until the time assigned for the exercise runs out, after which a solution is presented to the whole class.
+
+This is problematic since students are sometimes unable to verify whether their solution is correct, or sometimes end up waiting so long that they do not solve the problem in the first place.
