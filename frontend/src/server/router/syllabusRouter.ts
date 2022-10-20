@@ -1,32 +1,23 @@
 import { createRouter } from "./context";
-import { string, z } from "zod";
-import ky from "ky";
-import { env } from "../../env/server.mjs";
+import { z } from "zod";
 import * as trpc from "@trpc/server";
 import { prisma } from "../db/client";
 import { Syllabus } from "@prisma/client";
 
-export const syllabusRouter = createRouter()
-    .query("getById", {
-        input: z.object({
-            id: z.string()
-        }),
-        output: z.object({
-            syllabus: z.object({
-                id: z.string(),
-                name: z.string()
-            })
-        }),
-        async resolve({input}){
-            const syllabus = await prisma.syllabus.findFirst({
-                where: {id: input.id}
-            })
-            if (syllabus === null) {
-                throw new trpc.TRPCError({
-                    code: "NOT_FOUND",
-                    message: "syllabus with id " + input.id + " not found."
-                })
-            }
-            return {syllabus};
-        }
-    })
+export const syllabusRouter = createRouter().query("getById", {
+  input: z.string(),
+  async resolve({ input: id }) {
+    const syllabus: Syllabus | null = await prisma.syllabus.findFirst({
+      where: { id },
+    });
+
+    if (!syllabus) {
+      throw new trpc.TRPCError({
+        code: "NOT_FOUND",
+        message: `Syllabus with id ${id} not found`,
+      });
+    }
+
+    return { syllabus };
+  },
+});

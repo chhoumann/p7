@@ -13,8 +13,8 @@ const Home: NextPage = () => {
   const codebox = useRef<HTMLTextAreaElement>(null);
 
   const mutation = trpc.useMutation("code.haskell", {
-    onSuccess: () => setTab(TabState.Result)
-  })
+    onSuccess: () => setTab(TabState.Result),
+  });
 
   // Ensure user isn't on results tab in an invalid state (no results).
   if (mutation.isError && tab === TabState.Result) {
@@ -140,7 +140,9 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
   return (
     <div className="flex flex-col w-full">
-      <span className="w-full text-center text-3xl">{success ? "Success!" : "Code failed to run"}</span>
+      <span className="w-full text-center text-3xl">
+        {success ? "Success!" : "Code failed to run"}
+      </span>
 
       <div className="my-8" />
 
