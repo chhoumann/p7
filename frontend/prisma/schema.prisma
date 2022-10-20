@@ -62,3 +62,39 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model Syllabus {
+    id         String       @id @default(cuid())
+    name       String
+
+    ProblemSets ProblemSet[]
+}
+
+model ProblemSet {
+    id    String   @id @default(cuid())
+    topic String
+    date  DateTime
+
+    Problems Problem[]
+
+    syllabus   Syllabus @relation(fields: [syllabusId], references: [id])
+    syllabusId String
+}
+
+model Problem {
+    id   String @id @default(cuid())
+    name String
+
+    template    String
+    description String
+    Tests       Test[]
+
+    problemSet   ProblemSet @relation(fields: [problemSetId], references: [id])
+    problemSetId String
+}
+
+model Test {
+    problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    problemId String  @id
+    code      String
+}
