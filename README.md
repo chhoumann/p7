@@ -38,3 +38,6 @@ This may fail if you do not have the appropriate environment variables set. You 
 WEBSERVER_ADDRESS=http://localhost:8000
 ```
 Which depends on the port you set for the backend.
+
+## Database
+We use Prisma. From the `frontend` folder, use `npx prisma db push` to get set up.
