@@ -11,7 +11,6 @@ enum TabState {
 const Home: NextPage = () => {
   const [tab, setTab] = useState<TabState>(TabState.Instructions);
   const codebox = useRef<HTMLTextAreaElement>(null);
-  //trpc.useQuery(["syllabus.getById", {id: "1"}]);
 
   const mutation = trpc.useMutation("code.haskell", {
     onSuccess: () => setTab(TabState.Result)
