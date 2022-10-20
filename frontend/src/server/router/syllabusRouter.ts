@@ -1,5 +1,5 @@
 import { createRouter } from "./context";
-import { z } from "zod";
+import { string, z } from "zod";
 import ky from "ky";
 import { env } from "../../env/server.mjs";
 import * as trpc from "@trpc/server";
@@ -12,19 +12,21 @@ export const syllabusRouter = createRouter()
             id: z.string()
         }),
         output: z.object({
-            syllabus:  
+            syllabus: z.object({
+                id: z.string(),
+                name: z.string()
+            })
         }),
         async resolve({input}){
             const syllabus = await prisma.syllabus.findFirst({
                 where: {id: input.id}
             })
             if (syllabus === null) {
-                console.log("shits fucked")
                 throw new trpc.TRPCError({
                     code: "NOT_FOUND",
-                    message: "syllabus with id " + input.id + "not found."
+                    message: "syllabus with id " + input.id + " not found."
                 })
             }
-            return {syllabus}
+            return {syllabus};
         }
     })
