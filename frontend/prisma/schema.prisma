@@ -77,7 +77,7 @@ model ProblemSet {
 
     Problems Problem[]
 
-    syllabus   Syllabus @relation(fields: [syllabusId], references: [id])
+    syllabus   Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
     syllabusId String
 }
 
@@ -89,7 +89,7 @@ model Problem {
     description String
     Tests       Test[]
 
-    problemSet   ProblemSet @relation(fields: [problemSetId], references: [id])
+    problemSet   ProblemSet @relation(fields: [problemSetId], references: [id], onDelete: Cascade)
     problemSetId String
 }
 
