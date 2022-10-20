@@ -1,16 +1,16 @@
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::{prelude::*};
 use std::path::Path;
-use std::process::{Command, Stdio};
-use error_chain::error_chain;
+use std::process::{Command, Stdio, Child, ChildStdin, ChildStdout, ChildStderr};
+use error_chain::{error_chain};
 use std::time::Duration;
 use wait_timeout::ChildExt;
 
 use super::dir_generator;
 
 const TIME_OUT : u64 = 10;
-const TEMP_FILE_NAME : &str = "code";
-const CODE_FILE_EXTENSION : &str = ".hs";
+const TEMP_CODE_FILE_NAME : &str = "code.hs";
+const TEMP_TEST_FILE_NAME : &str = "test.hs";
 
 error_chain!{
     errors { CmdError }
@@ -20,41 +20,60 @@ error_chain!{
     }
 }
 
-
 /// Executes the Haskell code in the string `code` and returns stdout.
-pub fn execute(code : String) -> Result<String> {
+pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
+    // Generate temp directory and code files containing the code and associated test
     let dir = dir_generator::generate_dir();
 
-    let executable_path = Path::new(&dir)
-        .join(TEMP_FILE_NAME)
+    generate_file(&dir, TEMP_CODE_FILE_NAME, &exercise_code);
+    generate_file(&dir, TEMP_TEST_FILE_NAME, &test_code);
+
+    println!("Running tests using runhaskell...");
+
+    // Spawn "runhaskell" child process and kill after TIME_OUT
+    let mut runhaskell_process = spawn_runhaskell_command(&dir, TEMP_TEST_FILE_NAME);
+
+    let secs = Duration::from_secs(TIME_OUT);
+    let status_code = match runhaskell_process.wait_timeout(secs).unwrap() {
+        Some(status) => status,
+        None => {
+            runhaskell_process.kill().unwrap();
+            error_chain::bail!(format!("Code execution timed out after {} seconds.", TIME_OUT))
+        }
+    };
+
+    // Remove temporary directories and files, and result of the runhaskell command
+    clean_up_code_dir(&dir);
+
+    let output = get_output(runhaskell_process);
+
+    if !status_code.success() {
+        // Note: Tests that fail flush to stdout and not stderr
+        println!("Test failed!\nOutput: {}", output);
+        error_chain::bail!(output)
+    }
+
+    println!("Test succeeded!");
+
+    return Ok(output)
+}
+
+fn generate_file(dir : &str, file_name : &str, content : &str) {
+    let file_path = Path::new(dir)
+        .join(file_name)
         .into_os_string()
         .into_string()
         .unwrap(); // example: "haskell-code/code"
 
-    let code_file_path = format!("{}{}", executable_path, CODE_FILE_EXTENSION); // example: "haskell-code/code.hs"
-    
-    write_code_to_file(&code, &code_file_path).expect("Could not write to file!");
-    
-    // Attempt to compile the file
-    if let Err(e) = compile_file(&code_file_path, &executable_path) {
-        error_chain::bail!(e)
-    }
-
-    // Run the compiled Haskell file and remove the created directory afterwards
-    let result = run_file(&executable_path);
-
-    clean_up_code_dir(&dir);
-
-    println!("Successfully compiled and ran code.");
-
-    return result
+    write_code_to_file(content, &file_path)
+        .expect("Could not write to file!");
 }
 
 /// Writes given code to a file at path `code_file_path`.
-fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> { 
-    println!("Writing code to file...");
+fn write_code_to_file(code : &str, file_path: &str) -> std::io::Result<()> {
+    println!("Writing code to file {}...", file_path);
 
-    let mut file = File::create(code_file_path)?;
+    let mut file = File::create(file_path)?;
     file.write_all(code.as_bytes())?;
 
     drop(file);
@@ -62,60 +81,29 @@ fn write_code_to_file(code : &str, code_file_path: &str) -> std::io::Result<()> 
     Ok(())
 }
 
-/// Compiles the given file at `code_file_path`, and outputs the executable at `executable_path`.
-fn compile_file(code_file_path: &str, executable_path : &str) -> Result<()> {
-    println!("Compiling file...");
-
-    let ghc_command = Command::new("ghc")
-        .args(["-O0", "-o", executable_path, code_file_path])
-        .output()
-        .expect("failed to run ghc");
-
-    if !ghc_command.status.success() {
-        let mut err = String::from_utf8(ghc_command.stderr)?;
-        err = format_haskell_stdout(err);
-        error_chain::bail!(err)
-    }
-    
-    Ok(())
-}
-
-fn run_file(executable_path : &str) -> Result<String> {
-    println!("Running executable...");
-
-    let mut child = Command::new(executable_path)
+/// Spawns a child runhaskell process with `dir` as its working directory
+fn spawn_runhaskell_command(dir : &str, file_name : &str) -> Child {
+    return Command::new("runhaskell")
+        .current_dir(dir)
+        .arg(file_name)
         .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
         .spawn()
         .unwrap();
-
-    let secs = Duration::from_secs(TIME_OUT);
-
-    return match child.wait_timeout(secs).unwrap() {
-        Some(_status) => {
-            let mut s = String::new();
-            child.stdout.unwrap().read_to_string(&mut s).unwrap();
-
-            Ok(s)
-        },
-        None => {
-            child.kill().unwrap();
-            child.wait().unwrap();
-            error_chain::bail!("Code execution timed out.")
-        }
-    };
 }
 
-fn format_haskell_stdout(output : String) -> String {
-    let mut split_output : Vec<&str> = output.split("\r\n").collect();
+fn get_output(runhaskell_process : Child) -> String {
+    let mut output = String::new();
 
-    if split_output.len() < 2 {
-        return output
+    if !runhaskell_process.stderr.is_none() {
+        runhaskell_process.stderr.unwrap().read_to_string(&mut output).unwrap();
+        println!("runhaskell process encountered stderr.");
+    }
+    else {
+        runhaskell_process.stdout.unwrap().read_to_string(&mut output).unwrap();
     }
 
-    split_output[0] = "";
-    split_output[1] = "An error occurred:\r\n";
-
-    return split_output.iter().map(|s| s.to_string()).collect()
+    return output
 }
 
 fn clean_up_code_dir(dir : &str) {
