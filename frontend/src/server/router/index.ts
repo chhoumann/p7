@@ -15,8 +15,8 @@ export const appRouter = createRouter()
   .merge("example.", exampleRouter)
   .merge("auth.", protectedExampleRouter)
   .merge("syllabus.", syllabusRouter)
-  .merge("problem", problemRouter)
-  .merge("problemSets", problemSetsRouter);
+  .merge("problem.", problemRouter)
+  .merge("problemSets.", problemSetsRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
