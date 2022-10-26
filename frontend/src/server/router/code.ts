@@ -46,19 +46,22 @@ export const codeRouter = createRouter()
     input: z.object({
       count: z.number(),
       code: z.string(),
+      test: z.string(),
     }),
     async resolve({ input }) {
-      console.time("spam");
+      const timeStart = Date.now();
 
       const ps = Array(input.count)
         .fill(undefined)
         .map(() => {
           try {
-            return ky
-              .post(`${env.WEBSERVER_ADDRESS}/haskell`, {
-                json: { code: input.code },
-              })
-              .json();
+            return fetch(`${env.WEBSERVER_ADDRESS}/haskell`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ code: input.code, test: input.test }),
+            }).then((res) => res.json());
           } catch {
             return undefined;
           }
@@ -66,13 +69,13 @@ export const codeRouter = createRouter()
 
       const responses = await Promise.all(ps);
       const fulfilledCount = responses.filter((x) => x !== undefined).length;
+      const duration = Date.now() - timeStart;
 
-      console.timeEnd("spam");
-      
       return {
-        requests: input.count,
+        requestCount: input.count,
         fulfilled: fulfilledCount,
         responses,
-      }
+        duration,
+      };
     },
   });
