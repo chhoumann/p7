@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import Link from 'next/link';
 
 
-const SyllabusId: NextPage = () => {
+const ExerciseId: NextPage = () => {
 
     const [selectedId, setSelectedId] = useState<string>()
 
@@ -26,39 +26,35 @@ const SyllabusId: NextPage = () => {
         { name: "Christ", id: "i31en" },
     ]
 
-
-
     return (
         <div className='container flex justify-center items-center w-full h-[75vh]'>
             <div className='flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto'>
 
                 {testData.map((session) =>
                     <React.Fragment key={session.id}>
-                        <SessionRow {...session} onClick={() => setSelectedId(session.id)} isSelected={session.id === selectedId}/>
+                        <ExerciseRow {...session} onClick={() => setSelectedId(session.id)} isSelected={session.id === selectedId}/>
                     </React.Fragment>
                 )}
                 <div className='mb-auto' />
                 <div className='flex flex-row gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white'>
-                    <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
-                        Create new session
-                    </button>
-                    <Link href={selectedId ? `/exercises/${selectedId}`: `/syllabus/${id}`}>
+                    <Link href="/exercises/create">
                         <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
-                            Edit
+                            Create new exercise
                         </button>
                     </Link>
+                    <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
+                        Edit
+                    </button>
                 </div>
             </div>
         </div>
     )
 }
 
-export default SyllabusId;
+export default ExerciseId;
 
 
-function SessionRow({ id, name, isSelected, onClick }:{ id: string, name: string, isSelected: boolean, onClick: () => void }) {
-
-
+function ExerciseRow({ id, name, isSelected, onClick }:{ id: string, name: string, isSelected: boolean, onClick: () => void }) {
     return (
         <div className={`p-3 m-3 ${isSelected?'bg-gray-400':"bg-gray-300 hover:bg-gray-400"}`} onClick={onClick}>
             <span>{name}</span>
