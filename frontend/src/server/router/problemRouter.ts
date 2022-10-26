@@ -37,7 +37,7 @@ export const problemRouter = createRouter().query("getByProblemSetId", {
 
         return {problems};
     },
-}).mutation("postProblem", {
+}).mutation("newProblem", {
     input: postInput,
     output: postOutput,
     async resolve({input}) {
