@@ -40,7 +40,7 @@ main = hspec $ do
 
   return (
     <div>
-      {!req.isSuccess && req.data && (
+      {req.isSuccess && req.data && (
         <div>
           Sent {req.data.requestCount} requests to the server.
           <br />
