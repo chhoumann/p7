@@ -15,11 +15,6 @@ pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json
     let json_exercise_submission = Json(exercise_submission)
         .into_inner();
 
-    return Json(CodeRunnerResponse {
-        success: true,
-        result: String::from("Hello from backend.")
-    });
-
     let exercise_code = json_exercise_submission.code;
     let test_code = json_exercise_submission.test;
     let result = code_runner::execute(exercise_code, test_code);

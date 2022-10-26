@@ -3,25 +3,22 @@ import { trpc } from "../utils/trpc";
 
 function TestPage() {
 
-    const code = `module SolutionSession6 where
-data Unary = I Unary | Z
+    const code = `
+module Code where
+add x y = x + y
+`;
 
-unary2int :: Unary -> Integer
-unary2int Z = 0
-unary2int (I n) = 1 + unary2int n`;
-
-    const test = `module Session6Spec where
-
+    const test = `
 import Test.Hspec
 import Test.QuickCheck
+import Code (add)
 import Control.Exception (evaluate)
-import SolutionSession6
-
-main :: IO()
+main :: IO ()
 main = hspec $ do
-    describe "Session6.unary2int" $ do
-        it "from Unary IIIIZ get 4" $ do
-            unary2int (I(I(I(I Z)))) \`shouldBe\` 4`;
+  describe "add" $ do
+    it "should evaluate 2 + 2 = 4" $ do
+      add 2 2 \`shouldBe\` (4 :: Int)
+`;
 
   const req = trpc.useQuery([
     "code.spam",
