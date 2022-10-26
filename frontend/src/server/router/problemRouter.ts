@@ -2,7 +2,9 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import * as trpc from "@trpc/server";
 import { prisma } from "../db/client";
+import {env} from "../../env/server.mjs";
 import { Problem } from "@prisma/client";
+import ky from "ky";
 
 export const problemRouter = createRouter().query("getByProblemSetId", {
   input: z.string(),
@@ -32,5 +34,35 @@ export const problemRouter = createRouter().query("getByProblemSetId", {
       success: z.boolean(),
       result: z.string()
   }),
-  resolve :
+  async resolve({ input }){
+    try {
+      const webserverResponse = await ky
+        .post(`${env.WEBSERVER_ADDRESS}/problem`, {
+          json:{
+            ...input
+          }
+        }).json();
+
+      const parsedResponse = z
+      .object({
+          result: z.string(),
+          success: z.boolean(),
+      })
+      .safeParse(webserverResponse);
+
+      if (!parsedResponse.success) {
+        return { success: false, result: parsedResponse.error.message };
+
+      
+      }
+    return parsedResponse.data;
+
+    } catch (error) {
+      throw new trpc.TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Could not post problem to database.",
+        cause: error
+      })
+    }
+  }
 });
