@@ -20,4 +20,17 @@ export const problemRouter = createRouter().query("getByProblemSetId", {
 
     return { problems };
   },
+}).mutation("postProblem", {
+  input: z.object({
+      id: z.string(),
+      name: z.string(),
+      template: z.string(),
+      description: z.string(),
+      problemSetId: z.string()
+  }),
+  output: z.object({
+      success: z.boolean(),
+      result: z.string()
+  }),
+  resolve :
 });
