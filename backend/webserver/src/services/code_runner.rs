@@ -97,11 +97,14 @@ fn get_output(runhaskell_process : Child) -> String {
 
     if !runhaskell_process.stderr.is_none() {
         runhaskell_process.stderr.unwrap().read_to_string(&mut output).unwrap();
-        println!("runhaskell process encountered stderr.");
+
+        if !output.is_empty() {
+            println!("runhaskell process encountered stderr: {}", output);
+            return output
+        }
     }
-    else {
-        runhaskell_process.stdout.unwrap().read_to_string(&mut output).unwrap();
-    }
+
+    runhaskell_process.stdout.unwrap().read_to_string(&mut output).unwrap();
 
     return output
 }
