@@ -8,7 +8,7 @@ on:
       - '*'
 
 env:
-  DATABASE_URL: " postgres://postgres:admin@postgres:5432/database"
+  DATABASE_URL: "postgres://postgres:admin@postgres:5432/database"
     
 jobs:
   # Label of the container job
@@ -27,7 +27,7 @@ jobs:
       postgres:
 
         env:
-          POSTGRES_USER: admin
+          POSTGRES_HOST_AUTH_METHOD=trust
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
