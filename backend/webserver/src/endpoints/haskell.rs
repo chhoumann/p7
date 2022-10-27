@@ -1,29 +1,28 @@
-use rocket::State;
 use rocket::serde::{json::Json};
 use crate::domain::exercise_submission_request::ExerciseSubmissionRequest;
 use crate::domain::code_runner_result::CodeRunnerResponse;
 use crate::services::test_runner;
 
-#[get("/")]
-fn index(runtime: &State<rocket::tokio::runtime::Runtime>) {
-    runtime.spawn_blocking(|| {
-
-    });
-}
+static mut COUNT : i32 = 0;
 
 #[post("/haskell", format="json", data = "<exercise_submission_request>")]
-pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>, runtime: &State<tokio::runtime::Runtime>) -> Json<CodeRunnerResponse> {
-    println!("Spawning thread");
+pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
+    unsafe {
+        while COUNT >= 10 {
+            tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+        }
 
-    let res = runtime.spawn_blocking(|| schedule_test(exercise_submission_request))
-        .await
-        .unwrap()
-        .await;
+        println!("Spawning thread");
+        COUNT += 1;
 
-    println!("Ending thread");
+        let res = schedule_test(exercise_submission_request).await;
 
-    return res
- }
+        COUNT -= 1;
+        println!("Ending thread");
+
+        return res
+    }
+}
 
 
 async fn schedule_test(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
