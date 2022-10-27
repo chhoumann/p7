@@ -1,21 +1,23 @@
-use std::fs;
+use tokio::fs;
 use std::path::Path;
 
 const CONTAINER_DIR_NAME : &str = "haskell-code";
 
-pub fn generate_dir() -> String {
+pub async fn generate_dir() -> String {
     if !Path::new(CONTAINER_DIR_NAME).is_dir() {
         fs::create_dir(CONTAINER_DIR_NAME)
+            .await
             .expect(&format!("Could not create directory \"{}\"!", CONTAINER_DIR_NAME));
     }
 
-    return create_code_directory()
+    return create_code_directory().await
 }
 
-fn create_code_directory() -> String {
+async fn create_code_directory() -> String {
     let dir_name = generate_code_dir_name();
     
     fs::create_dir(&dir_name)
+        .await
         .expect(&format!("Could not create directory \"{}\"!", dir_name));
 
     return dir_name
