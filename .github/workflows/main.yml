@@ -42,7 +42,7 @@ jobs:
           # Maps TCP port 5432 on service container to the host
           - 5432:5432
     env:
-      DATABASE_URL: postgresql://user:postgres@localhost:5432/test
+      DATABASE_URL: postgresql://user:postgres@container-job:5432/test
 
 
     steps:
@@ -57,7 +57,7 @@ jobs:
       - name: migrate DB
         run: npm run db:push
         env:
-          DATABASE_URL: postgresql://user:postgres@localhost:5432/test
+          DATABASE_URL: postgresql://user:postgres@container-job:5432/test
 
             
         
