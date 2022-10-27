@@ -8,10 +8,11 @@ on:
       - '*'
 
 env:
-  POSTGRES_PASSWORD: admin
-  POSTGRES_USER: user
+  POSTGRES_PASSWORD: test
+  POSTGRES_USER: admin
   POSTGRES_DB: db
   DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/
+  DATABASE_URL: "postgres://admin:test@postgres:5432"
     
 jobs:
   # Label of the container job
@@ -42,7 +43,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up node
@@ -57,7 +57,3 @@ jobs:
         run: |
           echo "$DATABASE_URL"
           yarn prisma db push
-
-
-            
-        
