@@ -60,7 +60,7 @@ jobs:
 
 
         env: 
-          DATABASE_URL: "postgresql://user:postgres@container-job:5432/test"
+          DATABASE_URL: 'postgresql://user:postgres@container-job:5432/test'
 
 
             
