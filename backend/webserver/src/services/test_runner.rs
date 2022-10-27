@@ -3,8 +3,9 @@ use std::io::{prelude::*};
 use std::path::Path;
 use std::process::{Command, Stdio, Child, ChildStdin, ChildStdout, ChildStderr};
 use error_chain::{error_chain};
-use std::time::Duration;
+use rocket::tokio;
 use wait_timeout::ChildExt;
+use tokio::time::Duration;
 
 use super::dir_generator;
 
@@ -21,13 +22,8 @@ error_chain!{
 }
 
 
-pub async fn execute2(exercise_code: String, test_code: String) -> Result<String> {
-    std::thread::sleep(Duration::from_secs(5));
-    Ok(String::from("Ok k"))
-}
-
 /// Executes the Haskell code in the string `code` and returns stdout.
-pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
+pub async fn execute(exercise_code: String, test_code: String) -> Result<String> {
     // Generate temp directory and code files containing the code and associated test
     let dir = dir_generator::generate_dir();
 
