@@ -8,10 +8,10 @@ on:
       - '*'
 
 env:
-  POSTGRES_PASSWORD: "admin"
-  POSTGRES_USER: "user"
-  POSTGRES_DB: "db"
-  DATABASE_URL: "postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/"
+  POSTGRES_PASSWORD: admin
+  POSTGRES_USER: user
+  POSTGRES_DB: db
+  DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/
     
 jobs:
   # Label of the container job
