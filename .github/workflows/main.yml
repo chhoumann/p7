@@ -53,7 +53,7 @@ jobs:
       - name: migrate DB
         run: yarn prisma db push
         env: 
-          DATABASE_URL: "postgresql://user:postgres@localhost:5432/test "
+          DATABASE_URL: "postgresql://user:postgres@localhost:5432/test"
 
             
         
