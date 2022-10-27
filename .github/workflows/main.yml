@@ -8,13 +8,14 @@ on:
       - '*'
 
 env:
-  POSTGRES_PASSWORD: password
+  POSTGRES_PASSWORD: postgres
   POSTGRES_USER: user
   POSTGRES_DB: test
+  DATABASE_URL: "postgres://user:postgres@container-job:5432/test"
     
 jobs:
   # Label of the container job
-  db:
+  container-job:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     defaults: 
@@ -56,7 +57,7 @@ jobs:
           echo "$DATABASE_URL"
           yarn prisma db push
         env: 
-          DATABASE_URL: "postgresql://user:password@db:5432/test"
+          DATABASE_URL: postgresql://user:postgres@localhost:5432/test
 
 
             
