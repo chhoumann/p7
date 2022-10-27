@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import Link from 'next/link';
 
 
-const SyllabusId: NextPage = () => {
+const SyllabiId: NextPage = () => {
 
     const [selectedId, setSelectedId] = useState<string>()
 
@@ -13,23 +13,17 @@ const SyllabusId: NextPage = () => {
     const { id } = router.query;
     //const sessions = trpc.useQuery
     const testData = [
-        { name: "hello", id: "i21en" },
-        { name: "Jesus", id: "i23en" },
-        { name: "Christ", id: "i22en" },
-        { name: "Christ", id: "i24en" },
-        { name: "Christ", id: "i25en" },
-        { name: "Christ", id: "i26en" },
-        { name: "Christ", id: "i27en" },
-        { name: "Christ", id: "i28en" },
-        { name: "Christ", id: "i29en" },
-        { name: "Christ", id: "i30en" },
-        { name: "Christ", id: "i31en" },
+        { name: "Programmerings paradigmer F22", id: "i21en" },
+        { name: "Programmerings paradigmer E22", id: "i23en" },
+        { name: "Programmerings paradigmer F21", id: "i22en" },
+        { name: "Programmerings paradigmer E21", id: "i24en" },
     ]
 
 
 
     return (
         <div className='container flex justify-center items-center w-full h-[75vh]'>
+            <h2 className="absolute top-10">List of syllabi</h2>
             <div className='flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto'>
 
                 {testData.map((session) =>
@@ -39,10 +33,17 @@ const SyllabusId: NextPage = () => {
                 )}
                 <div className='mb-auto' />
                 <div className='flex flex-row gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white'>
-                    <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
-                        Create new session
-                    </button>
-                    <Link href={selectedId ? `/exercises/${selectedId}`: `/syllabus/${id}`}>
+                    <Link href={`/syllabi/create`}>
+                        <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
+                            Create new session
+                        </button>
+                    </Link>
+                    <Link href={selectedId ? `/problemsets/${selectedId}`: `/syllabi/${id}`}>
+                        <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
+                            view
+                        </button>
+                    </Link>
+                    <Link href={selectedId ? `/syllabi/edit/${selectedId}`: `/syllabi/${id}`}>
                         <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
                             Edit
                         </button>
@@ -53,7 +54,7 @@ const SyllabusId: NextPage = () => {
     )
 }
 
-export default SyllabusId;
+export default SyllabiId;
 
 
 function SessionRow({ id, name, isSelected, onClick }:{ id: string, name: string, isSelected: boolean, onClick: () => void }) {
