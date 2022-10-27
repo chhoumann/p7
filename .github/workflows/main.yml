@@ -28,6 +28,9 @@ jobs:
     services:
       # Label used to access the service container
       postgres:
+
+        env:
+          ${{DATABASE_URL}}
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
