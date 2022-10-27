@@ -51,6 +51,18 @@ Containers are bundles of code and required dependencies. This allows developers
 The containers themselves are created from an image. Here the image is the executable package that encapsulates everything required in order to run the application. On runtime, the image is then turned into our container. 
 This is possible due to the Linux kernel's build process isolation and virtualization capabilities. These also allow a single host system to share its resources with multiple application components in the same way a hypervisor enables the resources of a single computer to be shared between multiple virtual machines\cite{Docker_Container}.
 
+\section{tRPC}
+TRPC is created in order to solve the paint point API presented in modern best practices for web programming using TypeScript. 
+Here an improved way of statically typing endpoints and sharing them between clients and servers is needed\cite{tRPC}.
 
-\section{Postgres (or other db)} %Prisma?, TRPC?
+TRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation. 
+It is structured in a way that allows for types to be shared between the client and server by only important the types instead of the actual server code. 
+This in turn allows developers to not have the actual server code exposed in the \frontend{} 
+Furthermore, tRPC is created in a way to fully take advantage of the powers from a full-stack TypeScript which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
+
+\section{Prisma}
+
+
+
+\section{Postgres (or other db)} %Prisma?
 
