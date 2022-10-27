@@ -5,12 +5,18 @@ import superjson from "superjson";
 import { exampleRouter } from "./example";
 import { protectedExampleRouter } from "./protected-example-router";
 import { codeRouter } from "./code";
+import { syllabusRouter } from "./syllabusRouter";
+import { problemRouter } from "./problemRouter";
+import { problemSetsRouter } from "./problemSetRouter";
 
 export const appRouter = createRouter()
   .transformer(superjson)
   .merge("code.", codeRouter)
   .merge("example.", exampleRouter)
-  .merge("auth.", protectedExampleRouter);
+  .merge("auth.", protectedExampleRouter)
+  .merge("syllabus.", syllabusRouter)
+  .merge("problem.", problemRouter)
+  .merge("problemSets.", problemSetsRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

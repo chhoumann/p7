@@ -11,7 +11,7 @@ datasource db {
     // Further reading: 
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+    url      = "file:./dev.db"
 }
 
 model Example {
@@ -61,4 +61,40 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Syllabus {
+    id         String       @id @default(cuid())
+    name       String
+
+    ProblemSets ProblemSet[]
+}
+
+model ProblemSet {
+    id    String   @id @default(cuid())
+    topic String
+    date  DateTime
+
+    Problems Problem[]
+
+    syllabus   Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
+    syllabusId String
+}
+
+model Problem {
+    id   String @id @default(cuid())
+    name String
+
+    template    String
+    description String
+    Tests       Test[]
+
+    problemSet   ProblemSet @relation(fields: [problemSetId], references: [id], onDelete: Cascade)
+    problemSetId String
+}
+
+model Test {
+    problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+    problemId String  @id
+    code      String
 }
