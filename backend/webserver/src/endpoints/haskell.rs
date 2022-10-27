@@ -3,12 +3,14 @@ use crate::domain::exercise_submission_request::ExerciseSubmissionRequest;
 use crate::domain::code_runner_result::CodeRunnerResponse;
 use crate::services::test_runner;
 
+const MAX_TEST_COUNT: i32 = 10;
+
 static mut COUNT : i32 = 0;
 
 #[post("/haskell", format="json", data = "<exercise_submission_request>")]
 pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
     unsafe {
-        while COUNT >= 10 {
+        while COUNT >= MAX_TEST_COUNT {
             tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
         }
 
