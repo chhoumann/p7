@@ -51,7 +51,10 @@ jobs:
       - name: migrate DB
         run: yarn prisma db push
       - name: print tables
-        run: \c test \dt
+        run: | 
+          psql -d test
+          \dt
+        
       #- name: run endpoint tests
        # run: todo
         #env: 
