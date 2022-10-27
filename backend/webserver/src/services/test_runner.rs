@@ -20,6 +20,12 @@ error_chain!{
     }
 }
 
+
+pub async fn execute2(exercise_code: String, test_code: String) -> Result<String> {
+    std::thread::sleep(Duration::from_secs(5));
+    Ok(String::from("Ok k"))
+}
+
 /// Executes the Haskell code in the string `code` and returns stdout.
 pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
     // Generate temp directory and code files containing the code and associated test

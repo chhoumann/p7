@@ -1,11 +1,11 @@
 use rocket::serde::{json::Json};
 use crate::domain::exercise_submission_request::ExerciseSubmissionRequest;
 use crate::domain::code_runner_result::CodeRunnerResponse;
-use crate::services::code_runner;
+use crate::services::test_runner;
 
 
 #[post("/haskell", format="json", data = "<exercise_submission_request>")]
-pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> { 
+pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
     let exercise_submission = ExerciseSubmissionRequest 
     {
          code: exercise_submission_request.code.to_string(),
@@ -17,7 +17,7 @@ pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json
 
     let exercise_code = json_exercise_submission.code;
     let test_code = json_exercise_submission.test;
-    let result = code_runner::execute(exercise_code, test_code);
+    let result = test_runner::execute(exercise_code, test_code).await;
 
     let output = match result {
         Ok(output) => Json(CodeRunnerResponse { 
