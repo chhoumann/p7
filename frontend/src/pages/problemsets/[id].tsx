@@ -8,25 +8,22 @@ import Link from 'next/link';
 const ExerciseId: NextPage = () => {
 
     const [selectedId, setSelectedId] = useState<string>()
-
     const router = useRouter();
     const { id } = router.query;
-    //const sessions = trpc.useQuery
-    const testData = [
-        { name: "Broplemset1", id: "i21en" },
-        { name: "Broplemset2", id: "i23en" },
-        { name: "Broplemset3", id: "i22en" },
-        { name: "Broplemset4", id: "i24en" },
-    ]
+
+    const problems = trpc.useQuery(["problem.getByProblemSetId", (id as string)??""], {
+        enabled: router.isReady
+    })
+
 
     return (
         <div className='container flex justify-center items-center w-full h-[75vh]'>
             <h2 className="absolute top-10">Problem sets</h2>
             <div className='flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto'>
 
-                {testData.map((session) =>
-                    <React.Fragment key={session.id}>
-                        <ExerciseRow {...session} onClick={() => setSelectedId(session.id)} isSelected={session.id === selectedId}/>
+                {problems.isSuccess && problems.data.problems.map((problemsets) =>
+                    <React.Fragment key={problemsets.id}>
+                        <ExerciseRow {...problemsets} onClick={() => setSelectedId(problemsets.id)} isSelected={problemsets.id === selectedId}/>
                     </React.Fragment>
                 )}
                 <div className='mb-auto' />
@@ -38,7 +35,7 @@ const ExerciseId: NextPage = () => {
                     </Link>
                     <Link href={selectedId ? `/problem/${selectedId}`: `/problemsets/${id}`}>
                         <button className='bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black'>
-                            view
+                            View
                         </button>
                     </Link>
                     <Link href={selectedId ? `/problemsets/edit/${selectedId}` : `/problemsets/${id}`}>

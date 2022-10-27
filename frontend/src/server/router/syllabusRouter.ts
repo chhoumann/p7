@@ -20,4 +20,19 @@ export const syllabusRouter = createRouter().query("getById", {
 
     return { syllabus };
   },
+}).query("findAll", {
+  async resolve(){
+    const syllabi: Syllabus[] | null = await prisma.syllabus.findMany();
+
+    if(!syllabi) {
+      throw new trpc.TRPCError({
+        code: "NOT_FOUND",
+        message: `Syllabi cannot be found`
+      })
+    }
+
+    return syllabi;
+  }
 });
+
+

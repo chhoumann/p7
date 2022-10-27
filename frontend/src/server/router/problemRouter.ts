@@ -3,6 +3,8 @@ import { z } from "zod";
 import * as trpc from "@trpc/server";
 import { prisma } from "../db/client";
 import { Problem } from "@prisma/client";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 export const problemRouter = createRouter().query("getByProblemSetId", {
   input: z.string(),
@@ -20,4 +22,22 @@ export const problemRouter = createRouter().query("getByProblemSetId", {
 
     return { problems };
   },
-});
+}).query("byId", {
+  input: z.string(),
+  async resolve({input}){
+    const problem: Problem | null = await prisma.problem.findFirst({
+      where: {id: input}
+    });
+
+
+    if (!problem) {
+      throw new trpc.TRPCError({
+        code: "NOT_FOUND",
+        message: `Problem with id ${input} not found`,
+      });
+    }
+
+
+    return problem;
+  }
+})
