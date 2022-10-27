@@ -49,16 +49,12 @@ jobs:
         with:
           node-version: latest
 
-      - name: print env
-        run: echo "$DATABASE_URL"
         
       - name: install dependencies
         run: npx ci
       - name: migrate DB
+        run: echo "$DATABASE_URL"
         run: yarn prisma db push
-
-
-
         env: 
           DATABASE_URL: 'postgresql://user:postgres@container-job:5432/test'
 
