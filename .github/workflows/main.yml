@@ -30,8 +30,9 @@ jobs:
       postgres:
 
         env:
+          #The issues stem from here! If test or admin references the global env vars it fails...
           POSTGRES_PASSWORD: test
-          POSTGRES_USER: admin
+          POSTGRES_USER: $POSTGRES_USER
           POSTGRES_DB: $POSTGRES_DB
         # Docker Hub image
         image: postgres
