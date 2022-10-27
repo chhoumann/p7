@@ -25,6 +25,9 @@ jobs:
     services:
       # Label used to access the service container
       postgres:
+
+        env:
+          POSTGRES_USER: admin
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
