@@ -3,8 +3,6 @@ import {z} from "zod";
 import * as trpc from "@trpc/server";
 import {prisma} from "../db/client";
 import {Syllabus} from "@prisma/client";
-import ky from "ky";
-import {env} from "../../env/server.mjs";
 
 const postInput = z.object({
     id: z.string(),
@@ -36,29 +34,12 @@ export const syllabusRouter = createRouter().query("getById", {
     .mutation("postSyllabus", {
         input: postInput, output: postOutput, async resolve({input}) {
             try {
-                const webserverResponse = await ky
-                    .post(`${env.WEBSERVER_ADDRESS}/syllabus`, {
-                        json: {
-                            ...input
-                        }
-                    }).json();
-
-                const parsedResponse = z
-                    .object({
-                        result: z.string(),
-                        success: z.boolean(),
-                    })
-                    .safeParse(webserverResponse);
-
-                if (!parsedResponse.success) {
-                    return {success: false, result: parsedResponse.error.message};
-                }
-                return parsedResponse.data;
-
+                await prisma.syllabus.create({data: input})
+                return {success: true, result: "Successfully created test!"}
             } catch (error) {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
-                    message: "Could not post syllabus to database.",
+                    message: "Could not post test to database.",
                     cause: error
                 })
             }
