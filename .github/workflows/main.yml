@@ -50,6 +50,8 @@ jobs:
         run: npx ci
       - name: migrate DB
         run: yarn prisma db push
+      - name: print tables
+        run: \c test \dt
       #- name: run endpoint tests
        # run: todo
         #env: 
