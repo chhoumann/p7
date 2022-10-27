@@ -30,7 +30,7 @@ jobs:
       postgres:
 
         env:
-          $env.DATABASE_URL
+          $DATABASE_URL
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
