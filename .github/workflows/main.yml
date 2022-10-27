@@ -6,6 +6,11 @@ on:
   pull_request:
     branches:
       - '*'
+
+env:
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_USER: user
+  POSTGRES_DB: test
     
 jobs:
   # Label of the container job
@@ -36,8 +41,8 @@ jobs:
         options: >-
           --health-cmd pg_isready
 
-        env:
-          DATABASE_URL: postgres://user:postgres@localhost:5432/test
+      env:
+        DATABASE_URL: postgres://user:postgres@localhost:5432/test
 
 
     steps:
