@@ -2,16 +2,16 @@
 The following chapter contains short introductions to the most important technologies used the repport. 
 
 \section{Glasgow Haskell Compiler} %-- Haskell afsnit istedet??
-Out of the three currently available Haskell compilers available the Glasgow Haskell Compiler (GHC) is used on the backend for interperting the haskell exercises and running the test suite. GHC was chosen over the other up to date compilers due to it being the standard compiler recommended by the Haskell Organisation \cite{} as well as it being the compiler used in the Haskell Course. 
+Out of the three currently available Haskell compilers available the Glasgow Haskell Compiler (GHC) is used on the backend for interpreting the Haskell exercises and running the test suite. GHC was chosen over the other up-to-date compilers due to it being the standard compiler recommended by the Haskell Organization \cite{} as well as it being the compiler used in the Haskell Course.
 
 \section{Hspec}
-To enable running Haskell tests on the backend we needed a testframe that allowed us to define tests for the exercises. 
+To enable running Haskell tests on the backend we needed a test framework that allowed us to define tests for the exercises. 
 
 Here Hspec was chosen over Hunit since it allows the professor the define the tests in an easy-to-understand domain-specific language(DSL). 
 This makes the framework easier to work with as well as gives us the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise.
 
-Hspec allows integration with other Haskell testframeworks if needed and an automatic discovery of testfiles. 
-Furthermore Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users. 
+Hspec allows integration with other Haskell test frameworks if needed and automatic discovery of test files. 
+Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec Test.}, label={lst:HspecTestExample}]
 {
@@ -23,30 +23,31 @@ Furthermore Hspec also allows for parallel test execution which is preferable wh
  spec = Spec
  spec = do
  	describe "Function Name" do
- 	it "functionality" $ do
+ 	it "functionality description" $ do
 	functionname x `shouldBe' y
 }
 \end{lstlisting}
 
 \section{Rust}
-Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla. The project was sponsored by Mozilla from 2009 to 2021 where the project was moved to the Rust Foundation. 
-The language was created to challange the idea that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}. 
-This in return means that Rust provides the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages. The overall goal is to provide as much safety as possible in a low-level systems language without sacrificing any speed\cite{Rust_in_Action}. 
+Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla. 
+The project was sponsored by Mozilla from 2009 to 2021 where the project along with all trademarks was moved to the Rust Foundation. 
+Rust was created to challenge the idea that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}. 
+This in return means that Rust tries to provide the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages. 
+The overall goal is to provide as much safety as possible in a low-level systems language without sacrificing any speed\cite{Rust_in_Action}. 
 
-In order to achieve this goal Rust provides a large ammount of safety features but its distinguishing feature is its abilitity to prevent invalid data access at compile time. 
-This is a large deal considering Microsoft Security Research Center have shown that invalid data access is behind 70\% of serius security bugs\cite{Safe_Systems_Languages}. 
-Since Rust guarantees that any compiled program is memory-safe this problem is handled by the Rust compiler. 
+In order to achieve this goal Rust provides a large number of safety features but its distinguishing feature is its ability to prevent invalid data access at compile time. 
+This is a large deal considering Microsoft Security Research Center has shown that invalid data access is behind 70\% of serious security bugs\cite{Safe_Systems_Languages}. 
+Since Rust guarantees that any compiled program is memory-safe this problem is handled by the Rust compiler.
 
 
 \section{Docker}
-In order to set up a local development environment for the used APIs and Databases the open source containerization platform Docker was chosen. 
+In order to set up a local development environment for the used APIs and Databases, the open-source containerization platform Docker was chosen. 
 
-The main purpose of Docker is to simplify deliveries in distributed systems with the use of so called containers\cite{Docker_Container}.
-Containers are bundles of code and required dependencies. This allows developers to move around prepackaged appplications ensuring that the developed software runs the same regardless of what system is use\cite{Docker_Container}.
+The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
+Containers are bundles of code and required dependencies. This allows developers to move around prepackaged applications ensuring that the developed software runs the same regardless of what system is use\cite{Docker_Container}.
 
-Containers themselves are created from an image. Here the image is the executeable package that encapsulates everything required in order to run the application. On runtime the image are then turned into our container. 
-This is possible due to the Linux kernels build process isolation and virtualization capabilities. These also allow a single host system to share its resources with multiple application components in the same way a hypervisor enables a single computers resources to be shared between multiple virtual machines\cite{Docker_Container}. 
-
+The containers themselves are created from an image. Here the image is the executable package that encapsulates everything required in order to run the application. On runtime, the image is then turned into our container. 
+This is possible due to the Linux kernel's build process isolation and virtualization capabilities. These also allow a single host system to share its resources with multiple application components in the same way a hypervisor enables the resources of a single computer to be shared between multiple virtual machines\cite{Docker_Container}.
 
 
 \section{Postgres (or other db)} %Prisma?, TRPC?
