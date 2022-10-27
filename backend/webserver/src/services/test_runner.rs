@@ -1,14 +1,13 @@
-use std::io::{prelude::*};
 use std::path::Path;
 use std::process::Stdio;
 use error_chain::{error_chain};
 use rocket::tokio;
-use wait_timeout::ChildExt;
-use tokio::process::{Child, ChildStdin, ChildStdout, ChildStderr};
+use tokio::process::Child;
 use tokio::process::Command;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::time::Duration;
 use tokio::fs;
+use tokio::time::timeout;
 
 use super::dir_generator;
 
@@ -38,18 +37,17 @@ pub async fn execute(exercise_code: String, test_code: String) -> Result<String>
     // Spawn "runhaskell" child process and kill after TIME_OUT
     let mut runhaskell_process = spawn_runhaskell_command(&dir, TEMP_TEST_FILE_NAME);
 
-    let status_code = runhaskell_process.wait().await.unwrap();
-    // let secs = Duration::from_secs(TIME_OUT);
-    // let status_code = match runhaskell_process.wait_timeout(secs).unwrap() {
-    //     Some(status) => status,
-    //     None => {
-    //         runhaskell_process.kill().unwrap();
-    //         error_chain::bail!(format!("Code execution timed out after {} seconds.", TIME_OUT))
-    //     }
-    // };
+    let duration = Duration::from_secs(TIME_OUT);
+    let status_code = match timeout(duration, runhaskell_process.wait()).await.unwrap() {
+        Ok(status) => status,
+        Err(_) => {
+            runhaskell_process.kill().await.unwrap();
+            error_chain::bail!(format!("Code execution timed out after {} seconds.", TIME_OUT))
+        }
+    };
 
     // Remove temporary directories and files, and result of the runhaskell command
-    clean_up_code_dir(&dir);
+    clean_up_code_dir(&dir).await;
 
     let output = get_output(runhaskell_process).await;
 
@@ -116,6 +114,6 @@ async fn get_output(runhaskell_process : Child) -> String {
     return output
 }
 
-fn clean_up_code_dir(dir : &str) {
-    std::fs::remove_dir_all(dir).unwrap();
+async fn clean_up_code_dir(dir : &str) {
+    fs::remove_dir_all(dir).await.unwrap();
 }
