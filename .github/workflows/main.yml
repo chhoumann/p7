@@ -53,17 +53,8 @@ jobs:
         run: npx ci
       - name: migrate DB
         run: yarn prisma db push
-
         env: 
-          DATABASE_URL: postgres://user:postgres@localhost:5432/test
+          DATABASE_URL: ${{env.DATABASE_URL}}
 
-    
-      
-        
-      #- name: run endpoint tests
-       # run: todo
-        #env: 
-         # DATABASE_URL: 
-            
             
         
