@@ -38,11 +38,11 @@ pub async fn execute(exercise_code: String, test_code: String) -> Result<String>
     let mut runhaskell_process = spawn_runhaskell_command(&dir, TEMP_TEST_FILE_NAME);
 
     let duration = Duration::from_secs(TIME_OUT);
-    let status_code = match timeout(duration, runhaskell_process.wait()).await.unwrap() {
-        Ok(status) => status,
-        Err(_) => {
+    let status_code = match timeout(duration, runhaskell_process.wait()).await {
+        Ok(status) => status.unwrap(),
+        Err(elapsed) => {
             runhaskell_process.kill().await.unwrap();
-            error_chain::bail!(format!("Code execution timed out after {} seconds.", TIME_OUT))
+            error_chain::bail!(format!("Code execution timed out after {} seconds.", elapsed))
         }
     };
 
