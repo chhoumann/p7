@@ -34,7 +34,7 @@ jobs:
           POSTGRES_USER: $POSTGRES_USER
           POSTGRES_DB: $POSTGRES_DB
         # Docker Hub image
-        image: postgres:12-alpine
+        image: postgres
         # Provide the password for postgres
         ports: 
           - 5432:5432
