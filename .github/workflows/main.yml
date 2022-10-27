@@ -11,7 +11,6 @@ env:
   POSTGRES_PASSWORD: postgres
   POSTGRES_USER: user
   POSTGRES_DB: test
-  DATABASE_URL: postgres://user:postgres@localhost:5432/test
     
 jobs:
   # Label of the container job
@@ -42,6 +41,10 @@ jobs:
         options: >-
           --health-cmd pg_isready
 
+        env:
+          DATABASE_URL: postgres://user:postgres@localhost:5432/test
+
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up node
@@ -53,9 +56,6 @@ jobs:
         run: npx ci
       - name: migrate DB
         run: yarn prisma db push
-
-        env: 
-          DATABASE_URL: "postgresql://user:postgres@localhost:5432/test"
 
             
         
