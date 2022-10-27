@@ -42,7 +42,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up node
-        uses: action/setup-node@latest
+        uses: action/setup-node@v3
+            with: 
+                node-version: latest
+        
       - name: install dependencies
         run: npx ci
       - name: migrate DB
