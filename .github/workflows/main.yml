@@ -27,7 +27,7 @@ jobs:
       postgres:
 
         env:
-          POSTGRES_HOST_AUTH_METHOD=trust
+          POSTGRES_HOST_AUTH_METHOD=trust 
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
