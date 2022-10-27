@@ -18,6 +18,9 @@ const SolveProblem: NextPage = () => {
     const problem = trpc.useQuery(["problem.byId", id as string],{
         enabled: router.isReady
     })
+    const test = trpc.useQuery(["test.byId", id as string], {
+        enabled: router.isReady
+    })
 
     console.log(problem.data)
     const mutation = trpc.useMutation("code.haskell", {
@@ -31,6 +34,10 @@ const SolveProblem: NextPage = () => {
 
     if(!problem.isSuccess || !problem.data){
         return <div>Could not find problem ☹</div>
+    }
+
+    if(!test.isSuccess || !test.data){
+        return <div>Could not find test ☹</div>
     }
     return (
         <>
@@ -64,6 +71,7 @@ const SolveProblem: NextPage = () => {
                                     onClick={() =>
                                         mutation.mutate({
                                             code: codebox.current?.value ?? "test",
+                                            test: test.data.code
                                         })
                                     }
                                 >
@@ -86,7 +94,7 @@ const SolveProblem: NextPage = () => {
                                 />
                             </div>
                             <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
-                                {tab === TabState.Instructions && <Instructions />}
+                                {tab === TabState.Instructions && <Instructions text={problem.data.description}/>}
                                 {tab === TabState.Result && mutation.isSuccess && (
                                     <Results
                                         result={mutation.data?.result}
@@ -125,24 +133,10 @@ function Tab({
     );
 }
 
-function Instructions() {
+function Instructions({text}:{text:string}) {
     return (
         <>
-            <strong>SHORT INTRODUCTION</strong>
-            <p>
-                Understanding general language structure and syntax is important.
-                Therefore, we begin with a short example of invalid code.
-                <br />
-                <br />
-                PROBLEM FORMULATION HERE
-                <br />
-                Find the issue in the code on the left.
-            </p>
-            <br />
-            <strong>ADDITIONAL TIPS</strong>
-            <br />
-            This is not Rust.
-            <br />
+            <p>{text}</p>
         </>
     );
 }

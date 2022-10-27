@@ -19,7 +19,8 @@ export default async function addTestData(
               {
                 name: "onlytwo",
                 description: `Define, using pattern matching and without using the length function, a function onlytwo that tells us if a list has precisely two elements – in which case it must return True – or not, in which case it must return False. What is the type of onlytwo?`,
-                template: "onlytwo :: ",
+                template: `module Code where 
+  onlytwo :: `,
                 Tests: {
                   create: {
                     code: `module Session3Spec where
@@ -27,7 +28,7 @@ export default async function addTestData(
 import Test.Hspec
 import Test.QuickCheck
 import Control.Exception (evaluate)
-import SolutionSession3
+import Code
 
 main :: IO()
 main = hspec $ do
