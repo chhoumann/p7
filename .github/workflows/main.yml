@@ -6,7 +6,12 @@ on:
   pull_request:
     branches:
       - '*'
-    
+
+env:
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_USER: user
+  POSTGRES_DB: test
+  DATABASE_URL: postgres://user:postgres@localhost:5432/test
     
 jobs:
   # Label of the container job
@@ -26,11 +31,6 @@ jobs:
         # Docker Hub image
         image: postgres
         # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: user
-          POSTGRES_DB: test
-          DATABASE_URL: postgres://user:postgres@localhost:5432/test
         ports: 
           - 5432:5432
         # Set health checks to wait until postgres has started
