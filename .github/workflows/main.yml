@@ -8,7 +8,7 @@ on:
       - '*'
 
 env:
-  POSTGRES_PASSWORD: postgres
+  POSTGRES_PASSWORD: password
   POSTGRES_USER: user
   POSTGRES_DB: test
     
@@ -56,7 +56,7 @@ jobs:
           echo "$DATABASE_URL"
           yarn prisma db push
         env: 
-          DATABASE_URL: "postgresql://user:postgres@db:5432/test"
+          DATABASE_URL: "postgresql://user:password@db:5432/test"
 
 
             
