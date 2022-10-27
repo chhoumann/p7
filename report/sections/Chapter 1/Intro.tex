@@ -1,29 +1,79 @@
 \chapter{Introduction} \label{chap:introduction}
-On the 1st semester of the Software Master’s Degree at \aau{}, the Programming Paradigms course had a problem where most attending students failed the course last year. 
-This resulted in a survey being sent out, and a student task force being assembled to grasp the main flaws with how the course was structured. 
-Here, many students mentioned lacking experience in the programming languages taught in the course given few opportunities to actively train their skills during the semester. 
+The Haskell programming language is purely functional\cite{} and builds upon the lambda calculus model of computation \cite{}.
+Unlike many other programming languages, Haskell can both be interpreted or compiled into an executable binary file.
+It is a statically typed language implementing many mathematical constructs such as currying, set-builder notation, recursive definitions of both types and functions, and more.
+This allows the programmer to create concise solutions that would normally be quite verbose in other programming paradigms.
+Therefore, many companies such as Meta and Galois use Haskell for cryptography, avionics monitoring and spam filtering.
+Thus, Haskell and other languages within the functional programming paradigm are useful tools for software engineers.
 
 
-With this in mind, \aau{} chose to restructure the course entirely. 
-The course now focuses on a single programming language instead of multiple. 
-Furthermore, the course now features more practical programming exercises with classroom discussion in-between, rather than traditional lectures followed by a seperate exercise session.
-To support this way of teaching, the course lectures have been moved to a more classical classroom setup, but with a monitor at each table and a main monitor at the lecture desk. 
-This is meant to allow students to more easily work together in groups by using the shared monitor.
-In addition, it allows the professor to view and share other groups' monitors such that student solutions can be used for classroom discussions. 
+Haskell is taught in the Programming Paradigms course on the 1st semester of the Software Master's Degree at \aau{}.
+Most students attending this course failed in the past.
+This resulted in a survey being sent out, and a student task force being assembled to understand the issues that caused the high failure rate.
+Here, many students mentioned not feeling experienced enough with the programming languages used in the course to teach the functional and logical programming paradigms.
 
 
-However, with this way of teaching new problems arise.
-Since students use their own local development environments for programming exercises, other students cannot revisit the discussed exercise solutions created by other groups. This makes it difficult to reflect on and learn from other students' solutions.
-Furthermore, it is difficult to verify whether ones own solution is correct and lives up to the requirements of the exercise.
+Consequently, \aau{} chose to restructure the course entirely.
+Rather than teaching many different programming languages within the functional and logical programming paradigms, the course was restructured to focus only on Haskell.
+Furthermore, the course now features more practical programming exercises with classroom discussion in-between, rather than traditional lectures followed by a separate exercise session.
+Supporting this way of teaching, the course lectures have been moved to a more classical classroom setup.
+By using a shared monitor at each table, multiple students can work together in groups to solve given problem sets.
+In addition, a primary monitor at the lecture desk enables the professor to view and share other groups' monitors such that student solutions can be used for classroom discussions.
+
+
+\section{Problem analysis}
+Following the restructuring of the Programming Paradigms course, new problems arose.
+Since students use their own local development environments for programming exercises, other students cannot revisit the discussed exercise solutions created by other groups.
+This makes it difficult to reflect on and learn from other students' solutions.
+Furthermore, it is difficult to verify whether one's own solution is correct and lives up to the requirements of the exercise.
 In fact, it is not uncommon for people to misunderstand an exercise and therefore implement an incorrect solution.
+Additionally, the system used to connect to and use the monitors in the classroom does not support any Linux-based operating systems, resulting in many students being unable to share their solutions on the monitor.
+Feedback is often slow since students must wait for teaching assistants to answer questions from many groups -- these questions are often the same, or of similar nature.
+Often, students end up waiting until the time assigned for the exercise runs out, after which a solution is presented to the whole class.
+
+This is problematic since students are sometimes unable to verify whether their solution is correct, or sometimes end up waiting so long that they do not solve the problem in the first place.
+
+\section{Existing solutions}
+In order to deal with the aforementioned problems, students use third-party learning platforms such as Codewars\cite{Codewars}, Coursera\cite{Coursera}, and Codecademy\cite{Codecademy}.
+These platforms offer an alternative approach to learning programming languages and paradigms to traditional classroom teaching by offering problems the user must solve.
+The feedback loop for each platform is quite different, however.
 
 
+Codewars focuses on competitive programming, meaning users compete to solve problems fastest and most efficient way.
+When a user submits a solution to a problem, one or more tests are used to verify whether or not the submitted code solves the given problem. 
+However, the problems do not constrain the user to use specific programming language constructs in their solution.
+Therefore the solutions with the highest ratings can include language constructs that are foreign to a new programmer. 
+This would certainly not be ideal in a university setting where students need to understand specific concepts for each exercise session.
 
 
+Coursera offers on-demand lectures and exercises created by third parties similar to how a traditional university course might be structured.
+On Coursera, there is no way to ask other people for help if a student gets stuck on an exercise.
+Furthermore, feedback on exercises is given in written form by other course participants, meaning there is no way to get feedback from a professor or teachers assistant. 
 
 
+Finally, while Codecademy offers instant feedback on problem solutions through tests, Codecademy has its own curriculums and thus would not be usable by a university professor. 
+It also does not offer extensive feedback on exercise solutions but instead informs the user that what might be wrong with their code. 
 
 
+Thus, none of these platforms are suitable as a supplementary platform to the programming paradigms course. 
+\section{Problem statement}
+Current platforms for learning to program are mainly split into three types: Coding exercises, video guides, and online curriculum. 
+AAU could benefit from an application that has been designed specifically for the case of teaching at AAU.
+To address the shortcomings of the current system used during exercises, an application designed to facilitate fast concrete feedback on exercises, for the students and the lecturer, could be created.
+By summarizing the main problems following the switch to the new teaching approach, an initial problem statement is written.
+\textbf{suggestions:}
+\begin{displayquote}
+How can one ensure a mutual feedback loop between students, teaching assistants and the professor during exercise sessions?
+\end{displayquote} 
 
+\begin{displayquote}
+    How can an application ensure swift feedback between teacher and possibly many students during exercise sessions?
+\end{displayquote} 
 
+\section{Solution}
+To alleviate the problem defined in the problem statement, a platform has been developed.
+The platform enables a professor to define problems that students can be solved students later.
+Whenever a student submits a solution to a problem, tests predefined by the professor will be run and notify the student whether their code is a valid solution.
+% it should describe the platform a bit more.
+The platform consists of a web application providing a UI, and a back-end system responsible for testing exercise solution submissions.
 
