@@ -11,7 +11,7 @@ env:
   POSTGRES_PASSWORD: password
   POSTGRES_USER: user
   POSTGRES_DB: database
-  DATABASE_URL: "postgresql://user:1234@postgres:5432/database"
+  DATABASE_URL: "postgresql://user:postgres@postgres:5432/database"
     
 jobs:
   # Label of the container job
