@@ -7,11 +7,11 @@ on:
     branches:
       - '*'
 
-env:
-  POSTGRES_PASSWORD: "password"
-  POSTGRES_USER: "user"
-  POSTGRES_DB: "database"
-  DATABASE_URL: "postgres://"$POSTGRES_USER":POSTGRES_PASSWORD@postgres:5432/"
+  env:
+    POSTGRES_PASSWORD: "password"
+    POSTGRES_USER: "user"
+    POSTGRES_DB: "database"
+    DATABASE_URL: "postgres://"$POSTGRES_USER":POSTGRES_PASSWORD@postgres:5432/"
     
 jobs:
   # Label of the container job
