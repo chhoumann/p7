@@ -56,8 +56,8 @@ jobs:
         run: npx ci
       - name: migrate DB
         run: npm run db:push
-          env:
-            DATABASE_URL: postgresql://user:postgres@localhost:5432/test
+        env:
+          DATABASE_URL: postgresql://user:postgres@localhost:5432/test
 
             
         
