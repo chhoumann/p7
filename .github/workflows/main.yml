@@ -55,7 +55,9 @@ jobs:
       - name: install dependencies
         run: npx ci
       - name: migrate DB
-        run: yarn prisma db push
+        run: npm run db:push
+          env:
+            DATABASE_URL: postgresql://user:postgres@localhost:5432/test
 
             
         
