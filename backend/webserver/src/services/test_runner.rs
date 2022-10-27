@@ -11,7 +11,7 @@ use super::dir_generator;
 
 const TIME_OUT : u64 = 10;
 const TEMP_CODE_FILE_NAME : &str = "Code.hs";
-const TEMP_TEST_FILE_NAME : &str = "test.hs";
+const TEMP_TEST_FILE_NAME : &str = "Test.hs";
 
 error_chain!{
     errors { CmdError }
