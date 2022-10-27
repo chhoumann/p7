@@ -9,7 +9,7 @@ use wait_timeout::ChildExt;
 use super::dir_generator;
 
 const TIME_OUT : u64 = 10;
-const TEMP_CODE_FILE_NAME : &str = "code.hs";
+const TEMP_CODE_FILE_NAME : &str = "Code.hs";
 const TEMP_TEST_FILE_NAME : &str = "test.hs";
 
 error_chain!{
