@@ -1,10 +1,12 @@
 use std::io::{prelude::*};
 use std::path::Path;
-use std::process::{Command, Stdio, Child, ChildStdin, ChildStdout, ChildStderr};
+use std::process::Stdio;
 use error_chain::{error_chain};
 use rocket::tokio;
-use tokio::io::AsyncWriteExt;
 use wait_timeout::ChildExt;
+use tokio::process::{Child, ChildStdin, ChildStdout, ChildStderr};
+use tokio::process::Command;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::time::Duration;
 use tokio::fs;
 
@@ -36,19 +38,20 @@ pub async fn execute(exercise_code: String, test_code: String) -> Result<String>
     // Spawn "runhaskell" child process and kill after TIME_OUT
     let mut runhaskell_process = spawn_runhaskell_command(&dir, TEMP_TEST_FILE_NAME);
 
-    let secs = Duration::from_secs(TIME_OUT);
-    let status_code = match runhaskell_process.wait_timeout(secs).unwrap() {
-        Some(status) => status,
-        None => {
-            runhaskell_process.kill().unwrap();
-            error_chain::bail!(format!("Code execution timed out after {} seconds.", TIME_OUT))
-        }
-    };
+    let status_code = runhaskell_process.wait().await.unwrap();
+    // let secs = Duration::from_secs(TIME_OUT);
+    // let status_code = match runhaskell_process.wait_timeout(secs).unwrap() {
+    //     Some(status) => status,
+    //     None => {
+    //         runhaskell_process.kill().unwrap();
+    //         error_chain::bail!(format!("Code execution timed out after {} seconds.", TIME_OUT))
+    //     }
+    // };
 
     // Remove temporary directories and files, and result of the runhaskell command
     clean_up_code_dir(&dir);
 
-    let output = get_output(runhaskell_process);
+    let output = get_output(runhaskell_process).await;
 
     if !status_code.success() {
         // Note: Tests that fail flush to stdout and not stderr
@@ -96,11 +99,11 @@ fn spawn_runhaskell_command(dir : &str, file_name : &str) -> Child {
         .unwrap();
 }
 
-fn get_output(runhaskell_process : Child) -> String {
+async fn get_output(runhaskell_process : Child) -> String {
     let mut output = String::new();
 
     if !runhaskell_process.stderr.is_none() {
-        runhaskell_process.stderr.unwrap().read_to_string(&mut output).unwrap();
+        runhaskell_process.stderr.unwrap().read_to_string(&mut output).await.unwrap();
 
         if !output.is_empty() {
             println!("runhaskell process encountered stderr: {}", output);
@@ -108,7 +111,7 @@ fn get_output(runhaskell_process : Child) -> String {
         }
     }
 
-    runhaskell_process.stdout.unwrap().read_to_string(&mut output).unwrap();
+    runhaskell_process.stdout.unwrap().read_to_string(&mut output).await.unwrap();
 
     return output
 }
