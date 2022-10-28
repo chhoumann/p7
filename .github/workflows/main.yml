@@ -8,9 +8,9 @@ on:
       - '*'
 
 env:
-  DB_PASSWORD: test
-  DB_USER: admin
-  DB_NAME: db
+  POSTGRES_PASSWORD: test
+  POSTGRES_USER: admin
+  POSTGRES_DB: db
   DATABASE_URL: "postgres://admin:test@postgres:5432"
     
 jobs:
@@ -32,7 +32,7 @@ jobs:
         env:
           #The issues stem from here! If test or admin references the global env vars it fails...
           POSTGRES_PASSWORD: test
-          POSTGRES_USER: $DB_USER
+          POSTGRES_USER: admin
           POSTGRES_DB: $POSTGRES_DB
         # Docker Hub image
         image: postgres
