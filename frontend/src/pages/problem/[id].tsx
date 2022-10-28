@@ -142,7 +142,10 @@ function Instructions({text}:{text:string}) {
 }
 
 function Results({ result, success }: { result?: string; success?: boolean }) {
-    if (!result || !success) return <></>;
+    if (!result) return <></>;
+    const formattedResult = result.trim()
+        .replaceAll("[v]", "✅")
+        .replaceAll("[x]", "❌")
 
     return (
         <div className="flex flex-col w-full">
@@ -153,7 +156,7 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
             <div className="my-8" />
 
             <span className="text-xl">Output</span>
-            <code className="bg-gray-100 p-2 rounded-lg">{result}</code>
+            <pre className={`bg-gray-100 p-2 rounded-lg text-white ${success ? `bg-green-600 `:`bg-red-700`}`}>{formattedResult}</pre>
         </div>
     );
 }
