@@ -1,18 +1,20 @@
+use axum::{
+    routing::post,
+    Router,
+};
+use axum::body::Body;
+
 mod domain;
 mod endpoints;
 mod services;
 
-#[macro_use]
-extern crate rocket;
+#[tokio::main]
+async fn main() {
+    let app : Router<Body> = Router::new()
+        .route("/haskell", post(endpoints::haskell::new));
 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
-    let _rocket = rocket::build()
-        .mount("/", routes![endpoints::index::index])
-        .mount("/", routes![endpoints::haskell::new])
-        .attach(endpoints::cors::CORS)
-        .launch()
-        .await?;
-
-    Ok(())
+    axum::Server::bind(&"0.0.0.0:8000".parse().unwrap())
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }

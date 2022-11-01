@@ -1,7 +1,6 @@
 use std::path::Path;
 use std::process::Stdio;
 use error_chain::{error_chain};
-use rocket::tokio;
 use tokio::process::Child;
 use tokio::process::Command;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};

@@ -9,10 +9,7 @@ edition = "2018"
 [dependencies]
 error-chain = "0.12.4"
 wait-timeout = "0.2.0"
-serde = "1.0.144"
+serde = { version = "1.0.144", features = ["derive"] }
 rand="0.8.5"
 tokio={ version = "1", features = ["full"] }
-
-[dependencies.rocket]
-version = "0.5.0-rc.2"
-features = ["json"]
+axum = "0.5.16"

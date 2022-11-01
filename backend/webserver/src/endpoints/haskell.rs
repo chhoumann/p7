@@ -1,4 +1,5 @@
-use rocket::serde::{json::Json};
+use axum::extract::Json;
+
 use crate::domain::exercise_submission_request::ExerciseSubmissionRequest;
 use crate::domain::code_runner_result::CodeRunnerResponse;
 use crate::services::test_runner;
@@ -7,8 +8,7 @@ const MAX_TEST_COUNT: i32 = 10;
 
 static mut COUNT : i32 = 0;
 
-#[post("/haskell", format="json", data = "<exercise_submission_request>")]
-pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
+pub async fn new(Json(exercise_submission): Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
     unsafe {
         while COUNT >= MAX_TEST_COUNT {
             tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
@@ -17,7 +17,7 @@ pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -
         println!("Spawning thread");
         COUNT += 1;
 
-        let res = schedule_test(exercise_submission_request).await;
+        let res = schedule_test(exercise_submission).await;
 
         COUNT -= 1;
         println!("Ending thread");
@@ -27,18 +27,9 @@ pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -
 }
 
 
-async fn schedule_test(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
-    let exercise_submission = ExerciseSubmissionRequest
-    {
-        code: exercise_submission_request.code.to_string(),
-        test: exercise_submission_request.test.to_string()
-    };
-
-    let json_exercise_submission = Json(exercise_submission)
-        .into_inner();
-
-    let exercise_code = json_exercise_submission.code;
-    let test_code = json_exercise_submission.test;
+async fn schedule_test(exercise_submission: ExerciseSubmissionRequest) -> Json<CodeRunnerResponse> {
+    let exercise_code = exercise_submission.code;
+    let test_code = exercise_submission.test;
     let result = test_runner::execute(exercise_code, test_code).await;
 
     let output = match result {

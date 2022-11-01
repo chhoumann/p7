@@ -1,8 +1,7 @@
-use rocket::serde::{Deserialize, Serialize};
+use serde::{Serialize, Deserialize};
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
-#[serde(crate = "rocket::serde")]
 pub struct CodeRunnerResponse {
     pub success: bool,
     pub result: String
