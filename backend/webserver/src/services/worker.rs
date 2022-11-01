@@ -5,6 +5,7 @@ use crate::domain::web_api_data::{ExerciseSubmissionRequest, TestRunnerWork, Tes
 use crate::test_runner;
 
 pub fn run(mut rx : Receiver<TestRunnerWork>) {
+    // TODO: Use a task instead
     tokio::spawn(async move {
         loop {
             let data = rx.recv().await.unwrap();
