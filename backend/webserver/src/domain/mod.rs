@@ -1,2 +1,2 @@
-pub mod exercise_submission_request;
-pub mod code_runner_result;
+pub mod web_api_data;
+pub mod shared_state;
