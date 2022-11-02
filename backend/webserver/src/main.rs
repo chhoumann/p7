@@ -20,8 +20,6 @@ mod services;
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
-    
     let (tx, rx) : (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) = mpsc::channel(10); 
     let map = Arc::new(Mutex::new(Box::new(HashMap::new())));
     let shared_state = Arc::new(State {
@@ -31,6 +29,7 @@ async fn main() {
     
     let app = create_app(shared_state);
 
+    dotenv().ok();
     run_worker(rx, map);
     bind_server(app).await;
 }
