@@ -31,7 +31,7 @@ pub async fn get_test_runner_result(
     Path(id) : Path<Uuid>,
     Extension(state): Extension<Arc<State>>,
 ) -> Json<Value> {
-    let map = state.jobs.lock().unwrap();
+    let mut map = state.jobs.lock().unwrap();
     
     if !map.contains_key(&id) {
         // UUID not contained in hashmap at all
@@ -46,6 +46,7 @@ pub async fn get_test_runner_result(
     }
 
     let result = work.clone().unwrap();
+    map.remove(&id);
     
     Json(json!({
         "status": "complete",

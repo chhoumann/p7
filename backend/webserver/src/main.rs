@@ -28,7 +28,6 @@ async fn main() {
     let app = create_app(shared_state);
 
     worker::run(rx, map);
-
     bind_server(app).await;
 }
 
