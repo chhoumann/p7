@@ -7,22 +7,22 @@ import {ProblemSet} from "@prisma/client";
 const zodObjProblemSet = z.object({
   topic: z.string(),
   date: z.date(),
-  syllabusId: z.string(),
+  syllabusName: z.string(),
 })
 
 
 export const problemSetsRouter = createRouter().query("getBySyllabusId", {
   input: z.string(),
-  async resolve({ input: id }) {
-    console.log("id is: ", id)
+  async resolve({ input: name }) {
+    console.log("id is: ", name)
     const problemSets: ProblemSet[] | null = await prisma.problemSet.findMany({
-      where: { syllabusId: id },
+      where: { syllabusName: name },
     });
 
     if (!problemSets || problemSets.length === 0) {
       throw new trpc.TRPCError({
         code: "NOT_FOUND",
-        message: `ProblemSets with syllabusId ${id} not found`,
+        message: `ProblemSets with syllabusId ${name} not found`,
       });
     }
 
@@ -42,4 +42,24 @@ export const problemSetsRouter = createRouter().query("getBySyllabusId", {
       })
     }
   }
+})
+.mutation("deleteProblemSet", {
+  input: z.string(),
+  async resolve({ input: id }) {
+    try {
+      await prisma.problemSet.delete({
+        where: {
+          id,
+        },
+      });
+
+      return true;
+    } catch (error) {
+      throw new trpc.TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Could not delete problem set with ID ${id}`,
+        cause: error,
+      });
+    }
+  },
 });
