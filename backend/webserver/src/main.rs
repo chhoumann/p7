@@ -1,4 +1,5 @@
-use std::sync::Arc;
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use axum::{routing::post, Router, Extension};
 use axum::body::Body;
 use tokio::sync::mpsc;
@@ -6,7 +7,7 @@ use tokio::sync::mpsc::{Sender, Receiver};
 
 use crate::services::test_runner;
 use crate::services::worker;
-use crate::domain::web_api_data::{TestRunnerWork};
+use crate::domain::web_api_data::ExerciseSubmission;
 use crate::domain::shared_state::State;
 
 mod domain;
@@ -16,9 +17,12 @@ mod services;
 
 #[tokio::main]
 async fn main() {
-    let (tx, rx) : (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) = mpsc::channel(10); 
+    let (tx, rx) : (Sender<ExerciseSubmission>, Receiver<ExerciseSubmission>) = mpsc::channel(10); 
     
-    let shared_state = Arc::new(State { tx } ) ;
+    let shared_state = Arc::new(State {
+        tx,
+        jobs: Arc::new(Mutex::new(Box::new(HashMap::new())))
+    });
     
     let app : Router<Body> = Router::new()
         .route("/haskell", post(endpoints::haskell::new))

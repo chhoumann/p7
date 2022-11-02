@@ -1,20 +1,29 @@
 use serde::{Serialize, Deserialize};
+use uuid::Uuid;
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
-pub struct ExerciseSubmissionRequest {
+pub struct ExerciseSubmission {
     pub code: String,
     pub test: String,
 }
 
 pub struct TestRunnerWork {
-    pub submission : ExerciseSubmissionRequest,
-    // We probably eventually need to add the client's information here
+    pub complete : bool,
+    pub result : Option<TestRunnerResult>
 }
+
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
-pub struct TestRunnerResponse {
+pub struct Token {
+    pub id : Uuid
+}
+
+
+#[derive(Deserialize)]
+#[derive(Serialize)]
+pub struct TestRunnerResult {
     pub success: bool,
-    pub result: String
+    pub output: String
 }
