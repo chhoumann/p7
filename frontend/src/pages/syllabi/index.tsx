@@ -6,19 +6,19 @@ import Link from "next/link";
 const Syllabi: NextPage = () => {
     const [selectedId, setSelectedId] = useState<string>();
 
-    const session = trpc.useQuery(["syllabus.findAll"]);
+    const syllabi = trpc.useQuery(["syllabus.findAll"]);
 
     return (
         <div className="container flex justify-center items-center w-full h-[75vh]">
             <h2 className="absolute top-10">List of syllabi</h2>
             <div className="flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto">
-                {session.isSuccess &&
-                    session.data.map((session) => (
-                        <React.Fragment key={session.id}>
+                {syllabi.isSuccess &&
+                    syllabi.data.map((syllabus) => (
+                        <React.Fragment key={syllabus.id}>
                             <SessionRow
-                                {...session}
-                                onClick={() => setSelectedId(session.id)}
-                                isSelected={session.id === selectedId}
+                                {...syllabus}
+                                onClick={() => setSelectedId(syllabus.id)}
+                                isSelected={syllabus.id === selectedId}
                             />
                         </React.Fragment>
                     ))}
