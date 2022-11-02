@@ -9,19 +9,29 @@ const SyllabusId: NextPage = () => {
     const router = useRouter();
     const { id } = router.query;
 
-    const problemsets = trpc.useQuery(
+    const problemSets = trpc.useQuery(
         ["problemSets.getBySyllabusId", (id as string) ?? ""],
         {
             enabled: router.isReady,
         }
     );
 
+    const deleteSetMutation = trpc.useMutation(["problemSets.deleteProblemSet"], {
+        onSuccess: () => problemSets.refetch()
+    });
+    
+    function deleteSetHandler() {
+        if (!selectedId) return;
+
+        deleteSetMutation.mutate(selectedId)
+    }
+
     return (
         <div className="container flex justify-center items-center mx-auto w-full h-[75vh]">
             <h2 className="absolute top-10">Problem sets</h2>
             <div className="flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto">
-                {problemsets.isSuccess &&
-                    problemsets.data.map((problemsets) => (
+                {problemSets.isSuccess &&
+                    problemSets.data.map((problemsets) => (
                         <React.Fragment key={problemsets.id}>
                             <ExerciseRow
                                 {...problemsets}
@@ -31,7 +41,7 @@ const SyllabusId: NextPage = () => {
                         </React.Fragment>
                     ))}
                 <div className="mb-auto" />
-                <div className="flex flex-row gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
+                <div className="flex flex-row-reverse gap-4 mx-3 my-3 pt-3 pb-3 justify-center sticky bottom-0 bg-white">
                     <Link href={`/problemsets/create`}>
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
                             Create new
@@ -59,6 +69,9 @@ const SyllabusId: NextPage = () => {
                             Edit
                         </button>
                     </Link>
+                        <button onClick={deleteSetHandler} className="bg-red-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
+                            Delete
+                        </button>
                 </div>
             </div>
         </div>
