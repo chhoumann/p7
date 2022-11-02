@@ -1250,6 +1250,7 @@ dependencies = [
  "memchr",
  "mio",
  "num_cpus",
+ "parking_lot",
  "pin-project-lite",
  "signal-hook-registry",
  "socket2",
@@ -1468,6 +1469,7 @@ dependencies = [
  "rand",
  "rocket",
  "serde",
+ "tokio",
  "wait-timeout",
 ]
 

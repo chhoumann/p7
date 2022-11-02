@@ -3,14 +3,15 @@ use std::io::{prelude::*};
 use std::path::Path;
 use std::process::{Command, Stdio, Child, ChildStdin, ChildStdout, ChildStderr};
 use error_chain::{error_chain};
-use std::time::Duration;
+use rocket::tokio;
 use wait_timeout::ChildExt;
+use tokio::time::Duration;
 
 use super::dir_generator;
 
 const TIME_OUT : u64 = 10;
-const TEMP_CODE_FILE_NAME : &str = "code.hs";
-const TEMP_TEST_FILE_NAME : &str = "test.hs";
+const TEMP_CODE_FILE_NAME : &str = "Code.hs";
+const TEMP_TEST_FILE_NAME : &str = "Test.hs";
 
 error_chain!{
     errors { CmdError }
@@ -20,8 +21,9 @@ error_chain!{
     }
 }
 
+
 /// Executes the Haskell code in the string `code` and returns stdout.
-pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
+pub async fn execute(exercise_code: String, test_code: String) -> Result<String> {
     // Generate temp directory and code files containing the code and associated test
     let dir = dir_generator::generate_dir();
 
@@ -97,11 +99,14 @@ fn get_output(runhaskell_process : Child) -> String {
 
     if !runhaskell_process.stderr.is_none() {
         runhaskell_process.stderr.unwrap().read_to_string(&mut output).unwrap();
-        println!("runhaskell process encountered stderr.");
+
+        if !output.is_empty() {
+            println!("runhaskell process encountered stderr: {}", output);
+            return output
+        }
     }
-    else {
-        runhaskell_process.stdout.unwrap().read_to_string(&mut output).unwrap();
-    }
+
+    runhaskell_process.stdout.unwrap().read_to_string(&mut output).unwrap();
 
     return output
 }

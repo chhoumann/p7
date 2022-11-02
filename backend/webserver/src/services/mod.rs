@@ -1,2 +1,2 @@
-pub mod code_runner;
+pub mod test_runner;
 pub mod dir_generator;
