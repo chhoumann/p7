@@ -13,6 +13,7 @@ serde = { version = "1.0.144", features = ["derive"] }
 rand="0.8.5"
 tokio={ version = "1", features = ["full"] }
 axum = "0.5.16"
+serde_json = "1.0.87"
 
 [dependencies.uuid]
 version = "1.2.1"

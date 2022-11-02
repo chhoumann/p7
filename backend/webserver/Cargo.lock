@@ -762,6 +762,7 @@ dependencies = [
  "error-chain",
  "rand",
  "serde",
+ "serde_json",
  "tokio",
  "uuid",
  "wait-timeout",

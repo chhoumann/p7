@@ -9,7 +9,6 @@ pub struct ExerciseSubmission {
 }
 
 pub struct TestRunnerWork {
-    pub complete : bool,
     pub result : Option<TestRunnerResult>
 }
 
@@ -23,6 +22,7 @@ pub struct Token {
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
+#[derive(Clone)]
 pub struct TestRunnerResult {
     pub success: bool,
     pub output: String

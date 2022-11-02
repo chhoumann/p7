@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use axum::{routing::post, Router, Extension};
 use axum::body::Body;
+use axum::routing::get;
 use tokio::sync::mpsc;
 use tokio::sync::mpsc::{Sender, Receiver};
 
@@ -25,11 +26,13 @@ async fn main() {
     });
     
     let app : Router<Body> = Router::new()
-        .route("/haskell", post(endpoints::haskell::new))
+        .route("/haskell/submit", post(endpoints::haskell::submit))
+        .route("/haskell/getResult/:id", get(endpoints::haskell::get_test_runner_result))
         .layer(Extension(shared_state));
     
     worker::run(rx);
 
+    // TODO: Make the IP address and port use environment variables
     axum::Server::bind(&"0.0.0.0:8000".parse().unwrap())
         .serve(app.into_make_service())
         .await

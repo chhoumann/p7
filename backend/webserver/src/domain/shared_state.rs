@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::domain::web_api_data::{ExerciseSubmission, TestRunnerResult, TestRunnerWork};
+use crate::domain::web_api_data::{ExerciseSubmission, TestRunnerWork};
 use tokio::sync::mpsc::Sender;
 use uuid::Uuid;
 use std::sync::{Arc, Mutex};
