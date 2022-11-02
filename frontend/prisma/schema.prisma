@@ -64,8 +64,7 @@ model VerificationToken {
 }
 
 model Syllabus {
-    id         String       @id @default(cuid())
-    name       String
+    name       String       @id @unique
 
     ProblemSets ProblemSet[]
 }
@@ -77,8 +76,8 @@ model ProblemSet {
 
     Problems Problem[]
 
-    syllabus   Syllabus @relation(fields: [syllabusId], references: [id], onDelete: Cascade)
-    syllabusId String
+    syllabus   Syllabus @relation(fields: [syllabusName], references: [name], onDelete: Cascade)
+    syllabusName String
 }
 
 model Problem {
