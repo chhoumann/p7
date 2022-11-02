@@ -16,15 +16,15 @@ const postOutput = z.object({
 export const syllabusRouter = createRouter()
     .query("getById", {
         input: z.string(),
-        async resolve({ input: id }) {
+        async resolve({ input: name }) {
             const syllabus: Syllabus | null = await prisma.syllabus.findFirst({
-                where: { id },
+                where: { name },
             });
 
             if (!syllabus) {
                 throw new trpc.TRPCError({
                     code: "NOT_FOUND",
-                    message: `Syllabus with id ${id} not found`,
+                    message: `Syllabus with name ${name} not found`,
                 });
             }
 
@@ -62,6 +62,32 @@ export const syllabusRouter = createRouter()
                     message: "Could not post syllabus to database.",
                     cause: error,
                 });
+            }
+        },
+    })
+    .mutation("updateSyllabus", {
+        input: z.object({
+            old: z.string(),
+            new: z.string(),
+        }),
+        async resolve({ input }) {
+            try {
+                await prisma.syllabus.update({
+                    where: {
+                        name: input.old,
+                    },
+                    data: {
+                        name: input.new,
+                    },
+                });
+
+                return true;
+            } catch (error) {
+                throw new trpc.TRPCError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: `Could not update syllabus with name ${input.old}`,
+                    cause: error
+                })
             }
         },
     });

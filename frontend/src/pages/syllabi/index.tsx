@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 const Syllabi: NextPage = () => {
-    const [selectedId, setSelectedId] = useState<string>();
+    const [selectedName, setSelectedName] = useState<string>();
 
     const syllabi = trpc.useQuery(["syllabus.findAll"]);
 
@@ -14,11 +14,11 @@ const Syllabi: NextPage = () => {
             <div className="flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto">
                 {syllabi.isSuccess &&
                     syllabi.data.map((syllabus) => (
-                        <React.Fragment key={syllabus.id}>
+                        <React.Fragment key={syllabus.name}>
                             <SessionRow
                                 {...syllabus}
-                                onClick={() => setSelectedId(syllabus.id)}
-                                isSelected={syllabus.id === selectedId}
+                                onClick={() => setSelectedName(syllabus.name)}
+                                isSelected={syllabus.name === selectedName}
                             />
                         </React.Fragment>
                     ))}
@@ -32,8 +32,8 @@ const Syllabi: NextPage = () => {
 
                     <Link
                         href={
-                            selectedId
-                                ? `/syllabi/edit/${selectedId}`
+                            selectedName
+                                ? `/syllabi/edit/${selectedName}`
                                 : `/syllabi`
                         }
                     >
@@ -43,7 +43,7 @@ const Syllabi: NextPage = () => {
                     </Link>
                     <Link
                         href={
-                            selectedId ? `/syllabi/${selectedId}` : `/syllabi`
+                            selectedName ? `/syllabi/${selectedName}` : `/syllabi`
                         }
                     >
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
@@ -59,12 +59,10 @@ const Syllabi: NextPage = () => {
 export default Syllabi;
 
 function SessionRow({
-    id,
     name,
     isSelected,
     onClick,
 }: {
-    id: string;
     name: string;
     isSelected: boolean;
     onClick: () => void;

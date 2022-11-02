@@ -1,30 +1,41 @@
 import { useRouter } from "next/router";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "../../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface Inputs {
     title: string;
 }
 
-export default function CreateSyllabusPage() {
+export default function EditSyllabusPage() {
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<Inputs>();
 
-    const mutation = trpc.useMutation(["syllabus.postSyllabus"]);
     const router = useRouter();
+    const name = router.query.name;
+
+    if (typeof name !== "string") return null;
+    
+
+    const foundSyllabus = trpc.useQuery(["syllabus.getById", name]);
+    const mutation = trpc.useMutation(["syllabus.postSyllabus"]);
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         try {
             await mutation.mutateAsync({
-                name: data.title,
+                old: name,
+                new: data.title
             });
 
             router.push("/syllabi");
         } catch (error) {} // Handled by form library
     };
+
+    if (!foundSyllabus?.data?.syllabus.name) {
+        return null;
+    }
 
     return (
         <div className="container flex justify-center items-center w-full h-[75vh]">
@@ -36,6 +47,7 @@ export default function CreateSyllabusPage() {
                         </label>
                         <input
                             type="text"
+                            defaultValue={foundSyllabus.data.syllabus.name}
                             {...register("title", { required: true })}
                             className="w-full border-2 border-solid border-gray-500 py-2 px-3 text-grey-darkest"
                         />
