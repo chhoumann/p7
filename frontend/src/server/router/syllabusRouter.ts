@@ -105,7 +105,7 @@ export const syllabusRouter = createRouter()
             } catch (error) {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
-                    message: `Could not update syllabus with name ${name}`,
+                    message: `Could not delete syllabus with name ${name}`,
                     cause: error,
                 });
             }
