@@ -84,8 +84,8 @@ function SessionRow({
 }) {
     return (
         <div
-            className={`p-3 m-3 ${
-                isSelected ? "bg-gray-400" : "bg-gray-300 hover:bg-gray-400"
+            className={`p-3 m-3 border-b-2 ${
+                isSelected ? "bg-gray-200" : "hover:bg-gray-200"
             }`}
             onClick={onClick}
         >
