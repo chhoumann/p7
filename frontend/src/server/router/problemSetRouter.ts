@@ -2,14 +2,21 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import * as trpc from "@trpc/server";
 import { prisma } from "../db/client";
-import {ProblemSet} from "@prisma/client";
+import {Problem, ProblemSet} from "@prisma/client";
+import ky from "ky";
+import {env} from "../../env/server.mjs";
 
-const zodObjProblemSet = z.object({
+const postInput = z.object({
+  id: z.string(),
   topic: z.string(),
   date: z.date(),
   syllabusId: z.string(),
 })
 
+const postOutput = z.object({
+  success: z.boolean(),
+  result: z.string()
+});
 
 export const problemSetsRouter = createRouter().query("getBySyllabusId", {
   input: z.string(),
@@ -28,12 +35,29 @@ export const problemSetsRouter = createRouter().query("getBySyllabusId", {
     return { problemSets };
   },
 }).mutation("postProblemSet", {
-
-  input: zodObjProblemSet,
+  input: postInput,
+  output: postOutput,
   async resolve({input}) {
     try {
-      await prisma.problemSet.create({data: input})
-      return {success: true, result: "Successfully created problem!"}
+      const webserverResponse = await ky
+          .post(`${env.WEBSERVER_ADDRESS}/problemset`, {
+            json: {
+              ...input
+            }
+          }).json();
+
+      const parsedResponse = z
+          .object({
+            result: z.string(),
+            success: z.boolean(),
+          })
+          .safeParse(webserverResponse);
+
+      if (!parsedResponse.success) {
+        return {success: false, result: parsedResponse.error.message};
+      }
+      return parsedResponse.data;
+
     } catch (error) {
       throw new trpc.TRPCError({
         code: "INTERNAL_SERVER_ERROR",

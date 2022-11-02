@@ -3,7 +3,8 @@ import {z} from "zod";
 import * as trpc from "@trpc/server";
 import {prisma} from "../db/client";
 import {Syllabus} from "@prisma/client";
-
+import ky from "ky";
+import {env} from "../../env/server.mjs";
 
 const postInput = z.object({
     id: z.string(),
@@ -58,12 +59,6 @@ export const syllabusRouter = createRouter().query("getById", {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
                     message: "Could not post syllabus to database.",
-                await prisma.syllabus.create({data: input})
-                return {success: true, result: "Successfully created test!"}
-            } catch (error) {
-                throw new trpc.TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Could not post test to database.",
                     cause: error
                 })
             }
