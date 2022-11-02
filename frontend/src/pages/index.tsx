@@ -73,6 +73,7 @@ const Home: NextPage = () => {
                   selected={tab === TabState.Result}
                   onClick={() => setTab(TabState.Result)}
                   disabled={!mutation.isSuccess}
+                  data-cy="result-tab"
                 />
               </div>
               <div className="px-2 py-1 overflow-y-auto overflow-x-clip">
@@ -148,7 +149,7 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
       <div className="my-8" />
 
-      <span className="text-xl">Output</span>
+      <span className="text-xl" data-cy="results-text">Output</span>
       <code className="bg-gray-100 p-2 rounded-lg">{result}</code>
     </div>
   );
