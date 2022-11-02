@@ -42,6 +42,7 @@ const Home: NextPage = () => {
               <textarea
                 ref={codebox}
                 className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0"
+                data-cy="code-text-input-file"
               />
               <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
                 <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
@@ -49,6 +50,7 @@ const Home: NextPage = () => {
                 </button>
                 <button
                   className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
+                  data-cy="submit-code"
                   onClick={() =>
                     mutation.mutate({
                       code: codebox.current?.value ?? "test",
