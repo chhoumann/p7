@@ -8,17 +8,17 @@ import { codeRouter } from "./code";
 import { syllabusRouter } from "./syllabusRouter";
 import { problemRouter } from "./problemRouter";
 import { problemSetsRouter } from "./problemSetRouter";
-import {testRouter} from "./testRouter";
+import { TestRouter } from "./testRouter";
 
 export const appRouter = createRouter()
-  .transformer(superjson)
-  .merge("code.", codeRouter)
-  .merge("example.", exampleRouter)
-  .merge("auth.", protectedExampleRouter)
-  .merge("syllabus.", syllabusRouter)
-  .merge("problem.", problemRouter)
-  .merge("problemSets.", problemSetsRouter)
-    .merge("test.", testRouter);
+    .transformer(superjson)
+    .merge("code.", codeRouter)
+    .merge("example.", exampleRouter)
+    .merge("auth.", protectedExampleRouter)
+    .merge("syllabus.", syllabusRouter)
+    .merge("problem.", problemRouter)
+    .merge("problemSets.", problemSetsRouter)
+    .merge("test.", TestRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
