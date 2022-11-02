@@ -87,7 +87,7 @@ model Problem {
 
     template    String
     description String
-    Tests       Test[]
+    Tests       Test[] //how do we represent this in the controller
 
     problemSet   ProblemSet @relation(fields: [problemSetId], references: [id], onDelete: Cascade)
     problemSetId String
