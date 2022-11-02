@@ -44,6 +44,7 @@ fn create_app(shared_state: Arc<State>) -> Router {
     app
 }
 
+
 fn run_worker(rx: Receiver<TestRunnerWork>, map: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>) {
     let limit = dotenv::var("MAX_THREADS").unwrap().parse::<usize>().unwrap();
     worker::run(rx, map, limit);
@@ -51,7 +52,6 @@ fn run_worker(rx: Receiver<TestRunnerWork>, map: Arc<Mutex<Box<HashMap<Uuid, Opt
 
 
 async fn bind_server(app: Router) {
-    
     let port = dotenv::var("PORT").unwrap();
     let ip = dotenv::var("IP").unwrap();
     let addr = format!("{}:{}", ip, port);
