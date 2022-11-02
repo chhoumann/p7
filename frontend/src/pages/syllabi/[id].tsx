@@ -16,14 +16,17 @@ const SyllabusId: NextPage = () => {
         }
     );
 
-    const deleteSetMutation = trpc.useMutation(["problemSets.deleteProblemSet"], {
-        onSuccess: () => problemSets.refetch()
-    });
-    
+    const deleteSetMutation = trpc.useMutation(
+        ["problemSets.deleteProblemSet"],
+        {
+            onSuccess: () => problemSets.refetch(),
+        }
+    );
+
     function deleteSetHandler() {
         if (!selectedId) return;
 
-        deleteSetMutation.mutate(selectedId)
+        deleteSetMutation.mutate(selectedId);
     }
 
     return (
@@ -69,9 +72,12 @@ const SyllabusId: NextPage = () => {
                             Edit
                         </button>
                     </Link>
-                        <button onClick={deleteSetHandler} className="bg-red-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
-                            Delete
-                        </button>
+                    <button
+                        onClick={deleteSetHandler}
+                        className="bg-red-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>
