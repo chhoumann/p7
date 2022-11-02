@@ -13,11 +13,15 @@ pub async fn submit(
     Extension(state): Extension<Arc<State>>,
 ) -> Json<Token> {
     let id = Uuid::new_v4();
-    let work = TestRunnerWork { result: None };
+    let work = TestRunnerWork { 
+        id,
+        submission: exercise_submission,
+        result: None 
+    };
     
-    state.jobs.lock().unwrap().insert(id, work);
+    state.jobs.lock().unwrap().insert(id, None);
     
-    let _res = state.tx.send(exercise_submission).await;
+    let _res = state.tx.send(work).await;
 
     Json(Token { id })
 }
@@ -36,12 +40,12 @@ pub async fn get_test_runner_result(
     
     let work = map.get(&id).unwrap();
  
-    if work.result.is_none() {
+    if work.is_none() {
         // Work is not completed yet
         return Json(json!({ "status": "in progress" }))
     }
 
-    let result = work.result.clone().unwrap();
+    let result = work.clone().unwrap();
     
     Json(json!(result))
 }

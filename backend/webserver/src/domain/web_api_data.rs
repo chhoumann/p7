@@ -9,6 +9,8 @@ pub struct ExerciseSubmission {
 }
 
 pub struct TestRunnerWork {
+    pub id : Uuid,
+    pub submission : ExerciseSubmission,
     pub result : Option<TestRunnerResult>
 }
 
