@@ -65,7 +65,7 @@ export const syllabusRouter = createRouter()
             }
         },
     })
-    .mutation("updateSyllabus", {
+    .mutation("editSyllabus", {
         input: z.object({
             old: z.string(),
             new: z.string(),
@@ -86,8 +86,28 @@ export const syllabusRouter = createRouter()
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
                     message: `Could not update syllabus with name ${input.old}`,
-                    cause: error
-                })
+                    cause: error,
+                });
+            }
+        },
+    })
+    .mutation("deleteSyllabus", {
+        input: z.string(),
+        async resolve({ input: name }) {
+            try {
+                await prisma.syllabus.delete({
+                    where: {
+                        name,
+                    },
+                });
+
+                return true;
+            } catch (error) {
+                throw new trpc.TRPCError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: `Could not update syllabus with name ${name}`,
+                    cause: error,
+                });
             }
         },
     });

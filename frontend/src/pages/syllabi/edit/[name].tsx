@@ -20,7 +20,7 @@ export default function EditSyllabusPage() {
     
 
     const foundSyllabus = trpc.useQuery(["syllabus.getById", name]);
-    const mutation = trpc.useMutation(["syllabus.postSyllabus"]);
+    const mutation = trpc.useMutation(["syllabus.editSyllabus"]);
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         try {

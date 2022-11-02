@@ -7,11 +7,20 @@ const Syllabi: NextPage = () => {
     const [selectedName, setSelectedName] = useState<string>();
 
     const syllabi = trpc.useQuery(["syllabus.findAll"]);
+    const deleteSyllabus = trpc.useMutation(["syllabus.deleteSyllabus"], {
+        onSuccess: () => syllabi.refetch()
+    });
+
+    function handleDeleteSyllabus() {
+        if (!selectedName) return;
+
+        deleteSyllabus.mutate(selectedName);
+    }
 
     return (
         <div className="container flex justify-center items-center w-full h-[75vh]">
             <h2 className="absolute top-10">List of syllabi</h2>
-            <div className="flex flex-col mt-40 w-[60vh] h-full border-solid border-2 border-gray-500 overflow-auto">
+            <div className="flex flex-col mt-40 w-3/5 h-full border-solid border-2 border-gray-500 overflow-auto">
                 {syllabi.isSuccess &&
                     syllabi.data.map((syllabus) => (
                         <React.Fragment key={syllabus.name}>
@@ -50,6 +59,12 @@ const Syllabi: NextPage = () => {
                             View
                         </button>
                     </Link>
+                    <button
+                        className="bg-red-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black"
+                        onClick={handleDeleteSyllabus}
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>
