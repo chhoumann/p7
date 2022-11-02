@@ -18,7 +18,7 @@ const Syllabi: NextPage = () => {
     }
 
     return (
-        <div className="container flex justify-center items-center w-full h-[75vh]">
+        <div className="container flex justify-center items-center mx-auto w-full h-[75vh]">
             <h2 className="absolute top-10">List of syllabi</h2>
             <div className="flex flex-col mt-40 w-3/5 h-full border-solid border-2 border-gray-500 overflow-auto">
                 {syllabi.isSuccess &&
