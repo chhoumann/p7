@@ -17,16 +17,17 @@ export default function EditSyllabusPage() {
     const name = router.query.name;
 
     if (typeof name !== "string") return null;
-    
 
-    const foundSyllabus = trpc.useQuery(["syllabus.getById", name]);
+    const foundSyllabus = trpc.useQuery(["syllabus.getById", name], {
+        enabled: router.isReady,
+    });
     const mutation = trpc.useMutation(["syllabus.editSyllabus"]);
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         try {
             await mutation.mutateAsync({
                 old: name,
-                new: data.title
+                new: data.title,
             });
 
             router.push("/syllabi");
@@ -51,11 +52,13 @@ export default function EditSyllabusPage() {
                             {...register("title", { required: true })}
                             className="w-full border-2 border-solid border-gray-500 py-2 px-3 text-grey-darkest"
                         />
-                            {!!errors.title
-                                ? <span>`Invalid input: ${errors.title.type}`</span>
-                                : null}
+                        {!!errors.title ? (
+                            <span>`Invalid input: ${errors.title.type}`</span>
+                        ) : null}
 
-                                {mutation.isError ? <span>{mutation.error.message}</span> : null}
+                        {mutation.isError ? (
+                            <span>{mutation.error.message}</span>
+                        ) : null}
                     </div>
                     <div className="mb-auto" />
                     <div className="flex flex-row gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">

@@ -2,24 +2,27 @@ import { NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 import React, { useState } from "react";
 import Link from "next/link";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 const ProblemSets: NextPage = () => {
     const router = useRouter();
-    const { id } = router.query;
-    const syllabusId = (id as string)??""
+    const { id: syllabusId } = router.query;
+    const [selectedId, setSelectedId] = useState<string>();
 
-    const [selectedName, setSelectedName] = useState<string>();
+    if (typeof syllabusId !== "string") return null;
 
-    const problemSets = trpc.useQuery(["problemSets.getBySyllabusId", syllabusId]);
+    const problemSets = trpc.useQuery(
+        ["problemSets.getBySyllabusId", syllabusId],
+        { enabled: router.isReady }
+    );
     const deleteSyllabus = trpc.useMutation(["problemSets.deleteProblemSet"], {
-        onSuccess: () => problemSets.refetch()
+        onSuccess: () => problemSets.refetch(),
     });
 
     function handleDeleteSyllabus() {
-        if (!selectedName) return;
+        if (!selectedId) return;
 
-        deleteSyllabus.mutate(selectedName);
+        deleteSyllabus.mutate(selectedId);
     }
 
     return (
@@ -28,11 +31,11 @@ const ProblemSets: NextPage = () => {
             <div className="flex flex-col mt-40 w-3/5 h-full border-solid border-2 border-gray-500 overflow-auto">
                 {problemSets.isSuccess &&
                     problemSets.data.map((problemSet) => (
-                        <React.Fragment key={problemSet.name}>
+                        <React.Fragment key={problemSet.id}>
                             <SessionRow
                                 {...problemSet}
-                                onClick={() => setSelectedName(problemSet.name)}
-                                isSelected={problemSet.name === selectedName}
+                                onClick={() => setSelectedId(problemSet.id)}
+                                isSelected={problemSet.id === selectedId}
                             />
                         </React.Fragment>
                     ))}
@@ -46,8 +49,8 @@ const ProblemSets: NextPage = () => {
 
                     <Link
                         href={
-                            selectedName
-                                ? `/problemsets/edit/${selectedName}`
+                            selectedId
+                                ? `/problemsets/edit/${selectedId}`
                                 : `/${syllabusId}`
                         }
                     >
@@ -57,7 +60,9 @@ const ProblemSets: NextPage = () => {
                     </Link>
                     <Link
                         href={
-                            selectedName ? `/problemsets/${selectedName}` : `/${syllabusId}`
+                            selectedId
+                                ? `/problemsets/${selectedId}`
+                                : `/${syllabusId}`
                         }
                     >
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
@@ -79,11 +84,11 @@ const ProblemSets: NextPage = () => {
 export default ProblemSets;
 
 function SessionRow({
-                        name,
-                        isSelected,
-                        onClick,
-                    }: {
-    name: string;
+    topic,
+    isSelected,
+    onClick,
+}: {
+    topic: string;
     isSelected: boolean;
     onClick: () => void;
 }) {
@@ -94,7 +99,7 @@ function SessionRow({
             }`}
             onClick={onClick}
         >
-            <span>{name}</span>
+            <span>{topic}</span>
         </div>
     );
 }
