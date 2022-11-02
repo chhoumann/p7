@@ -14,13 +14,11 @@ pub struct TestRunnerWork {
     pub result: Option<TestRunnerResult>
 }
 
-
 #[derive(Deserialize)]
 #[derive(Serialize)]
 pub struct Token {
     pub id: Uuid
 }
-
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
