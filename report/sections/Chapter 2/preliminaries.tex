@@ -1,4 +1,4 @@
-\chapter{Preliminaries}
+ \chapter{Preliminaries}
 The following chapter contains short introductions to the most important technologies used in the repport. 
 
 \section{Glasgow Haskell Compiler} %-- Haskell afsnit istedet??
@@ -61,9 +61,20 @@ This in turn allows developers to not have the actual server code exposed in the
 Furthermore, tRPC is created in a way to fully take advantage of the powers from a full-stack TypeScript which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
 
 \section{Prisma}
-The main goal behind Prisma is to increase developers productivity by providing a clean and type-safe API for submitting database queries\cite{Prisma_Why}.
-Here Prisma tries to avoid to large tradeoffs in productivity that comes with increased control in the main database tools currently in use for TypeScript. 
+The main goal behind Prisma is to increase developers' productivity by providing a clean and type-safe API for submitting database queries\cite{Prisma_Why}.
+Prisma tries to stay in the area between high-control low-productivity raw SQL and classic low-control high-productivity object-relational mappers(ORM). 
 
+Here Prisma tries to stay in the gap that divides object-relational mappers(ORM) from 
 
-\section{Postgres (or other db)} %Prisma?
+Here Prisma tries to avoid large productivity tradeoffs that come with increased control in the main database tools currently in use for TypeScript. The idea is to try to merge the control gained from writing raw SQL with productivity from using ORMs without the pitfall of the object-relational impedance mismatch\cite{Prisma_Why}.
+
+Prisma allows developers to define their application models through a data modeling language. Here developers can configure the applications' data sources, data model, and generator used to create the Prisma Client\cite{Prisma_Doc}.
+
+\section{JavaScript}
+\section{TypeScript}
+\section{Rocket}
+\section{Axum}
+\section{Next}
+\section{Postgres}
+
 
