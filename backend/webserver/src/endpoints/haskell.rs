@@ -47,5 +47,9 @@ pub async fn get_test_runner_result(
 
     let result = work.clone().unwrap();
     
-    Json(json!(result))
+    Json(json!({
+        "status": "complete",
+        "success": result.success,
+        "output": result.output
+    }))
 }
