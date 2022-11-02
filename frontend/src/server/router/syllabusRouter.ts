@@ -2,10 +2,9 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import * as trpc from "@trpc/server";
 import { prisma } from "../db/client";
-import { Syllabus } from "@prisma/client";
+import { Prisma, Syllabus } from "@prisma/client";
 
 const postInput = z.object({
-    id: z.string(),
     name: z.string(),
 });
 
@@ -48,15 +47,19 @@ export const syllabusRouter = createRouter()
     })
     .mutation("postSyllabus", {
         input: postInput,
-        output: postOutput,
-        async resolve({ input }) {
+        async resolve({ input: { name } }) {
             try {
-                await prisma.syllabus.create({ data: input });
-                return { success: true, result: "Successfully created test!" };
+                await prisma.syllabus.create({
+                    data: {
+                        name: name,
+                    },
+                });
+
+                return true;
             } catch (error) {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
-                    message: "Could not post test to database.",
+                    message: "Could not post syllabus to database.",
                     cause: error,
                 });
             }
