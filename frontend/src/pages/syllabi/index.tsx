@@ -23,21 +23,13 @@ const Syllabi: NextPage = () => {
                         </React.Fragment>
                     ))}
                 <div className="mb-auto" />
-                <div className="flex flex-row gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
+                <div className="flex flex-row justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
                     <Link href={`/syllabi/create`}>
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
-                            Create new session
+                            Create new syllabus
                         </button>
                     </Link>
-                    <Link
-                        href={
-                            selectedId ? `/syllabi/${selectedId}` : `/syllabi`
-                        }
-                    >
-                        <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
-                            view
-                        </button>
-                    </Link>
+
                     <Link
                         href={
                             selectedId
@@ -47,6 +39,15 @@ const Syllabi: NextPage = () => {
                     >
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
                             Edit
+                        </button>
+                    </Link>
+                    <Link
+                        href={
+                            selectedId ? `/syllabi/${selectedId}` : `/syllabi`
+                        }
+                    >
+                        <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
+                            View
                         </button>
                     </Link>
                 </div>
