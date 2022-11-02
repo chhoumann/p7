@@ -14,7 +14,6 @@ export const problemSetsRouter = createRouter()
     .query("getBySyllabusId", {
         input: z.string(),
         async resolve({ input: name }) {
-            console.log("id is: ", name);
             const problemSets: ProblemSet[] | null =
                 await prisma.problemSet.findMany({
                     where: { syllabusName: name },
