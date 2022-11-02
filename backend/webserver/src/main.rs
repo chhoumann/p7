@@ -5,6 +5,7 @@ use axum::body::Body;
 use axum::routing::get;
 use tokio::sync::mpsc;
 use tokio::sync::mpsc::{Sender, Receiver};
+use dotenv::dotenv;
 
 use crate::services::test_runner;
 use crate::services::worker;
@@ -20,21 +21,36 @@ mod services;
 async fn main() {
     let (tx, rx) : (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) = mpsc::channel(10); 
     let map = Arc::new(Mutex::new(Box::new(HashMap::new())));
-    
     let shared_state = Arc::new(State {
         tx,
         jobs: map.clone()
     });
-    
-    let app : Router<Body> = Router::new()
-        .route("/haskell/submit", post(endpoints::haskell::submit))
-        .route("/haskell/getResult/:id", get(endpoints::haskell::get_test_runner_result))
-        .layer(Extension(shared_state));
+    let app = create_app(shared_state);
 
     worker::run(rx, map);
 
-    // TODO: Make the IP address and port use environment variables
-    axum::Server::bind(&"0.0.0.0:8000".parse().unwrap())
+    bind_server(app).await;
+}
+
+
+fn create_app(shared_state: Arc<State>) -> Router {
+    let app: Router<Body> = Router::new()
+        .route("/haskell/submit", post(endpoints::haskell::submit))
+        .route("/haskell/getResult/:id", get(endpoints::haskell::get_test_runner_result))
+        .layer(Extension(shared_state));
+    
+    return app
+}
+
+
+async fn bind_server(app: Router) {
+    dotenv().ok();
+    
+    let port = dotenv::var("PORT").unwrap();
+    let ip = dotenv::var("IP").unwrap();
+    let addr = format!("{}:{}", ip, port);
+
+    axum::Server::bind(&addr.parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
