@@ -61,17 +61,16 @@ This in turn allows developers to not have the actual server code exposed in the
 Furthermore, tRPC is created in a way to fully take advantage of the powers from a full-stack TypeScript which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
 
 \section{Prisma}
-The main goal behind Prisma is to increase developers' productivity by providing a clean and type-safe API for submitting database queries\cite{Prisma_Why}.
-Prisma tries to stay in the area between high-control low-productivity raw SQL and classic low-control high-productivity object-relational mappers(ORM). 
+Prisma is a 2nd generation object-relational mapper(ORM) developed for usage in Node.js and \typescript{} back-ends. 
+The main goal is to increase developers' productivity by allowing them to develop using a type-safe API for database queries that return \javascript{} objects. 
+This goal is achieved by providing type-safe database queries allowing for validation at compile time as well as constraints preventing common pitfalls\cite{Prisma_Why}.
 
-Here Prisma tries to stay in the gap that divides object-relational mappers(ORM) from 
-
-Here Prisma tries to avoid large productivity trade-offs that come with increased control in the main database tools currently in use for TypeScript. The idea is to try to merge the control gained from writing raw SQL with productivity from using ORMs without the pitfall of the object-relational impedance mismatch\cite{Prisma_Why}.
-
-Prisma allows developers to define their application models through a data modelling language. Here developers can configure the applications' data sources, data model, and generator used to create the Prisma Client\cite{Prisma_Doc}.
+The goal for the 2nd generation ORMs is to move closer to raw SQL in terms of high control while improving on the 1st generation ORMs productivity improvements. 
+Prisma enables this productivity improvement by allowing developers to define their applications models through a data modeling language allowing an easier way of configuring their applications' data sources and models\cite{Prisma_Doc}.
 
 \section{JavaScript}
-\javascript{} is a interpreted programming language created for developing interactive elements for websites\cite{JavaScript_Mozilla}.
+\javascript{} is a lightweight interpreted programming language best known from its use for developing interactive elements for websites\cite{JavaScript_Mozilla}.
+The language was originally created only for use in web programming but have over time become a core component of servers and applications like Node.js. 
 
 
 \section{TypeScript}
@@ -95,5 +94,7 @@ This is done by handling the tooling and configuration needed while providing ad
 
 
 \section{Postgres}
+PostgresSQL (Postgres) is an open-source object-relational database system that was originally developed at University of California, Berkley with the goal of supporting multiple data types with the fewest features needed. 
+
 
 
