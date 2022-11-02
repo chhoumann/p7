@@ -25,7 +25,7 @@ export const problemRouter = createRouter().query("getByProblemSetId", {
             });
         }
 
-    return { problems };
+      return problems;
   },
 }).query("byId", {
   input: z.string(),

@@ -6,7 +6,7 @@ import { ProblemSet } from "@prisma/client";
 
 const zodObjProblemSet = z.object({
     topic: z.string(),
-    date: z.date(),
+    date: z.string(),
     syllabusName: z.string(),
 });
 
@@ -28,6 +28,24 @@ export const problemSetsRouter = createRouter()
 
             return problemSets;
         },
+    })
+    .query("getByProblemSetId", {
+        input: z.string(),
+        async resolve({ input: id }) {
+            const problemSet: ProblemSet | null =
+                await prisma.problemSet.findUnique({
+                    where: { id },
+                });
+
+            if (!problemSet) {
+                throw new trpc.TRPCError({
+                    code: "NOT_FOUND",
+                    message: `ProblemSet with id ${id} not found`,
+                });
+            }
+
+            return problemSet;
+        }
     })
     .mutation("postProblemSet", {
         input: zodObjProblemSet,

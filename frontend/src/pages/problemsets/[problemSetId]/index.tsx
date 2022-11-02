@@ -1,49 +1,55 @@
 import { NextPage } from "next";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "../../../utils/trpc";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-const Syllabi: NextPage = () => {
-    const [selectedName, setSelectedName] = useState<string>();
+const ProblemSetPage: NextPage = () => {
+    const router = useRouter();
+    const { problemSetId } = router.query as { problemSetId: string };
+    const [selectedId, setSelectedId] = useState<string>();
 
-    const syllabi = trpc.useQuery(["syllabus.findAll"]);
-    const deleteSyllabus = trpc.useMutation(["syllabus.deleteSyllabus"], {
-        onSuccess: () => syllabi.refetch(),
-    });
+    const problemSet = trpc.useQuery(
+        ["problemSets.getByProblemSetId", problemSetId],
+        {}
+    );
 
-    function handleDeleteSyllabus() {
-        if (!selectedName) return;
-
-        deleteSyllabus.mutate(selectedName);
-    }
+    const problems = trpc.useQuery(
+        ["problem.getByProblemSetId", problemSetId],
+        {
+            enabled: router.isReady,
+        }
+    );
 
     return (
-        <div className="container flex justify-center items-center mx-auto w-full h-[75vh]">
-            <h2 className="absolute top-10 text-2xl">List of syllabi</h2>
+        <div className="container flex justify-center items-center w-full h-[75vh]">
+            {problemSet.isSuccess ? (
+                <h2 className="absolute top-10 text-2xl">
+                    Problems for {problemSet.data.topic}
+                </h2>
+            ) : null}
             <div className="flex flex-col mt-40 w-3/5 h-full border-solid border-2 border-gray-500 overflow-auto">
-                {syllabi.isSuccess &&
-                    syllabi.data.map((syllabus) => (
-                        <React.Fragment key={syllabus.name}>
+                {problems.isSuccess &&
+                    problems.data.map((problemSet) => (
+                        <React.Fragment key={problemSet.id}>
                             <SessionRow
-                                {...syllabus}
-                                onClick={() => setSelectedName(syllabus.name)}
-                                isSelected={syllabus.name === selectedName}
+                                {...problemSet}
+                                onClick={() => setSelectedId(problemSet.id)}
+                                isSelected={problemSet.id === selectedId}
                             />
                         </React.Fragment>
                     ))}
                 <div className="mb-auto" />
                 <div className="flex flex-row justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
-                    <Link href={`/syllabi/create`}>
+                    <Link href={`/problemsets/${problemSetId}/create`}>
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
-                            Create new syllabus
+                            Create new problem
                         </button>
                     </Link>
 
                     <Link
                         href={
-                            selectedName
-                                ? `/syllabi/edit/${selectedName}`
-                                : `/syllabi`
+                            selectedId ? `/problem/${selectedId}/edit` : `#`
                         }
                     >
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
@@ -51,11 +57,7 @@ const Syllabi: NextPage = () => {
                         </button>
                     </Link>
                     <Link
-                        href={
-                            selectedName
-                                ? `/syllabi/${selectedName}`
-                                : `/syllabi`
-                        }
+                        href={selectedId ? `/problem/${selectedId}` : `#`}
                     >
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
                             View
@@ -63,7 +65,9 @@ const Syllabi: NextPage = () => {
                     </Link>
                     <button
                         className="bg-red-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black"
-                        onClick={handleDeleteSyllabus}
+                        onClick={() => {
+                            1;
+                        }}
                     >
                         Delete
                     </button>
@@ -73,7 +77,7 @@ const Syllabi: NextPage = () => {
     );
 };
 
-export default Syllabi;
+export default ProblemSetPage;
 
 function SessionRow({
     name,
