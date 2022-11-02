@@ -1,35 +1,56 @@
-use rocket::serde::{json::Json};
-use crate::domain::exercise_submission_request::ExerciseSubmissionRequest;
-use crate::domain::code_runner_result::CodeRunnerResponse;
-use crate::services::test_runner;
+use axum::Extension;
+use axum::extract::{Json, Path};
+use std::sync::Arc;
+use uuid::Uuid;
+use serde_json::{Value, json};
+
+use crate::domain::shared_state::State;
+use crate::domain::web_api_data::{ExerciseSubmission, TestRunnerWork, Token};
 
 
-#[post("/haskell", format="json", data = "<exercise_submission_request>")]
-pub async fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
-    let exercise_submission = ExerciseSubmissionRequest 
-    {
-         code: exercise_submission_request.code.to_string(),
-         test: exercise_submission_request.test.to_string()
+pub async fn submit(
+    Json(exercise_submission): Json<ExerciseSubmission>,
+    Extension(state): Extension<Arc<State>>,
+) -> Json<Token> {
+    let id = Uuid::new_v4();
+    let work = TestRunnerWork { 
+        id,
+        submission: exercise_submission,
+        result: None 
     };
     
-    let json_exercise_submission = Json(exercise_submission)
-        .into_inner();
+    state.jobs.lock().unwrap().insert(id, None);
+    
+    let _res = state.tx.send(work).await;
 
-    let exercise_code = json_exercise_submission.code;
-    let test_code = json_exercise_submission.test;
-    let result = test_runner::execute(exercise_code, test_code).await;
+    Json(Token { id })
+}
 
-    let output = match result {
-        Ok(output) => Json(CodeRunnerResponse { 
-            success: true,
-            result: output
-        }),
-        Err(error_message) => Json(CodeRunnerResponse { 
-            success: false, 
-            result: error_message.to_string()
-        })
-    };
 
-    return output
- }
+pub async fn get_test_runner_result(
+    Path(id) : Path<Uuid>,
+    Extension(state): Extension<Arc<State>>,
+) -> Json<Value> {
+    let mut map = state.jobs.lock().unwrap();
+    
+    if !map.contains_key(&id) {
+        // UUID not contained in hashmap at all
+        return Json(json!({ "status": "not found" }))
+    }
+    
+    let work = map.get(&id).unwrap();
+ 
+    if work.is_none() {
+        // Work is not completed yet
+        return Json(json!({ "status": "in progress" }))
+    }
 
+    let result = work.clone().unwrap();
+    map.remove(&id);
+    
+    Json(json!({
+        "status": "complete",
+        "success": result.success,
+        "output": result.output
+    }))
+}
