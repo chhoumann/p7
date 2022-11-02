@@ -1,8 +1,7 @@
 /// <reference types="cypress" />
 
-describe('Can add entities', () => {
+describe('Render tests', () => {
     beforeEach(() => {
-      
       cy.visit('http://localhost:3000/')
     })
 
