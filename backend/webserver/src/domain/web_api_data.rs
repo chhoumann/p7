@@ -9,16 +9,16 @@ pub struct ExerciseSubmission {
 }
 
 pub struct TestRunnerWork {
-    pub id : Uuid,
-    pub submission : ExerciseSubmission,
-    pub result : Option<TestRunnerResult>
+    pub id: Uuid,
+    pub submission: ExerciseSubmission,
+    pub result: Option<TestRunnerResult>
 }
 
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
 pub struct Token {
-    pub id : Uuid
+    pub id: Uuid
 }
 
 

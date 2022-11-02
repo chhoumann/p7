@@ -2,7 +2,8 @@ use tokio::sync::mpsc::Receiver;
 use uuid::Uuid;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use tokio::{runtime, task};
+use tokio::task;
+use futures::stream::{StreamExt};
 
 use crate::domain::web_api_data::{ExerciseSubmission, TestRunnerResult, TestRunnerWork};
 use crate::test_runner;
@@ -10,28 +11,27 @@ use crate::test_runner;
 
 pub fn run(
     rx : Receiver<TestRunnerWork>,
-    jobs : Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>
+    jobs : Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    limit : usize
 ) {
-    tokio::spawn(worker_thread(rx, jobs));
+    task::spawn(worker_thread(rx, jobs, limit));
 }
 
 
-pub async fn worker_thread(
-    mut rx : Receiver<TestRunnerWork>,
-    jobs : Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>
+async fn worker_thread(
+    rx: Receiver<TestRunnerWork>,
+    jobs : Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    limit : usize
 ) {
-    loop {
-        let work = rx.recv().await.unwrap();
-        let job_handler = jobs.clone();
-        
+    let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
+    
+    stream.for_each_concurrent(limit, |work| async {
         println!("Running worker thread on UUID {}...", work.id);
-        
-        task::spawn(async move {
-            let res = schedule_test(work.submission).await;
-            let mut map = job_handler.lock().unwrap();
-            map.insert(work.id, Some(res));
-        });
-    }
+
+        let res = schedule_test(work.submission).await;
+        let mut map = jobs.lock().unwrap();
+        map.insert(work.id, Some(res));
+    }).await;
 }
 
 
