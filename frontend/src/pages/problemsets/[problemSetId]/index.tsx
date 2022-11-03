@@ -21,6 +21,15 @@ const ProblemSetPage: NextPage = () => {
         }
     );
 
+    const deleteProblemMutation = trpc.useMutation(["problem.delete"]);
+
+    async function deleteProblemHandler() {
+        if (!selectedId) return;
+
+        await deleteProblemMutation.mutateAsync(selectedId);
+        problems.refetch();
+    }
+
     return (
         <div className="container flex justify-center items-center w-full h-[75vh]">
             {problemSet.isSuccess ? (
@@ -40,7 +49,7 @@ const ProblemSetPage: NextPage = () => {
                         </React.Fragment>
                     ))}
                 <div className="mb-auto" />
-                <div className="flex flex-row justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
+                <div className="flex flex-row-reverse justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
                     <Link href={`/problemsets/${problemSetId}/create`}>
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
                             Create new problem
@@ -65,9 +74,7 @@ const ProblemSetPage: NextPage = () => {
                     </Link>
                     <button
                         className="bg-red-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black"
-                        onClick={() => {
-                            1;
-                        }}
+                        onClick={deleteProblemHandler}
                     >
                         Delete
                     </button>
