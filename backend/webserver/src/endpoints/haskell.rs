@@ -19,7 +19,7 @@ pub async fn submit(
         result: None 
     };
     
-    state.jobs.lock().unwrap().insert(id, None);
+    state.job_results.lock().unwrap().insert(id, None);
     
     let _res = state.tx.send(work).await;
 
@@ -31,7 +31,7 @@ pub async fn get_test_runner_result(
     Path(id) : Path<Uuid>,
     Extension(state): Extension<Arc<State>>,
 ) -> Json<Value> {
-    let mut map = state.jobs.lock().unwrap();
+    let mut map = state.job_results.lock().unwrap();
     
     if !map.contains_key(&id) {
         // UUID not contained in hashmap at all

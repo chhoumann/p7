@@ -7,5 +7,5 @@ use std::sync::{Arc, Mutex};
 
 pub struct State {
     pub tx : Sender<TestRunnerWork>,
-    pub jobs: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    pub job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
 }

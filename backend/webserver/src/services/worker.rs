@@ -11,16 +11,16 @@ use crate::test_runner;
 
 pub fn run(
     rx : Receiver<TestRunnerWork>,
-    jobs : Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
     limit : usize
 ) {
-    task::spawn(worker_thread(rx, jobs, limit));
+    task::spawn(worker_thread(rx, job_results, limit));
 }
 
 
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
-    jobs : Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
     limit : usize
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
@@ -29,7 +29,7 @@ async fn worker_thread(
         println!("Running worker thread on UUID {}...", work.id);
 
         let res = schedule_test(work.submission).await;
-        let mut map = jobs.lock().unwrap();
+        let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res));
     }).await;
 }

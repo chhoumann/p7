@@ -20,18 +20,26 @@ mod services;
 
 #[tokio::main]
 async fn main() {
-    let (tx, rx) : (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) = mpsc::channel(10); 
-    let map = Arc::new(Mutex::new(Box::new(HashMap::new())));
+    dotenv().ok();
+    
+    let (tx, rx) = create_channel(); 
+    let job_results = Arc::new(Mutex::new(Box::new(HashMap::new())));
     let shared_state = Arc::new(State {
         tx,
-        jobs: map.clone()
+        job_results: job_results.clone()
     });
     
     let app = create_app(shared_state);
 
-    dotenv().ok();
-    run_worker(rx, map);
+    run_worker(rx, job_results);
     bind_server(app).await;
+}
+
+
+fn create_channel() -> (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) {
+    let buffer_capacity = dotenv::var("CHANNEL_BUFFER_CAPACITY").unwrap().parse::<usize>().unwrap();
+    let (tx, rx): (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) = mpsc::channel(buffer_capacity);
+    (tx, rx)
 }
 
 
@@ -44,9 +52,9 @@ fn create_app(shared_state: Arc<State>) -> Router {
 }
 
 
-fn run_worker(rx: Receiver<TestRunnerWork>, map: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>) {
+fn run_worker(rx: Receiver<TestRunnerWork>, job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>) {
     let limit = dotenv::var("MAX_THREADS").unwrap().parse::<usize>().unwrap();
-    worker::run(rx, map, limit);
+    worker::run(rx, job_results, limit);
 }
 
 
