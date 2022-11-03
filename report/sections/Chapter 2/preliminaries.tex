@@ -7,7 +7,7 @@ Out of the three currently available Haskell compilers available the Glasgow Has
 \section{Hspec}
 To enable running Haskell tests on the backend we needed a test framework that allowed us to define tests for the exercises. 
 
-Here Hspec was chosen over Hunit since it allows the professor the define the tests in an easy-to-understand domain-specific language(DSL). 
+Here Hspec was chosen over Hunit since it allows the professor to define the tests in an easy-to-understand domain-specific language(DSL). 
 This makes the framework easier to work with as well as gives us the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise.
 
 Hspec allows integration with other Haskell test frameworks if needed and automatic discovery of test files. 
@@ -46,19 +46,16 @@ Instead of relying on the developer to deal with this, the Rust compiler guarant
 In order to set up a local development environment for the used APIs and Databases, the open-source containerization platform Docker was chosen. 
 
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
-Containers are bundles of code and required dependencies. This allows developers to move around prepackaged applications ensuring that the developed software runs the same regardless of what system is use\cite{Docker_Container}.
+Containers are bundles of code and required dependencies. This allows developers to move around prepackaged applications ensuring that the developed software runs the same regardless of what system is used\cite{Docker_Container}.
 
 The containers themselves are created from an image. Here the image is the executable package that encapsulates everything required in order to run the application. On runtime, the image is then turned into our container. 
 This is possible due to the Linux kernel's build process isolation and virtualization capabilities. These also allow a single host system to share its resources with multiple application components in the same way a hypervisor enables the resources of a single computer to be shared between multiple virtual machines\cite{Docker_Container}.
 
 \section{tRPC}
-TRPC is created in order to solve the paint point API presented in modern best practices for web programming using TypeScript. 
-Here an improved way of statically typing endpoints and sharing them between clients and servers is needed\cite{tRPC}.
-
 TRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation. 
-It is structured in a way that allows for types to be shared between the client and server by only important the types instead of the actual server code. 
+It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code. 
 This in turn allows developers to not have the actual server code exposed in the \frontend{} 
-Furthermore, tRPC is created in a way to fully take advantage of the powers from a full-stack TypeScript which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
+Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project, which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
 
 \section{Prisma}
 Prisma is a 2nd generation object-relational mapper(ORM) developed for usage in Node.js and \typescript{} back-ends. 
@@ -89,8 +86,8 @@ Next tries to combat this by providing the developers with the building blocks n
 This is done by handling the tooling and configuration needed while providing additional structure and optimization on top\cite{Nextjs_Docks}.
 
 
-\section{Postgres}
-PostgresSQL (Postgres) is an open-source object-relational database management system that was originally developed at the University of California, Berkley with the goal of supporting multiple data types with the fewest features needed. Originally only designed for UNIX-like platforms Postgres today runs on all major operating systems like Windows and MacOS\cite{Postgres_Docs}.
+\section{PostgreSQL}
+PostgreSQL (Postgres) is an open-source object-relational database management system that was originally developed at the University of California, Berkley with the goal of supporting multiple data types with the fewest features needed. Originally only designed for UNIX-like platforms Postgres today runs on all major operating systems like Windows and MacOS\cite{Postgres_Docs}.
 As a rule, the Postgres development team tries to conform to the SQL Standards whenever these standards do not contradict Postgres features or when the standards could lead to a deterioration of the architecture or performance\cite{Postgres_Docs}. 
 
 Today Postgres features transactions with supports Atomicity, Consistency, Isolation, and Durability (ACID) properties, as well as automatic update of views, foreign keys, and procedures. 
