@@ -23,15 +23,15 @@ async fn main() {
     dotenv().ok();
     
     let (tx, rx) = create_channel(); 
-    let map = Arc::new(Mutex::new(Box::new(HashMap::new())));
+    let jobs = Arc::new(Mutex::new(Box::new(HashMap::new())));
     let shared_state = Arc::new(State {
         tx,
-        jobs: map.clone()
+        jobs: jobs.clone()
     });
     
     let app = create_app(shared_state);
 
-    run_worker(rx, map);
+    run_worker(rx, jobs);
     bind_server(app).await;
 }
 
