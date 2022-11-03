@@ -1,14 +1,15 @@
 import Link from "next/link";
 import React from "react";
 import Layout from "../components/layout";
-import bg from '../../public/background.jpg';
-import Image from 'next/image';
+import SolveProblem from "../pages/problem/[problemId]/index";
 
 export default function IndexPage() {
     return (
         <Layout title={"Home"}>
-            <div className="mx-auto">
-                <BackgroundImage/>
+            <div className="background-content">
+                <h3 className="landing-title-first link link-underline link-underline-black">Welcome to the AAU</h3>
+                <h3 className="landing-title-second link link-underline link-underline-black">programming paradigm</h3>
+                <h3 className="landing-title-third link link-underline link-underline-black">course</h3>
             </div>
         </Layout>
     );

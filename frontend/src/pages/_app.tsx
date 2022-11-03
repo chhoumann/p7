@@ -9,6 +9,7 @@ import superjson from "superjson";
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
 import '../styles/underline.css';
+import '../styles/landing.css'
 const queryClient = new QueryClient();
 
 const MyApp: AppType = ({
