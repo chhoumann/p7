@@ -7,7 +7,7 @@ function Navbar() {
     return (
         <nav>
             <div className="border-b-2 p-4 flex justify-between align-middle">
-                <span className="font-bold">Home</span>
+                <span />
                 <div>
                     {session ? (
                         <UserProfile name={session.user?.name ?? ""} />
