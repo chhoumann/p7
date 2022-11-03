@@ -15,7 +15,7 @@ function Layout({ children, title }: Props) {
                 <meta name="description" content="Haskell Runner." />
                 <link rel="icon" type="image/x-icon" href="favicon.ico" />
             </Head>
-            <div className="h-screen flex flex-col">
+            <div className="h-screen flex flex-col max-h-screen overflow-y-hidden">
                 <Navbar />
                 {children}
             </div>
