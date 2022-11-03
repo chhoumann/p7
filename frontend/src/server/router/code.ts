@@ -24,24 +24,22 @@ const jobResultResponseSchema = z
         })
     );
 
-                async function getJobResult(id: string) {
-                    const jobResultResponse = await ky
-                        .get(
-                            `${env.WEBSERVER_ADDRESS}/haskell/getResult/${id}`
-                        )
-                        .json();
+async function getJobResult(id: string) {
+    const jobResultResponse = await ky
+        .get(`${env.WEBSERVER_ADDRESS}/haskell/getResult/${id}`)
+        .json();
 
-                    console.log(jobResultResponse);
+    const parsedResultResponse =
+        jobResultResponseSchema.safeParse(jobResultResponse);
 
-                    const parsedResultResponse =
-                        jobResultResponseSchema.safeParse(jobResultResponse);
+    if (!parsedResultResponse.success) {
+        throw new Error(parsedResultResponse.error.message);
+    }
 
-                    if (!parsedResultResponse.success) {
-                        throw new Error(parsedResultResponse.error.message);
-                    }
+    return parsedResultResponse;
+}
 
-                    return parsedResultResponse;
-                }
+const moduleWrapper = (code: string) => `module Code where\n${code}`;
 
 export const codeRouter = createRouter()
     .mutation("haskell", {
@@ -57,14 +55,15 @@ export const codeRouter = createRouter()
             try {
                 const jobSubmitResponse = await ky
                     .post(`${env.WEBSERVER_ADDRESS}/haskell/submit`, {
-                        json: { code: input.code, test: input.test },
+                        json: {
+                            code: moduleWrapper(input.code),
+                            test: input.test,
+                        },
                     })
                     .json();
 
                 const parsedSubmitResponse =
                     jobSubmitResponseSchema.safeParse(jobSubmitResponse);
-
-                console.log("Got submit response");
 
                 if (!parsedSubmitResponse.success) {
                     return {
@@ -73,10 +72,10 @@ export const codeRouter = createRouter()
                     };
                 }
 
-                console.log("Submit response is good");
-
                 for (let i = 0; i < 200; i++) {
-                    const { data } = await getJobResult(parsedSubmitResponse.data.id);
+                    const { data } = await getJobResult(
+                        parsedSubmitResponse.data.id
+                    );
 
                     if (data.status === "not found") {
                         return {
@@ -100,7 +99,7 @@ export const codeRouter = createRouter()
                 throw new trpc.TRPCError({
                     message: "Failed to get job results.",
                     code: "INTERNAL_SERVER_ERROR",
-                })
+                });
             } catch (error) {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
