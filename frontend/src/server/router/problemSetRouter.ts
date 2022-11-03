@@ -84,4 +84,32 @@ export const problemSetsRouter = createRouter()
                 });
             }
         },
-    });
+    })
+    .mutation("update", {
+        input: z.object({
+            id: z.string(),
+            topic: z.string(),
+            date: z.string(),
+        }),
+        async resolve({ input }) {
+            try {
+                await prisma.problemSet.update({
+                    where: {
+                        id: input.id,
+                    },
+                    data: {
+                        topic: input.topic,
+                        date: input.date,
+                    },
+                });
+
+                return true;
+            } catch (error) {
+                throw new trpc.TRPCError({
+                    code: "INTERNAL_SERVER_ERROR",
+                    message: `Could not update problem set with ID ${input.id}`,
+                    cause: error,
+                });
+            }
+        }
+    })
