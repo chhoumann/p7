@@ -8,6 +8,7 @@ export const codeRouter = createRouter()
   .mutation("haskell", {
     input: z.object({
       code: z.string(),
+      test: z.string()
     }),
     output: z.object({
       success: z.boolean(),
@@ -17,7 +18,7 @@ export const codeRouter = createRouter()
       try {
         const webserverResponse = await ky
           .post(`${env.WEBSERVER_ADDRESS}/haskell`, {
-            json: { code: input.code },
+            json: { code: input.code, test: input.test},
           })
           .json();
 
