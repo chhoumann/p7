@@ -2,6 +2,7 @@ use std::cmp::max;
 use tokio::sync::mpsc::Receiver;
 use uuid::Uuid;
 use std::collections::HashMap;
+use std::ops::Sub;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, SystemTime};
 use tokio::task;
@@ -28,6 +29,9 @@ async fn worker_thread(
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
     
+    let duration_between_sweeps = Duration::from_secs(10);
+    let mut last_sweep_time = SystemTime::now();
+    
     stream.for_each_concurrent(limit, |work| async {
         println!("Running worker thread on UUID {}...", work.id);
 
@@ -35,7 +39,12 @@ async fn worker_thread(
         let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res));
         
-        clear_old_job_results(job_results);
+        
+        if last_sweep_time.elapsed().unwrap() > duration_between_sweeps {
+            last_sweep_time = SystemTime::now();
+            clear_old_job_results(job_results);
+        } 
+        
     }).await;
 }
 
@@ -62,8 +71,8 @@ pub async fn schedule_test(exercise_submission: ExerciseSubmission) -> TestRunne
 
 
 fn clear_old_job_results(job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>) {
-    let max_duration = Duration::from_secs(10);
+    let time_to_live = Duration::from_secs(10);
     let mut map = job_results.lock().unwrap();
     
-    map.retain(|&uuid, &res| res.unwrap().timestamp.elapsed() <= &max_duration);
+    map.retain(|&uuid, &res| res.unwrap().timestamp.elapsed() <= &time_to_live);
 }
