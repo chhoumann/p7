@@ -21,11 +21,10 @@
     font-family: "Anek Latin", sans-serif;
     font-weight: 800;
     margin: 0px;
-    font-size: 5vmin;
-    width: 550px;
+    font-size: 3vmin;
+    width: 250px;
     word-wrap: break-word;
     padding: 2% 2% 0% 2%;
-    cursor: default;
 }
 
 .landing-title-second {
@@ -37,7 +36,6 @@
     width: 580px;
     word-wrap: break-word;
     padding-left: 2%;
-    cursor: default;
 }
 
 .landing-title-third {
@@ -46,7 +44,7 @@
     font-weight: 800;
     margin: 0px;
     font-size: 5vmin;
-    width: 250px;
+    width: 550px;
     word-wrap: break-word;
     padding-left: 2%;
 }
