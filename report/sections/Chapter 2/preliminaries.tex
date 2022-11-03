@@ -94,7 +94,12 @@ This is done by handling the tooling and configuration needed while providing ad
 
 
 \section{Postgres}
-PostgresSQL (Postgres) is an open-source object-relational database system that was originally developed at University of California, Berkley with the goal of supporting multiple data types with the fewest features needed. 
+PostgresSQL (Postgres) is an open-source object-relational database management system that was originally developed at the University of California, Berkley with the goal of supporting multiple data types with the fewest features needed. Originally only designed for UNIX-like platforms Postgres today runs on all major operating systems like Windows and MacOS\cite{Postgres_Docs}.
+As a rule, the Postgres development team tries to conform to the SQL Standards whenever these standards do not contradict Postgres features or when the standards could lead to a deterioration of the architecture or performance\cite{Postgres_Docs}. 
+
+Today Postgres features transactions with supports Atomicity, Consistency, Isolation, and Durability (ACID) properties, as well as automatic update of views, foreign keys, and procedures. 
+Furthermore modern Postgres supports a wide variety of deployment options from single machine usage to data warehouses and web services\cite{Postgres_Docs}.
+
 
 
 
