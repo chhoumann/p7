@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRef, useState } from "react";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 
 enum TabState {
@@ -13,16 +13,15 @@ const SolveProblem: NextPage = () => {
     const [tab, setTab] = useState<TabState>(TabState.Instructions);
     const codebox = useRef<HTMLTextAreaElement>(null);
     const router = useRouter();
-    const { id } = router.query;
+    const { problemId } = router.query;
 
-    const problem = trpc.useQuery(["problem.byId", id as string], {
+    const problem = trpc.useQuery(["problem.byId", problemId as string], {
         enabled: router.isReady,
     });
-    const test = trpc.useQuery(["test.byId", id as string], {
+    const test = trpc.useQuery(["test.byId", problemId as string], {
         enabled: router.isReady,
     });
 
-    console.log(problem.data);
     const mutation = trpc.useMutation("code.haskell", {
         onSuccess: () => setTab(TabState.Result),
     });
