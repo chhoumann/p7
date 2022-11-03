@@ -25,10 +25,11 @@ const SyllabusId: NextPage = () => {
         }
     );
 
-    function deleteSetHandler() {
+    async function deleteSetHandler() {
         if (!selectedId) return;
 
-        deleteSetMutation.mutate(selectedId);
+        await deleteSetMutation.mutateAsync(selectedId);
+        problemSets.refetch();
     }
 
     return (
