@@ -33,7 +33,7 @@ const Syllabi: NextPage = () => {
                         </React.Fragment>
                     ))}
                 <div className="mb-auto" />
-                <div className="flex flex-row justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
+                <div className="flex flex-row-reverse justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
                     <Link href={`/syllabi/create`}>
                         <button className="bg-gray-300 px-3 py-2 hover:bg-gray-400 hover:outline hover:outline-2 hover:outline-black">
                             Create new syllabus
