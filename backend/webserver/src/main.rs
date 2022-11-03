@@ -23,15 +23,15 @@ async fn main() {
     dotenv().ok();
     
     let (tx, rx) = create_channel(); 
-    let jobs = Arc::new(Mutex::new(Box::new(HashMap::new())));
+    let job_results = Arc::new(Mutex::new(Box::new(HashMap::new())));
     let shared_state = Arc::new(State {
         tx,
-        jobs: jobs.clone()
+        job_results: job_results.clone()
     });
     
     let app = create_app(shared_state);
 
-    run_worker(rx, jobs);
+    run_worker(rx, job_results);
     bind_server(app).await;
 }
 
@@ -52,9 +52,9 @@ fn create_app(shared_state: Arc<State>) -> Router {
 }
 
 
-fn run_worker(rx: Receiver<TestRunnerWork>, map: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>) {
+fn run_worker(rx: Receiver<TestRunnerWork>, job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>) {
     let limit = dotenv::var("MAX_THREADS").unwrap().parse::<usize>().unwrap();
-    worker::run(rx, map, limit);
+    worker::run(rx, job_results, limit);
 }
 
 
