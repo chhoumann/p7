@@ -11,10 +11,11 @@ const Syllabi: NextPage = () => {
         onSuccess: () => syllabi.refetch(),
     });
 
-    function handleDeleteSyllabus() {
+    async function handleDeleteSyllabus() {
         if (!selectedName) return;
 
-        deleteSyllabus.mutate(selectedName);
+        await deleteSyllabus.mutateAsync(selectedName);
+        syllabi.refetch()
     }
 
     return (
