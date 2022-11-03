@@ -47,6 +47,8 @@ RUN \
     ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
     ghcup -v install cabal --isolate /usr/local/bin --force ${CABAL}
 
+RUN cabal update && cabal install --package-env=. --lib hspec hspec-contrib QuickCheck HUnit
+
 RUN ["cargo", "build", "--release", "--verbose", "--jobs", "1"]
 
 CMD ["./target/release/web_server"]
