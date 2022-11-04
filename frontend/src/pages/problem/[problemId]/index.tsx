@@ -53,6 +53,7 @@ const SolveProblem: NextPage = () => {
                 <div className="flex flex-row gap-8 items-center justify-center h-full w-full px-10">
                     <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
                         <textarea
+                            spellCheck={false}
                             ref={codebox}
                             className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0"
                             defaultValue={problem.data.template}
