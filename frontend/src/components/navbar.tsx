@@ -48,7 +48,7 @@ function UserProfile({ name }: { name: string }) {
 function LogInBtn() {
     return (
         <button
-            className="absolute text-stone-300 font-bold link link-underline link-underline-black text-xl right-20 hover:text-sky-400 cursor-pointer"
+            className="absolute font-bold link link-underline link-underline-black text-xl right-20 hover:text-sky-400 cursor-pointer"
             onClick={() => signIn("google")}
         >
             Sign in
