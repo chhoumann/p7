@@ -53,7 +53,7 @@ const Syllabi: NextPage<{ role: string }> = ({ role }) => {
                                         />
                                     ) : (
                                         <StudentRowItem
-                                            url={`/syllabi/${name}`}
+                                            url={`/syllabi/${syllabus.name}`}
                                             name={syllabus.name}
                                         />
                                     )}
