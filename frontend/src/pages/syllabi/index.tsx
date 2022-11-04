@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
+import { PrismaClient } from "@prisma/client";
 
 const Syllabi: NextPage<{ role: string }> = ({ role }) => {
     const syllabi = trpc.useQuery(["syllabus.findAll"]);
@@ -138,7 +139,7 @@ function CreateSyllabusModal({
         register,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
     } = useForm<{ title: string }>();
 
     const mutation = trpc.useMutation(["syllabus.postSyllabus"], {
@@ -195,7 +196,10 @@ function CreateSyllabusModal({
                                     New syllabus
                                 </Dialog.Title>
                                 <div className="container flex justify-center items-center w-full">
-                                    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+                                    <form
+                                        onSubmit={handleSubmit(onSubmit)}
+                                        className="w-full"
+                                    >
                                         <div className="mt-4">
                                             <input
                                                 type="text"
@@ -207,7 +211,8 @@ function CreateSyllabusModal({
                                             />
                                             {!!errors.title ? (
                                                 <span>
-                                                    Invalid input: {errors.title.type}
+                                                    Invalid input:{" "}
+                                                    {errors.title.type}
                                                 </span>
                                             ) : null}
 
@@ -237,6 +242,7 @@ function CreateSyllabusModal({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getServerAuthSession(ctx);
+    const prisma = new PrismaClient();
 
     if (!session) {
         return {
@@ -247,7 +253,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         };
     }
 
-    const userRole = await prisma?.role.findFirst({
+    const userRole = await prisma.role.findFirst({
         where: {
             users: {
                 some: {
