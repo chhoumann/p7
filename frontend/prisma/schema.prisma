@@ -11,7 +11,7 @@ datasource db {
     // Further reading: 
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url = env("DATABASE_URL")
+    url      = env("DATABASE_URL")
 }
 
 model Example {
@@ -33,6 +33,7 @@ model Account {
     id_token          String? //@db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
     @@unique([provider, providerAccountId])
 }
 
@@ -52,37 +53,47 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+
+    role     Role   @relation(fields: [roleName], references: [name])
+    roleName String @default("student")
 }
 
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
+
     @@unique([identifier, token])
 }
 
+model Role {
+    name String @id
+
+    users User[]
+}
+
 model Syllabus {
-    name       String       @id @unique
+    name String @id @unique
 
     ProblemSets ProblemSet[]
 }
 
 model ProblemSet {
-    id    String   @id @default(cuid())
-    topic String
-    date  DateTime
+    id       String    @id @default(cuid())
+    topic    String
+    date     DateTime
     Problems Problem[]
 
-    syllabus   Syllabus @relation(fields: [syllabusName], references: [name], onDelete: Cascade)
+    syllabus     Syllabus @relation(fields: [syllabusName], references: [name], onDelete: Cascade)
     syllabusName String
 }
 
 model Problem {
-    id   String @id @default(cuid())
-    name String
-    template    String
-    description String
-    Tests       Test[]
+    id           String     @id @default(cuid())
+    name         String
+    template     String
+    description  String
+    Tests        Test[]
     problemSet   ProblemSet @relation(fields: [problemSetId], references: [id], onDelete: Cascade)
     problemSetId String
 }
@@ -91,5 +102,4 @@ model Test {
     problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
     problemId String  @id
     code      String
-
 }
