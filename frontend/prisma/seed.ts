@@ -4,17 +4,34 @@ const prisma = new PrismaClient();
 async function main() {
     console.log(`Start seeding ...`);
 
-    const exists = await prisma.syllabus.findFirst({
+    const rolesExist = (await prisma.role.count()) > 0;
+
+    if (!rolesExist) {
+        console.log(`Seeding roles ...`);
+        await prisma.role.createMany({
+            data: [{ name: "student" }, { name: "teacher" }],
+        });
+    } else {
+        console.log(`Roles already exist, skipping seeding ...`);
+    }
+
+    const syllabusExists = await prisma.syllabus.findFirst({
         where: {
             name: "Programming Paradigms F22",
         },
     });
 
-    if (exists) {
+    if (syllabusExists) {
         console.log(`Syllabus already exists, skipping seeding ...`);
-        return;
+    } else {
+        console.log(`Seeding syllabus ...`);
+        await addTestSyllabus();
     }
 
+    console.log(`Seeding finished.`);
+}
+
+async function addTestSyllabus() {
     await prisma.syllabus.create({
         data: {
             name: "Programming Paradigms F22",
@@ -57,8 +74,6 @@ main = hspec $ do
             },
         },
     });
-
-    console.log(`Seeding finished.`);
 }
 
 main();
