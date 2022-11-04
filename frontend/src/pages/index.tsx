@@ -1,7 +1,5 @@
-import Link from "next/link";
 import React from "react";
 import Layout from "../components/layout";
-import SolveProblem from "../pages/problem/[problemId]/index";
 
 export default function IndexPage() {
     return (

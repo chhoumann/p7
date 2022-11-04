@@ -1,6 +1,6 @@
 .background-content {
     aspect-ratio: 1 / 1.6;
-    background: radial-gradient(rgba(255, 255, 255, 0.2) 8%, transparent 8%) 0% 0%;
+    background: radial-gradient(rgba(0, 0, 0, 0.2) 8%, transparent 8%) 0% 0%;
     background-position: -10% 0%;
     background-size: 5vmin 5vmin;
     padding: 5vmin;
@@ -17,18 +17,20 @@
 }
 
 .landing-title-first {
-    color: #d6d3d1;
+    /* color: #d6d3d1; */
+    @apply text-slate-800;
     font-family: "Anek Latin", sans-serif;
     font-weight: 800;
     margin: 0px;
     font-size: 3vmin;
-    width: 250px;
+    width: 270px;
     word-wrap: break-word;
     padding: 2% 2% 0% 2%;
 }
 
 .landing-title-second {
-    color: #d6d3d1;
+    /* color: #d6d3d1; */
+    @apply text-slate-800;
     font-family: "Anek Latin", sans-serif;
     font-weight: 800;
     margin: 0px;
@@ -39,7 +41,8 @@
 }
 
 .landing-title-third {
-    color: #d6d3d1;
+    /* color: #d6d3d1; */
+    @apply text-slate-800;
     font-family: "Anek Latin", sans-serif;
     font-weight: 800;
     margin: 0px;

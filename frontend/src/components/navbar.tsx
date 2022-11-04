@@ -1,4 +1,5 @@
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import React from "react";
 
 function Navbar() {
@@ -7,9 +8,21 @@ function Navbar() {
     return (
         <nav>
             <div className="flex items-center p-4 flex-row align-middle justify-between">
-                <span className="ml-10 text-stone-300 font-bold link link-underline link-underline-black text-xl hover:text-sky-400 cursor-pointer">
-                    Home
-                </span>
+                <div className="flex flex-row align-middle gap-4">
+                    <Link href="/">
+                        <a className="ml-10 font-bold link link-underline link-underline-black text-xl hover:text-sky-400 cursor-pointer">
+                            Home
+                        </a>
+                    </Link>
+
+                    {session ? (
+                        <Link href="/syllabi">
+                            <a className="ml-10 font-bold link link-underline link-underline-black text-xl hover:text-sky-400 cursor-pointer">
+                                Courses
+                            </a>
+                        </Link>
+                    ) : null}
+                </div>
                 <div>
                     {session ? (
                         <UserProfile name={session.user?.name ?? ""} />
