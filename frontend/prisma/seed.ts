@@ -4,9 +4,7 @@ const prisma = new PrismaClient();
 async function main() {
     console.log(`Start seeding ...`);
 
-    const rolesExist = (await prisma.role.count()) > 0;
-
-    if (!rolesExist) {
+    if (prisma?.role && (await prisma.role.count()) > 0) {
         console.log(`Seeding roles ...`);
         await prisma.role.createMany({
             data: [{ name: "student" }, { name: "teacher" }],
