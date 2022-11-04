@@ -3,11 +3,11 @@ import { trpc } from "../../utils/trpc";
 import React, { Fragment, useState } from "react";
 import Link from "next/link";
 import Layout from "../../components/layout";
-import { getSession } from "next-auth/react";
 import { ArrowRightCircle, Edit, Trash } from "react-feather";
 import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
 const Syllabi: NextPage<{ role: string }> = ({ role }) => {
     const syllabi = trpc.useQuery(["syllabus.findAll"]);
@@ -236,7 +236,7 @@ function CreateSyllabusModal({
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession(ctx);
+    const session = await getServerAuthSession(ctx);
 
     if (!session) {
         return {
