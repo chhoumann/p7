@@ -16,7 +16,7 @@ export function TeacherRowItem({
     return (
         <div
             className={clsx(
-                "p-3 m-3 text-xl group hover:bg-zinc-100 rounded-lg flex flex-row align-middle justify-between transition-all duration-500 ease-in-out"
+                "p-3 m-3 text-xl group hover:bg-zinc-100 rounded-lg flex flex-row align-middle justify-between transition-all duration-200 ease-in-out"
             )}
         >
             <span>{name}</span>
