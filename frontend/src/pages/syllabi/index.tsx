@@ -1,14 +1,13 @@
 import { GetServerSideProps, NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 import React, { Fragment, useState } from "react";
-import Link from "next/link";
 import Layout from "../../components/layout";
-import { ArrowRightCircle, Edit, Trash } from "react-feather";
-import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { PrismaClient } from "@prisma/client";
+import { StudentRowItem } from "../../components/StudentRowItem";
+import { TeacherRowItem } from "../../components/TeacherRowItem";
 
 const Syllabi: NextPage<{ role: string }> = ({ role }) => {
     const syllabi = trpc.useQuery(["syllabus.findAll"]);
@@ -42,8 +41,10 @@ const Syllabi: NextPage<{ role: string }> = ({ role }) => {
                             syllabi.data.map((syllabus) => (
                                 <React.Fragment key={syllabus.name}>
                                     {role === "teacher" ? (
-                                        <SyllabusRowSelect
+                                        <TeacherRowItem
                                             {...syllabus}
+                                            url={`/syllabi/${syllabus.name}`}
+                                            editUrl={`/syllabi/edit/${syllabus.name}`}
                                             onClickTrash={() => {
                                                 handleDeleteSyllabus(
                                                     syllabus.name
@@ -51,21 +52,22 @@ const Syllabi: NextPage<{ role: string }> = ({ role }) => {
                                             }}
                                         />
                                     ) : (
-                                        <SyllabusRow name={syllabus.name} />
+                                        <StudentRowItem
+                                            url={`/syllabi/${name}`}
+                                            name={syllabus.name}
+                                        />
                                     )}
                                 </React.Fragment>
                             ))}
                         <div className="mb-auto" />
                         {role === "teacher" ? (
                             <div className="flex flex-row-reverse justify-center gap-4 mx-3 my-3 pt-3 pb-3 sticky bottom-0 bg-white">
-                                {/* <Link href={`/syllabi/create`}> */}
                                 <button
                                     className="px-3 py-2 outline outline-1 outline-gray-400 rounded-lg hover:ring-1 hover:ring-offset-white hover:ring-gray-400 hover:ring-offset-2 transition duration-300 ease-in-out"
                                     onClick={() => setIsOpen(true)}
                                 >
                                     Create new syllabus
                                 </button>
-                                {/* </Link> */}
                             </div>
                         ) : null}
                     </div>
@@ -76,55 +78,6 @@ const Syllabi: NextPage<{ role: string }> = ({ role }) => {
 };
 
 export default Syllabi;
-
-function SyllabusRowSelect({
-    name,
-    onClickTrash,
-}: {
-    name: string;
-    onClickTrash: () => void;
-}) {
-    return (
-        <div
-            className={clsx(
-                "p-3 m-3 text-xl group hover:bg-zinc-100 rounded-lg flex flex-row align-middle justify-between transition-all duration-500 ease-in-out"
-            )}
-        >
-            <span>{name}</span>
-            <div className="flex flex-row gap-3">
-                <Trash
-                    size={30}
-                    className="cursor-pointer"
-                    onClick={onClickTrash}
-                />
-                <Link href={`/syllabi/edit/${name}`}>
-                    <Edit size={30} className="cursor-pointer" />
-                </Link>
-                <Link href={`/syllabi/${name}`}>
-                    <ArrowRightCircle size={30} className="cursor-pointer" />
-                </Link>
-            </div>
-        </div>
-    );
-}
-
-function SyllabusRow({ name }: { name: string }) {
-    return (
-        <Link href={`/syllabi/${name}`}>
-            <div
-                className={
-                    "p-3 m-3 text-xl group hover:bg-zinc-100 rounded-lg flex flex-row align-middle cursor-pointer justify-between transition-all duration-500 ease-in-out"
-                }
-            >
-                <span>{name}</span>
-                <ArrowRightCircle
-                    size={30}
-                    className="cursor-pointer group-hover:scale-125 transition-transform duration-500 ease-in-out"
-                />
-            </div>
-        </Link>
-    );
-}
 
 function CreateSyllabusModal({
     isOpen,
