@@ -8,8 +8,8 @@ export default function IndexPage() {
         <Layout title={"Home"}>
             <div className="background-content">
                 <h3 className="landing-title-first max-md">Welcome to</h3>
-                <h3 className="landing-title-second max-sm">The AAU Programming</h3>
-                <h3 className="landing-title-third max-sm">Paradigms Course</h3>
+                <h3 className="landing-title-second max-md">The AAU Programming</h3>
+                <h3 className="landing-title-third max-md">Paradigms Course</h3>
             </div>
         </Layout>
     );
