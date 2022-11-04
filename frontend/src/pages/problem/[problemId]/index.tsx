@@ -17,7 +17,7 @@ const SolveProblem: NextPage = () => {
     const { problemId } = router.query;
 
     const problem = trpc.useQuery(["problem.byId", problemId as string], {
-        enabled: router.isReady
+        enabled: router.isReady,
     });
     const test = trpc.useQuery(["test.byId", problemId as string], {
         enabled: router.isReady,
@@ -51,18 +51,18 @@ const SolveProblem: NextPage = () => {
     return (
         <Layout title={problem.data.name}>
             <main className="mx-auto h-full w-full">
-                <div className="flex flex-row gap-8 items-center justify-center h-full w-full px-10">
-                    <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
+                <h2 className="text-3xl uppercase w-full text-center p-8">
+                    {problem.data.name}
+                </h2>
+                <div className="flex flex-row gap-8 justify-center my-auto h-full w-full px-10">
+                    <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
                         <CodeEditor
                             value={problem.data.template}
                             height="100%"
-                            className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0"
+                            className="h-full px-2 py-1 font-mono resize-none rounded-lg outline-0"
                             setCode={setCode}
                         />
-                        <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
-                            <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
-                                Attempt
-                            </button>
+                        <div className="w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
                             <button
                                 className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
                                 onClick={() =>
@@ -76,7 +76,7 @@ const SolveProblem: NextPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
+                    <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
                         <div className="w-full items-center justify-around flex">
                             <Tab
                                 text="Instructions"
@@ -148,7 +148,7 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
     return (
         <div className="flex flex-col w-full">
-            <span className="w-full text-center text-3xl">
+            <span className="w-full text-center text-3xl p-2">
                 {success ? "Success!" : "Code failed to run"}
             </span>
 
@@ -156,7 +156,7 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
             <span className="text-xl">Output</span>
             <pre
-                className={`bg-gray-100 p-2 rounded-lg text-white ${
+                className={`bg-gray-100 p-2 rounded-lg text-white overflow-auto ${
                     success ? `bg-green-600 ` : `bg-red-700`
                 }`}
             >
