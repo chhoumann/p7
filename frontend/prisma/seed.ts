@@ -1,26 +1,37 @@
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-    console.log(`Start seeding ...`)
+    console.log(`Start seeding ...`);
 
-  await prisma.syllabus.create({
-    data: {
-      name: "Programming Paradigms F22",
-      ProblemSets: {
-        create: {
-          topic: "Functions and lists",
-          date: new Date(Date.now()), // Needs to be proper ISO string
-          Problems: {
-            create: [
-              {
-                name: "onlytwo",
-                description: `Define, using pattern matching and without using the length function, a function onlytwo that tells us if a list has precisely two elements – in which case it must return True – or not, in which case it must return False. What is the type of onlytwo?`,
-                template: `module Code where 
+    const exists = await prisma.syllabus.findFirst({
+        where: {
+            name: "Programming Paradigms F22",
+        },
+    });
+
+    if (exists) {
+        console.log(`Syllabus already exists, skipping seeding ...`);
+        return;
+    }
+
+    await prisma.syllabus.create({
+        data: {
+            name: "Programming Paradigms F22",
+            ProblemSets: {
+                create: {
+                    topic: "Functions and lists",
+                    date: new Date(Date.now()), // Needs to be proper ISO string
+                    Problems: {
+                        create: [
+                            {
+                                name: "onlytwo",
+                                description: `Define, using pattern matching and without using the length function, a function onlytwo that tells us if a list has precisely two elements – in which case it must return True – or not, in which case it must return False. What is the type of onlytwo?`,
+                                template: `module Code where 
   onlytwo :: `,
-                Tests: {
-                  create: {
-                    code: `module Session3Spec where
+                                Tests: {
+                                    create: {
+                                        code: `module Session3Spec where
     
 import Test.Hspec
 import Test.QuickCheck
@@ -37,15 +48,17 @@ main = hspec $ do
         it "returns False when list has 3 or more elements" $ do
             onlytwo [0..3] \`shouldBe\` False
             onlytwo [0..10] \`shouldBe\` False`,
-                  },
+                                    },
+                                },
+                            },
+                        ],
+                    },
                 },
-              },
-            ],
-          },
+            },
         },
-      },
-    },
-  });
+    });
+
+    console.log(`Seeding finished.`);
 }
 
 main();
