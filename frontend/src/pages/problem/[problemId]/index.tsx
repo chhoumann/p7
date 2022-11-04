@@ -50,8 +50,8 @@ const SolveProblem: NextPage = () => {
 
     return (
         <Layout title={problem.data.name}>
-            <main className="mx-auto h-full w-full">
-                <h2 className="text-3xl uppercase w-full text-center p-8">
+            <main className="mx-auto h-full w-full overflow-hidden">
+                <h2 className="text-3xl w-full text-center p-8">
                     {problem.data.name}
                 </h2>
                 <div className="flex flex-row gap-8 justify-center my-auto h-full w-full px-10">
