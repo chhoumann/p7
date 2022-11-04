@@ -42,8 +42,7 @@ async function addTestSyllabus() {
                             {
                                 name: "onlytwo",
                                 description: `Define, using pattern matching and without using the length function, a function onlytwo that tells us if a list has precisely two elements – in which case it must return True – or not, in which case it must return False. What is the type of onlytwo?`,
-                                template: `module Code where 
-  onlytwo :: `,
+                                template: `onlytwo :: `,
                                 Tests: {
                                     create: {
                                         code: `module Session3Spec where
