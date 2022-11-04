@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
+import CodeEditor from "../../../components/codeEditor";
 
 enum TabState {
     Instructions,
@@ -11,12 +12,12 @@ enum TabState {
 
 const SolveProblem: NextPage = () => {
     const [tab, setTab] = useState<TabState>(TabState.Instructions);
-    const codebox = useRef<HTMLTextAreaElement>(null);
+    const [code, setCode] = useState<string>("");
     const router = useRouter();
     const { problemId } = router.query;
 
     const problem = trpc.useQuery(["problem.byId", problemId as string], {
-        enabled: router.isReady,
+        enabled: router.isReady
     });
     const test = trpc.useQuery(["test.byId", problemId as string], {
         enabled: router.isReady,
@@ -52,11 +53,11 @@ const SolveProblem: NextPage = () => {
             <main className="mx-auto h-full w-full">
                 <div className="flex flex-row gap-8 items-center justify-center h-full w-full px-10">
                     <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
-                        <textarea
-                            spellCheck={false}
-                            ref={codebox}
+                        <CodeEditor
+                            value={problem.data.template}
+                            height="100%"
                             className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0"
-                            defaultValue={problem.data.template}
+                            setCode={setCode}
                         />
                         <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
                             <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
@@ -66,7 +67,7 @@ const SolveProblem: NextPage = () => {
                                 className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
                                 onClick={() =>
                                     mutation.mutate({
-                                        code: codebox.current?.value ?? "test",
+                                        code,
                                         test: test.data.code,
                                     })
                                 }
