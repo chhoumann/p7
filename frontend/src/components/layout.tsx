@@ -11,7 +11,7 @@ function Layout({ children, title }: Props) {
     return (
         <React.Fragment>
             <Head>
-                <title>{title} | P7 Haskell Runner</title>
+                <title>{`${title}  | P7 Haskell Runner`}</title>
                 <meta name="description" content="Haskell Runner." />
                 <link rel="icon" type="image/x-icon" href="favicon.ico" />
             </Head>
