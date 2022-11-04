@@ -31,7 +31,7 @@ const ProblemSetPage: NextPage = () => {
     }
 
     return (
-        <div className="container flex justify-center items-center w-full h-[75vh]">
+        <div className="container mx-auto flex justify-center items-center w-full h-[75vh]">
             {problemSet.isSuccess ? (
                 <h2 className="absolute top-10 text-2xl">
                     Problems for {problemSet.data.topic}
