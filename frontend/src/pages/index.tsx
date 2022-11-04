@@ -7,9 +7,9 @@ export default function IndexPage() {
     return (
         <Layout title={"Home"}>
             <div className="background-content">
-                <h3 className="landing-title-first link link-underline link-underline-black">Welcome to</h3>
-                <h3 className="landing-title-second link link-underline link-underline-black">The AAU Programming</h3>
-                <h3 className="landing-title-third link link-underline link-underline-black">Paradigms Course</h3>
+                <h3 className="landing-title-first">Welcome to</h3>
+                <h3 className="landing-title-second">The AAU Programming</h3>
+                <h3 className="landing-title-third">Paradigms Course</h3>
             </div>
         </Layout>
     );
