@@ -39,6 +39,32 @@ async function getJobResult(id: string) {
     return parsedResultResponse;
 }
 
+async function tryGetJobResult(id: string, maxRetries: number, delay: number) {
+    for (let i = 0; i < maxRetries; i++) {
+        const { data } = await getJobResult(id);
+
+        switch (data.status) {
+            case "in progress":
+                await sleep(delay);
+                break;
+            case "not found":
+                return {
+                    success: false,
+                    result: "Job not found",
+                };
+            case "complete":
+                return {
+                    success: data.success,
+                    result: data.output,
+                };
+            default:
+                break;
+        }
+    }
+
+    throw new Error("Max retries exceeded");
+}
+
 const moduleWrapper = (code: string) => `module Code where\n${code}`;
 
 export const codeRouter = createRouter()
@@ -46,12 +72,22 @@ export const codeRouter = createRouter()
         input: z.object({
             code: z.string(),
             test: z.string(),
+            problemId: z.string(),
         }),
         output: z.object({
             success: z.boolean(),
             result: z.string(),
         }),
-        async resolve({ input }) {
+        async resolve({ input, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user?.id) {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized",
+                });
+            }
+
             try {
                 const jobSubmitResponse = await ky
                     .post(`${env.WEBSERVER_ADDRESS}/haskell/submit`, {
@@ -72,34 +108,33 @@ export const codeRouter = createRouter()
                     };
                 }
 
-                for (let i = 0; i < 200; i++) {
-                    const { data } = await getJobResult(
-                        parsedSubmitResponse.data.id
+                try {
+                    const MAX_ATTEMPTS = 200;
+                    const ATTEMPT_DELAY = 500;
+                    const jobResultResponse = await tryGetJobResult(
+                        parsedSubmitResponse.data.id,
+                        MAX_ATTEMPTS,
+                        ATTEMPT_DELAY
                     );
 
-                    if (data.status === "not found") {
-                        return {
-                            success: false,
-                            result: "Job not found.",
-                        };
-                    }
+                    await prisma?.submission.create({
+                        data: {
+                            code: input.code,
+                            output: jobResultResponse.result,
+                            success: jobResultResponse.success,
+                            problemId: input.problemId,
+                            userId: session.user.id,
+                        },
+                    });
 
-                    if (data.status === "in progress") {
-                        await sleep(100);
-                    }
-
-                    if (data.status === "complete") {
-                        return {
-                            success: data.success,
-                            result: data.output,
-                        };
-                    }
+                    return jobResultResponse;
+                } catch (error) {
+                    throw new trpc.TRPCError({
+                        message: "Failed to get job results.",
+                        code: "INTERNAL_SERVER_ERROR",
+                        cause: error,
+                    });
                 }
-
-                throw new trpc.TRPCError({
-                    message: "Failed to get job results.",
-                    code: "INTERNAL_SERVER_ERROR",
-                });
             } catch (error) {
                 throw new trpc.TRPCError({
                     code: "INTERNAL_SERVER_ERROR",
