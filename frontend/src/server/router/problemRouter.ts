@@ -130,5 +130,5 @@ export const problemRouter = createRouter()
           cause: error,
         });
       }
-    }
+    },
   });
