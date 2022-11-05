@@ -25,6 +25,7 @@
     "@uiw/codemirror-theme-github": "^4.12.4",
     "@uiw/react-codemirror": "^4.12.4",
     "clsx": "^1.2.1",
+    "dayjs": "^1.11.6",
     "ky": "^0.31.3",
     "next": "12.2.5",
     "next-auth": "^4.10.3",
