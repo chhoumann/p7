@@ -79,7 +79,7 @@ export const codeRouter = createRouter()
             result: z.string(),
         }),
         async resolve({ input, ctx }) {
-            const { session } = ctx;
+            const { session, prisma } = ctx;
 
             if (!session || !session.user?.id) {
                 throw new trpc.TRPCError({
@@ -117,7 +117,7 @@ export const codeRouter = createRouter()
                         ATTEMPT_DELAY
                     );
 
-                    await prisma?.submission.create({
+                    await prisma.submission.create({
                         data: {
                             code: input.code,
                             output: jobResultResponse.result,
