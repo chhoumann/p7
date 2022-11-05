@@ -6,14 +6,14 @@ import Layout from "../../../components/layout";
 import CodeEditor from "../../../components/codeEditor";
 import dayjs from "dayjs";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Submission } from "@prisma/client";
 
 enum TabState {
     Instructions,
     Result,
 }
 
-const SolveProblem: NextPage<{template: string}> = ({ template }) => {
+const SolveProblem: NextPage<{ template: string }> = ({ template }) => {
     const [tab, setTab] = useState<TabState>(TabState.Instructions);
     const [code, setCode] = useState<string>(template);
     const router = useRouter();
@@ -26,9 +26,20 @@ const SolveProblem: NextPage<{template: string}> = ({ template }) => {
         enabled: router.isReady,
     });
 
+    const submissions = trpc.useQuery(
+        ["submission.byProblemId", { problemId: problemId as string }],
+        {
+            enabled: true,
+        }
+    );
+
     const mutation = trpc.useMutation("code.haskell", {
-        onSuccess: () => setTab(TabState.Result),
+        onSuccess: () => {
+            setTab(TabState.Result);
+            submissions.refetch();
+        }
     });
+
 
     // Ensure user isn't on results tab in an invalid state (no results).
     if (mutation.isError && tab === TabState.Result) {
@@ -67,7 +78,7 @@ const SolveProblem: NextPage<{template: string}> = ({ template }) => {
                         />
                         <div className="w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
                             <AttemptSelect
-                                problemId={problem.data.id}
+                                submissions={submissions.data}
                                 setCode={setCode}
                                 defaultCode={template}
                             />
@@ -177,27 +188,16 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
 function AttemptSelect({
     setCode,
-    problemId,
+    submissions,
     defaultCode,
 }: {
-    problemId: string;
+    submissions: Submission[] | undefined
     setCode: (code: string) => void;
     defaultCode: string;
 }) {
     const [selected, setSelected] = useState<string>("");
 
-    const submissions = trpc.useQuery(
-        ["submission.byProblemId", { problemId }],
-        {
-            enabled: true,
-        }
-    );
-
-    if (submissions.isLoading) {
-        return null;
-    }
-
-    if (!submissions.isSuccess || submissions.data === undefined) {
+    if (!submissions || submissions.length === 0) {
         return null;
     }
 
@@ -210,10 +210,10 @@ function AttemptSelect({
                 setCode(e.target.value);
             }}
         >
-            <option value={defaultCode}>Select a submission</option>
-            {submissions.data.map((submission, i) => (
+            <option value={defaultCode}>New submission</option>
+            {submissions.map((submission, i) => (
                 <option key={submission.id} value={submission.code}>
-                    #{submissions.data.length - i}{" "}
+                    #{submissions.length - i}{" "}
                     {dayjs(submission.createdAt).format("MMM D, YYYY HH:mm")} -{" "}
                     {submission.success ? "✅" : "❌"}
                 </option>
@@ -245,12 +245,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
         select: {
             template: true,
-        }
+        },
     });
 
     return {
         props: {
-            template: problem?.template
+            template: problem?.template,
         },
     };
 };
