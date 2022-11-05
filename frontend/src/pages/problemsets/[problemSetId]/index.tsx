@@ -14,13 +14,20 @@ const ProblemSetPage: NextPage<{ role: string }> = ({ role }) => {
     const router = useRouter();
     const { problemSetId } = router.query as { problemSetId: string };
 
-    const problemSet = trpc.useQuery(
-        ["problemSets.getByProblemSetId", problemSetId],
-        {}
-    );
+    const problemSet = trpc.useQuery([
+        "problemSets.getByProblemSetId",
+        problemSetId,
+    ]);
 
     const problems = trpc.useQuery(
         ["problem.getByProblemSetId", problemSetId],
+        {
+            enabled: router.isReady,
+        }
+    );
+
+    const solvedProblems = trpc.useQuery(
+        ["submission.solvedByUserInSet", problemSetId],
         {
             enabled: router.isReady,
         }
@@ -35,7 +42,11 @@ const ProblemSetPage: NextPage<{ role: string }> = ({ role }) => {
         problems.refetch();
     }
 
-    if (!problemSet.isSuccess || !problems.isSuccess) {
+    if (
+        !problemSet.isSuccess ||
+        !problems.isSuccess ||
+        !solvedProblems.isSuccess
+    ) {
         return null;
     }
 
@@ -49,7 +60,7 @@ const ProblemSetPage: NextPage<{ role: string }> = ({ role }) => {
             />
             <Layout title={problemSet.data.topic}>
                 <h1 className="text-4xl mt-20 text-center">
-                    {problemSet.data.topic}
+                    {problemSet.data.topic} ({Object.keys(solvedProblems.data).length}/{problems.data.length})
                 </h1>
 
                 <div className="my-8 mx-auto border-b w-1/2 shadow-xs" />
@@ -72,6 +83,7 @@ const ProblemSetPage: NextPage<{ role: string }> = ({ role }) => {
                                         <StudentRowItem
                                             url={`/problem/${problem.id}`}
                                             name={problem.name}
+                                            showCheckmark={solvedProblems.data[problem.id]}
                                         />
                                     )}
                                 </React.Fragment>

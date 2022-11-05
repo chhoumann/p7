@@ -1,7 +1,15 @@
 import Link from "next/link";
-import { ArrowRightCircle } from "react-feather";
+import { ArrowRightCircle, CheckCircle } from "react-feather";
 
-export function StudentRowItem({ name, url }: { name: string; url: string }) {
+export function StudentRowItem({
+    name,
+    url,
+    showCheckmark,
+}: {
+    name: string;
+    url: string;
+    showCheckmark?: boolean;
+}) {
     return (
         <Link href={url}>
             <div
@@ -10,10 +18,17 @@ export function StudentRowItem({ name, url }: { name: string; url: string }) {
                 }
             >
                 <span>{name}</span>
-                <ArrowRightCircle
-                    size={30}
-                    className="cursor-pointer group-hover:scale-125 transition-transform duration-200 ease-in-out"
-                />
+                {!showCheckmark ? (
+                    <ArrowRightCircle
+                        size={30}
+                        className="cursor-pointer group-hover:scale-125 transition-transform duration-200 ease-in-out"
+                    />
+                ) : (
+                    <CheckCircle
+                        size={30}
+                        className="text-green-500 cursor-pointer group-hover:scale-125 transition-transform duration-200 ease-in-out"
+                    />
+                )}
             </div>
         </Link>
     );
