@@ -4,14 +4,11 @@ const prisma = new PrismaClient();
 async function main() {
     console.log(`Start seeding ...`);
 
-    if (prisma?.role && (await prisma.role.count()) > 0) {
-        console.log(`Seeding roles ...`);
+    try {
         await prisma.role.createMany({
             data: [{ name: "student" }, { name: "teacher" }],
         });
-    } else {
-        console.log(`Roles already exist, skipping seeding ...`);
-    }
+    } catch (error) {}
 
     const syllabusExists = await prisma.syllabus.findFirst({
         where: {
