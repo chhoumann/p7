@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 function Navbar() {
-    const { data: session } = useSession();
+    const { status, data: session } = useSession();
 
     return (
         <nav>
@@ -24,7 +24,7 @@ function Navbar() {
                     ) : null}
                 </div>
                 <div>
-                    {session ? (
+                    {status !== "loading" && session ? (
                         <UserProfile name={session.user?.name ?? ""} />
                     ) : (
                         <LogInBtn />
