@@ -23,7 +23,7 @@ pub struct Token {
 
 #[derive(Deserialize)]
 #[derive(Serialize)]
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct TestRunnerResult {
     pub success: bool,
     pub output: String,
