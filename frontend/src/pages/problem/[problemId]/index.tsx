@@ -7,6 +7,7 @@ import CodeEditor from "../../../components/codeEditor";
 import dayjs from "dayjs";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import { PrismaClient, Submission } from "@prisma/client";
+import clsx from "clsx";
 
 enum TabState {
     Instructions,
@@ -83,7 +84,11 @@ const SolveProblem: NextPage<{ template: string }> = ({ template }) => {
                                 defaultCode={template}
                             />
                             <button
-                                className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
+                                className={clsx(
+                                    "rounded-lg bg-green-500 px-4 cursor-pointer py-2 text-white font-semibold",
+                                    mutation.isLoading && "bg-gray-400 cursor-default"
+                                )}
+                                disabled={mutation.isLoading}
                                 onClick={() =>
                                     mutation.mutate({
                                         code,
