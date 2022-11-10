@@ -21,17 +21,21 @@ public class TicketedCodeRunnerBenchmark
     [BenchmarkCategory("Sending without fetching results")]
     public void PostAndWaitForResponseReceived()
     {
-        Task<HttpResponseMessage>[] taskList = _codeRunnerQueueClient.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
+        Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
         
-        Task.WhenAll(taskList);
+        Task<HttpResponseMessage>[] tasks = _codeRunnerQueueClient.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
+        
+        Task.WhenAll(tasks).Wait();
     }
 
     [Benchmark]
     [BenchmarkCategory("Sending and then fetch results - 5 second pull time")]
     public void PostAndWaitForAllResultsFetched_5SecondsBetweenPolls()
     {
+        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
+        
         TimeSpan pullTime = TimeSpan.FromSeconds(5);
-        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
+        List<Task> taskList = BuildTaskList(pullTime);
         
         Task.WhenAll(taskList);
     }
@@ -40,8 +44,10 @@ public class TicketedCodeRunnerBenchmark
     [BenchmarkCategory("Sending and then fetch results - 2 second pull time")]
     public void PostAndWaitForAllResultsFetched_2SecondsBetweenPolls()
     {
+        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
+        
         TimeSpan pullTime = TimeSpan.FromSeconds(2);
-        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
+        List<Task> taskList = BuildTaskList(pullTime);
         
         Task.WhenAll(taskList);
     }
@@ -50,8 +56,10 @@ public class TicketedCodeRunnerBenchmark
     [BenchmarkCategory("Sending and then fetch results - 1 second pull time")]
     public void PostAndWaitForAllResultsFetched_1SecondsBetweenPolls()
     {
+        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
+        
         TimeSpan pullTime = TimeSpan.FromSeconds(1);
-        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
+        List<Task> taskList = BuildTaskList(pullTime);
         
         Task.WhenAll(taskList);
     }
@@ -60,23 +68,30 @@ public class TicketedCodeRunnerBenchmark
     [BenchmarkCategory("Sending and then fetch results - 0.5 second pull time")]
     public void PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls()
     {
-        TimeSpan pullTime = TimeSpan.FromMilliseconds(500);
-        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
+        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
         
-        Task.WhenAll(taskList);
+        TimeSpan pullTime = TimeSpan.FromMilliseconds(500);
+        List<Task> clientActions = BuildTaskList(pullTime);
+
+        Task.WhenAll(clientActions).Wait();
     }
 
-    private Task<TestRunResult>[] BuildTaskList(TimeSpan pullTime)
+    private List<Task> BuildTaskList(TimeSpan pullTime)
     {
-        Task<TestRunResult>[] clientActions = new Task<TestRunResult>[NumberOfRequests];
-        
+        List<Action> clientActions = new(NumberOfRequests);
+        List<Task> tasks = new(NumberOfRequests);
+        CodeRunnerQueueClient codeRunnerQueueClient = new();
+            
         for (int i = 0; i < NumberOfRequests; i++)
         {
-            CodeRunnerQueueClient codeRunnerQueueClient = new();
-            
-            clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, pullTime);
+            clientActions.Add(() => codeRunnerQueueClient.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, pullTime));
+        }
+        
+        foreach (Action clientAction in clientActions)
+        {
+            tasks.Add(Task.Run(clientAction));
         }
 
-        return clientActions;
+        return tasks;
     }
 }
