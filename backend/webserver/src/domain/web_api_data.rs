@@ -1,3 +1,4 @@
+use std::time::SystemTime;
 use serde::{Serialize, Deserialize};
 use uuid::Uuid;
 
@@ -25,5 +26,6 @@ pub struct Token {
 #[derive(Clone)]
 pub struct TestRunnerResult {
     pub success: bool,
-    pub output: String
+    pub output: String,
+    pub timestamp : SystemTime
 }
