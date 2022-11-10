@@ -45,7 +45,8 @@ public class CodeRunnerQueueClientTest
             clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         }
 
-        Task.WaitAll(clientActions);
+        Task.WhenAll(clientActions);
+        
         return Task.CompletedTask;
     }
     [Fact]
@@ -62,7 +63,7 @@ public class CodeRunnerQueueClientTest
             clientTasks[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         }
 
-        Task.WaitAll(clientTasks);
+        Task.WhenAll(clientTasks);
         
         return Task.CompletedTask;
     }

@@ -23,7 +23,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Task<HttpResponseMessage>[] taskList = _codeRunnerQueueClient.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
         
-        Task.WaitAll(taskList);
+        Task.WhenAll(taskList);
     }
 
     [Benchmark]
@@ -33,7 +33,7 @@ public class TicketedCodeRunnerBenchmark
         TimeSpan pullTime = TimeSpan.FromSeconds(5);
         Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         
-        Task.WaitAll(taskList);
+        Task.WhenAll(taskList);
     }
 
     [Benchmark]
@@ -43,7 +43,7 @@ public class TicketedCodeRunnerBenchmark
         TimeSpan pullTime = TimeSpan.FromSeconds(2);
         Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         
-        Task.WaitAll(taskList);
+        Task.WhenAll(taskList);
     }
 
     [Benchmark]
@@ -53,7 +53,7 @@ public class TicketedCodeRunnerBenchmark
         TimeSpan pullTime = TimeSpan.FromSeconds(1);
         Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         
-        Task.WaitAll(taskList);
+        Task.WhenAll(taskList);
     }
 
     [Benchmark]
@@ -63,7 +63,7 @@ public class TicketedCodeRunnerBenchmark
         TimeSpan pullTime = TimeSpan.FromMilliseconds(500);
         Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         
-        Task.WaitAll(taskList);
+        Task.WhenAll(taskList);
     }
 
     private Task<TestRunResult>[] BuildTaskList(TimeSpan pullTime)
