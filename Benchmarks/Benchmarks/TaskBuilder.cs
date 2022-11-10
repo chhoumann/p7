@@ -2,7 +2,7 @@
 
 public static class TaskBuilder
 {
-    public static IEnumerable<Task> BuildTaskList(int count, Action<CodeRunnerQueueClient> action)
+    public static IEnumerable<Task> BuildClientTaskList(int count, Action<CodeRunnerQueueClient> action)
     {
         List<Action> clientActions = new(count);
         List<Task> tasks = new(count);

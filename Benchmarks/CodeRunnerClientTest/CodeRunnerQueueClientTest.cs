@@ -34,7 +34,7 @@ public class CodeRunnerQueueClientTest
     [Fact]
     public Task CanTestMultipleResultsOneAtATime()
     {
-        const int numberOfRequests = 50;
+        const int numberOfRequests = 10;
         
         Task<TestRunResult>[] clientActions = new Task<TestRunResult>[numberOfRequests];
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
@@ -55,7 +55,7 @@ public class CodeRunnerQueueClientTest
     {
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
 
-        IEnumerable<Task> tasks = TaskBuilder.BuildTaskList(10, client =>
+        IEnumerable<Task> tasks = TaskBuilder.BuildClientTaskList(10, client =>
         {
             client.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         });

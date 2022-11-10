@@ -23,7 +23,7 @@ public class TicketedCodeRunnerBenchmark
 
         CodeSubmit submission = new(CorrectCode, IncorrectTest);
         
-        IEnumerable<Task> clientActions = TaskBuilder.BuildTaskList(NumberOfRequests, client =>
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
             client.Post(submission);
         });
@@ -37,7 +37,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = TaskBuilder.BuildTaskList(NumberOfRequests, client =>
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(5));
         });
@@ -51,7 +51,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = TaskBuilder.BuildTaskList(NumberOfRequests, client =>
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(2));
         });
@@ -65,7 +65,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = TaskBuilder.BuildTaskList(NumberOfRequests, client =>
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(1));
         });
@@ -79,7 +79,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = TaskBuilder.BuildTaskList(NumberOfRequests, client =>
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromMilliseconds(500));
         });
