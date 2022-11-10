@@ -1,12 +1,12 @@
 ﻿namespace Benchmarks;
 
-public class CodeLoader
+public static class CodeLoader
 {
     private const string CodeDirectoryName = "BenchmarkCode";
     private const string CodeFileName = "code.hs";
     private const string TestFileName = "test.hs";
     
-    public List<CodeSubmission> Load()
+    public static IEnumerable<CodeSubmission> Load()
     {
         List<CodeSubmission> codeSubmissions = new();
         

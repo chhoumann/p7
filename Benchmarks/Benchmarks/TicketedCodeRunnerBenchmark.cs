@@ -11,8 +11,11 @@ public class TicketedCodeRunnerBenchmark
 {
     [Params(10, 20)]
     public int NumberOfRequests { get; set; }
+    
+    [ParamsSource(nameof(CodeSubmissions))]
+    public CodeSubmission CodeSubmission { get; set; }
 
-    private CodeSubmission codeSubmission = new CodeLoader().Load()[0];
+    public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
     [BenchmarkCategory("Sending without fetching results")]
@@ -22,7 +25,7 @@ public class TicketedCodeRunnerBenchmark
 
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.Post(codeSubmission);
+            client.Post(CodeSubmission);
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -36,7 +39,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromSeconds(5));
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromSeconds(5));
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -50,7 +53,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromSeconds(2));
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromSeconds(2));
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -64,7 +67,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromSeconds(1));
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromSeconds(1));
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -75,12 +78,14 @@ public class TicketedCodeRunnerBenchmark
     public void PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls()
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
-        
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
-        {
-            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromMilliseconds(500));
-        });
-        
+
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests,
+            client =>
+            {
+                client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test,
+                    TimeSpan.FromMilliseconds(500));
+            });
+
         Task.WhenAll(clientActions).Wait();
     }
 }
