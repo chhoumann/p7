@@ -19,7 +19,7 @@ public class CodeRunnerQueueClientTest
     [Fact]
     public async Task CanPostRequest()
     {
-        var response = await _client.PostCodeRequest("", "");
+        PullIdResponse? response = await _client.PostCodeRequest("", "");
         Assert.False(string.IsNullOrWhiteSpace(response?.id));
     }
 
@@ -45,7 +45,7 @@ public class CodeRunnerQueueClientTest
             clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         }
 
-        Task.WhenAll(clientActions);
+        Task.WhenAll(clientActions).Wait();
         
         return Task.CompletedTask;
     }
@@ -63,7 +63,7 @@ public class CodeRunnerQueueClientTest
             clientTasks[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         }
 
-        Task.WhenAll(clientTasks);
+        Task.WhenAll(clientTasks).Wait();
         
         return Task.CompletedTask;
     }
