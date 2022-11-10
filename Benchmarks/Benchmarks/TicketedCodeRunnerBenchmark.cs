@@ -79,12 +79,10 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
 
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests,
-            client =>
-            {
-                client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test,
-                    TimeSpan.FromMilliseconds(500));
-            });
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
+        {
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromMilliseconds(500));
+        });
 
         Task.WhenAll(clientActions).Wait();
     }
