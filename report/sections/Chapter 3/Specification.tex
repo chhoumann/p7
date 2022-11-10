@@ -2,30 +2,23 @@
 In this chapter we will discuss, the system specification. 
 % --- maybe include something more between
 
-% system introduction
-%     - Purpose of the system
+
 \section*{Purpose and scope of the system }
 The purpose of the system is to provide a better approach to learning functional programming in haskell using a software application.
 To do this we plan to make a system that allows students to read their exercises and solve them. The system should also be able to provide feedback on whether is able to compile, and if it fulfills the requirements of the exercise. The lecturer of the course should be able to add exercises to the course, and write tests that must be passed in order to consider the exercise completed.
-%     - project scope
 For this project we will only focus on creating a platform for the functional programming course, though it could be modified to support other languages we will not do this during this project. 
 
-%     - target users
 \section*{Target users}
 The system will have two main users, the lecturer that will conduct the course and create the exercises, and the university students who will try to solve the exercises.
 
 
-% overall description
-%     - constraint
 \section*{Constraints of the project}
 Given this project is developed as a semester project at \aau there will be some constraints that we must adhere to. 
 One of the constraints is the time constraint, we have single semester to develop the system. 
 We also had to fulfill the study regulations. The study regulations requires that we create an internet based system, that is scalable. 
  
 \section*{Use Cases}
-%     - product features
-%         - fetch assignments
-%         - test solutions
+% Write introduction to use cases
 
 \subsection*{Use case 0: Accounts}
 To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
@@ -52,21 +45,6 @@ Students should be able to view their own solutions to old exercises, and they s
 To gain an overview of which features the solution should contain we can perform a MoSCoW analysis.
 A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system.
 
-% \begin{itemize}
-%     \item students should be able to retrieve exercises.
-%     \item students should be able to submit exercise solutions.
-%     \item students should be able to verify their solutions.
-%     \item lecturers should be able to add tests for exercises.
-%     \item lecturers should be able to  add exercises to an exercise session.
-%     \item lecturers should be able to add exercise sessions.
-%     \item lecturers should be able to add sessions to the curriculum.
-%     \item A user should be able to log in to determine whether they are a student or lecturer.
-%     \item The professor should be able to track the amount of exercises solved by each enrolled student.
-%     \item The professor should be able to view additional statistics like the number of attempts used by a student to solve an exercise.
-%     \item Students should have access to discussed solutions later on.
-%     \item The professor should be able to see each student's code.
-% \end{itemize}
-
 \begin{table}[H]
     \begin{tabular}{|l|llll}
     \cline{1-1}
@@ -87,12 +65,4 @@ A MoSCoW analysis is split into four categories, Must have, Should have, Could h
     Statistics for the lecturer                       &  &  &  &  \\ \cline{1-1}
     \end{tabular}
     \end{table}
-
-
-
-
-%     - functional requirements
-%         - must be able to compile code
-%         - need a client server system, to update assignments and send them to students
-    
     
