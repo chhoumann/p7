@@ -9,6 +9,8 @@ import {
     getCoreRowModel,
     flexRender,
 } from "@tanstack/react-table";
+import { Tab } from "@headlessui/react";
+import clsx from "clsx";
 
 interface ProblemSubmissionData {
     success: boolean;
@@ -47,30 +49,62 @@ const OverviewPage: NextPage = () => {
     return (
         <Layout title="Overview">
             <div className="flex flex-col mt-10 h-screen w-2/3 mx-auto gap-16">
-                {data
-                    ? data.map((problemSet) => (
-                          <React.Fragment key={problemSet.topic}>
-                              <h1 className="text-3xl">{problemSet.topic}</h1>
-                              {problemSet.Problems.map((problem) => (
-                                  <div
-                                      key={problem.name}
-                                      className="flex flex-col w-2/3 mx-auto"
+                <Tab.Group>
+                    <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+                        {data
+                            ? data.map((problemSet) => (
+                                  <Tab
+                                      key={problemSet.topic}
+                                      className={({ selected }) =>
+                                          clsx(
+                                              "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
+                                              "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                                              selected
+                                                  ? "bg-white shadow"
+                                                  : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                                          )
+                                      }
                                   >
-                                      <h1 className="text-2xl">
-                                          {problem.name}
-                                      </h1>
-                                      <div className="flex flex-col justify-center w-2/3 mx-auto">
-                                          <div className="flex flex-col justify-center w-2/3 mx-auto">
-                                              <ProblemTable
-                                                  data={problem.Submission}
-                                              />
+                                      {problemSet.topic}
+                                  </Tab>
+                              ))
+                            : null}
+                    </Tab.List>
+
+                    <Tab.Panels>
+                        {data
+                            ? data.map((problemSet) => (
+                                  <Tab.Panel
+                                      key={problemSet.topic}
+                                      className={clsx(
+                                          "rounded-xl bg-white p-3",
+                                          "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                                      )}
+                                  >
+                                      {problemSet.Problems.map((problem) => (
+                                          <div
+                                              key={problem.name}
+                                              className="flex flex-col w-2/3 mx-auto"
+                                          >
+                                              <h1 className="text-2xl">
+                                                  {problem.name}
+                                              </h1>
+                                              <div className="flex flex-col justify-center w-2/3 mx-auto">
+                                                  <div className="flex flex-col justify-center w-2/3 mx-auto">
+                                                      <ProblemTable
+                                                          data={
+                                                              problem.Submission
+                                                          }
+                                                      />
+                                                  </div>
+                                              </div>
                                           </div>
-                                      </div>
-                                  </div>
-                              ))}
-                          </React.Fragment>
-                      ))
-                    : null}
+                                      ))}
+                                  </Tab.Panel>
+                              ))
+                            : null}
+                    </Tab.Panels>
+                </Tab.Group>
             </div>
         </Layout>
     );
