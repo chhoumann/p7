@@ -61,9 +61,9 @@ public class TicketedCodeRunnerBenchmark
     }
 
 
-    private async Task<IEnumerable<Task<Task<Task<TestRunResult>>>>> BuildTaskList(TimeSpan pullTime)
+    private async Task<IEnumerable<Task<Task<TestRunResult>>>> BuildTaskList(TimeSpan pullTime)
     {
-        var clientActions = new List<Func<Task<Task<TestRunResult>>>>(_numberOfRequests);
+        var clientActions = new List<Func<Task<TestRunResult>>>(_numberOfRequests);
         
         for (int i = 0; i < _numberOfRequests; i++)
         {
@@ -72,6 +72,6 @@ public class TicketedCodeRunnerBenchmark
             clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult(CorrectCode, IncorrectTest, pullTime);
         }
 
-        return clientActions.Select(a => Task.FromResult(a.Invoke())) as Task<Task<Task<TestRunResult>>>[] ?? throw new InvalidOperationException();
+        return clientActions.Select(a => Task.FromResult(a.Invoke())) as Task<Task<TestRunResult>>[] ?? throw new InvalidOperationException();
     }
 }

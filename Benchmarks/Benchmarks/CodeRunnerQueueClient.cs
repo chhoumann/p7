@@ -55,12 +55,16 @@ internal class CodeRunnerQueueClient
 
     private async Task<TestRunResult> PullUntilResponseReady(TimeSpan timeBetweenPulls, string id)
     {
-        PeriodicTimer periodicTimer = new PeriodicTimer(timeBetweenPulls);
+        PeriodicTimer periodicTimer = new(timeBetweenPulls);
+        
         while (await periodicTimer.WaitForNextTickAsync())
         {
-            TestRunResult? codeRunResult = await this.GetTestRunResult(id);
+            TestRunResult? codeRunResult = await GetTestRunResult(id);
+
             if (codeRunResult is not null && codeRunResult.success.HasValue)
+            {
                 return codeRunResult;
+            }
         }
 
         throw new TimeoutException("Did not get an answer from server.");
@@ -69,28 +73,29 @@ internal class CodeRunnerQueueClient
     public Task[] PostCodeRequest(string code, string test, int numberOfSubmissions)
     {
         Task[] taskList = new Task[numberOfSubmissions];
+
         for (int i = 0; i < numberOfSubmissions; i++)
+        {
             taskList[i] = Post(new CodeSubmit(code, test));
+        }
+
         return taskList;
     }
 
-
-    public Func<Task<Task<TestRunResult>>> CreatePostAndGetHaskellResult(string code, string test, TimeSpan timeBetweenPulls)
+    public Func<Task<TestRunResult>> CreatePostAndGetHaskellResult(string code, string test, TimeSpan timeBetweenPulls)
     {
         return () => PostAndGetHaskellResultTask(code, test, timeBetweenPulls);
     }
 
-    public Task<Task<TestRunResult>> PostAndGetHaskellResultTask(string code, string test, TimeSpan timeBetweenPulls)
+    public Task<TestRunResult> PostAndGetHaskellResultTask(string code, string test, TimeSpan timeBetweenPulls)
     {
-        return PostCodeRequest(code, test)
-            .ContinueWith<Task<TestRunResult>>(async (tokenResponseTask) =>
-            {
-                PullIdResponse? tokenResponse = await tokenResponseTask;
-                string id = tokenResponse?.id is null
-                    ? throw new InvalidOperationException("Token string was null!")
-                    : tokenResponse.id;
+        Task<PullIdResponse?> postCodeRequest = PostCodeRequest(code, test);
+        
+        PullIdResponse? tokenResponse = postCodeRequest.Result;
+        string id = tokenResponse?.id is null
+            ? throw new InvalidOperationException("Token string was null!")
+            : tokenResponse.id;
 
-                return await PullUntilResponseReady(timeBetweenPulls, id);
-            });
+        return PullUntilResponseReady(timeBetweenPulls, id);
     }
 }

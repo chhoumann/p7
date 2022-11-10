@@ -8,7 +8,6 @@ public class CodeRunnerQueueClientTest
 {
     private readonly CodeRunnerQueueClient _client = new();
 
-
     public CodeRunnerQueueClientTest()
     {
         DotEnv.Fluent()
@@ -27,34 +26,25 @@ public class CodeRunnerQueueClientTest
     [Fact]
     public async Task CanPostRequestAndFetchResultBefore30Sec()
     {
-        var timeToFail = Task.Delay(TimeSpan.FromSeconds(30));
-        Task<TestRunResult> testRunResultTask = await _client.PostAndGetHaskellResultTask("", "",
-            new TimeSpan(0, 0, 0, 0, 500));
-        if (await Task.WhenAny(testRunResultTask, timeToFail) == testRunResultTask)
-        {
-            TestRunResult response = await testRunResultTask;
-            Assert.False(string.IsNullOrWhiteSpace(response.output));
-        }
-        else
-        {
-            throw new TimeoutException();
-        }
+        var timeBetweenPulls = new TimeSpan(0, 0, 0, 0, 500);
+        var testRunResultTask = await _client.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
+        
+        Assert.False(string.IsNullOrWhiteSpace(testRunResultTask.output));
     }
     
     [Fact]
     public Task CanTestMultipleResultsOneAtATime()
     {
-        int numberOfRequests = 5;
-        Task<Task<TestRunResult>>[] clientActions = new Task<Task<TestRunResult>> [50];
+        const int numberOfRequests = 50;
+        
+        Task<TestRunResult>[] clientActions = new Task<TestRunResult>[numberOfRequests];
+        TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
 
-        for (int i = 0; i < clientActions.Length; i++)
+        for (int i = 0; i < numberOfRequests; i++)
         {
             CodeRunnerQueueClient codeRunnerQueueClient = new();
-            clientActions[0] = codeRunnerQueueClient.CreatePostAndGetHaskellResult(
-                "", "", TimeSpan.FromSeconds(3)).Invoke();
+            clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult("", "", timeBetweenPulls).Invoke();
         }
-
-
 
         Task.WaitAll(clientActions);
         return Task.CompletedTask;
@@ -63,17 +53,18 @@ public class CodeRunnerQueueClientTest
     public Task CanTestMultipleResultsMoreAtATime()
     {
         const int numberOfRequests = 10;
-        Func<Task<Task<TestRunResult>>>[] clientActions = new Func<Task<Task<TestRunResult>>> [numberOfRequests];
-
+        Func<Task<TestRunResult>>[] clientActions = new Func<Task<TestRunResult>> [numberOfRequests];
+        TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
+        
         for (int i = 0; i < clientActions.Length; i++)
         {
             CodeRunnerQueueClient codeRunnerQueueClient = new();
-            clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult(
-                "", "", TimeSpan.FromSeconds(3));
+            clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult("", "", timeBetweenPulls);
         }
 
-        var res = new Task[numberOfRequests];
-        for (var index = 0; index < clientActions.Length; index++)
+        Task[] res = new Task[numberOfRequests];
+        
+        for (int index = 0; index < clientActions.Length; index++)
         {
             var clientAction = clientActions[index];
             res[index] = (clientAction.Invoke());
