@@ -12,8 +12,6 @@ public class TicketedCodeRunnerBenchmark
     private const string CorrectCode = "module Code where\n\nadd x y = x - y";
     private const string IncorrectTest = "a";
     
-    private readonly CodeRunnerQueueClient _codeRunnerQueueClient = new();
-
     [Params(10, 20)]
     public int NumberOfRequests { get; set; }
 
@@ -23,9 +21,12 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
         
-        Task<HttpResponseMessage>[] tasks = _codeRunnerQueueClient.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
+        List<Task> clientActions = BuildTaskList(client =>
+        {
+            client.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
+        });
         
-        Task.WhenAll(tasks).Wait();
+        Task.WhenAll(clientActions).Wait();
     }
 
     [Benchmark]
@@ -34,10 +35,12 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
         
-        TimeSpan pullTime = TimeSpan.FromSeconds(5);
-        IEnumerable<Task> taskList = BuildTaskList(pullTime);
+        List<Task> clientActions = BuildTaskList(client =>
+        {
+            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(5));
+        });
         
-        Task.WhenAll(taskList);
+        Task.WhenAll(clientActions).Wait();
     }
 
     [Benchmark]
@@ -46,10 +49,12 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
         
-        TimeSpan pullTime = TimeSpan.FromSeconds(2);
-        IEnumerable<Task> taskList = BuildTaskList(pullTime);
+        List<Task> clientActions = BuildTaskList(client =>
+        {
+            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(2));
+        });
         
-        Task.WhenAll(taskList);
+        Task.WhenAll(clientActions).Wait();
     }
 
     [Benchmark]
@@ -58,10 +63,12 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
         
-        TimeSpan pullTime = TimeSpan.FromSeconds(1);
-        IEnumerable<Task> taskList = BuildTaskList(pullTime);
+        List<Task> clientActions = BuildTaskList(client =>
+        {
+            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(1));
+        });
         
-        Task.WhenAll(taskList);
+        Task.WhenAll(clientActions).Wait();
     }
 
     [Benchmark]
@@ -70,21 +77,23 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
         
-        TimeSpan pullTime = TimeSpan.FromMilliseconds(500);
-        IEnumerable<Task> clientActions = BuildTaskList(pullTime);
-
+        List<Task> clientActions = BuildTaskList(client =>
+        {
+            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromMilliseconds(500));
+        });
+        
         Task.WhenAll(clientActions).Wait();
     }
 
-    private IEnumerable<Task> BuildTaskList(TimeSpan pullTime)
+    private List<Task> BuildTaskList(Action<CodeRunnerQueueClient> action)
     {
         List<Action> clientActions = new(NumberOfRequests);
         List<Task> tasks = new(NumberOfRequests);
-        CodeRunnerQueueClient codeRunnerQueueClient = new();
-            
+        
         for (int i = 0; i < NumberOfRequests; i++)
         {
-            clientActions.Add(() => codeRunnerQueueClient.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, pullTime));
+            CodeRunnerQueueClient client = new();
+            clientActions.Add(() => action.Invoke(client));
         }
         
         foreach (Action clientAction in clientActions)
