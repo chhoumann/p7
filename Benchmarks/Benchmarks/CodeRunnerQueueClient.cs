@@ -31,7 +31,7 @@ internal class CodeRunnerQueueClient
         return v.Uri;
     }
 
-    private Task<HttpResponseMessage> Post(CodeSubmit toSend)
+    public Task<HttpResponseMessage> Post(CodeSubmit toSend)
     {
         return _client.PostAsJsonAsync(_postProblemUrl, toSend);
     }

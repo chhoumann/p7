@@ -20,10 +20,12 @@ public class TicketedCodeRunnerBenchmark
     public void PostAndWaitForResponseReceived()
     {
         Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
+
+        CodeSubmit submission = new(CorrectCode, IncorrectTest);
         
-        IEnumerable<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(NumberOfRequests, client =>
         {
-            client.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
+            client.Post(submission);
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -35,7 +37,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(5));
         });
@@ -49,7 +51,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(2));
         });
@@ -63,7 +65,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(1));
         });
@@ -77,7 +79,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
         
-        IEnumerable<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(NumberOfRequests, client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromMilliseconds(500));
         });
@@ -85,12 +87,12 @@ public class TicketedCodeRunnerBenchmark
         Task.WhenAll(clientActions).Wait();
     }
 
-    private IEnumerable<Task> BuildTaskList(Action<CodeRunnerQueueClient> action)
+    private IEnumerable<Task> BuildTaskList(int count, Action<CodeRunnerQueueClient> action)
     {
-        List<Action> clientActions = new(NumberOfRequests);
-        List<Task> tasks = new(NumberOfRequests);
+        List<Action> clientActions = new(count);
+        List<Task> tasks = new(count);
         
-        for (int i = 0; i < NumberOfRequests; i++)
+        for (int i = 0; i < count; i++)
         {
             CodeRunnerQueueClient client = new();
             clientActions.Add(() => action.Invoke(client));
