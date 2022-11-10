@@ -49,21 +49,18 @@ public class CodeRunnerQueueClientTest
         
         return Task.CompletedTask;
     }
+    
     [Fact]
     public Task CanTestMultipleResultsMoreAtATime()
     {
-        const int numberOfRequests = 10;
-        
-        Task<TestRunResult>[] clientTasks = new Task<TestRunResult> [numberOfRequests];
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
-        
-        for (int i = 0; i < clientTasks.Length; i++)
-        {
-            CodeRunnerQueueClient codeRunnerQueueClient = new();
-            clientTasks[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
-        }
 
-        Task.WhenAll(clientTasks).Wait();
+        IEnumerable<Task> tasks = TaskBuilder.BuildTaskList(10, client =>
+        {
+            client.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
+        });
+
+        Task.WhenAll(tasks).Wait();
         
         return Task.CompletedTask;
     }

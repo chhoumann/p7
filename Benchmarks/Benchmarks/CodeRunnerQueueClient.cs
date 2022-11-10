@@ -5,7 +5,7 @@ using dotenv.net.Utilities;
 
 namespace Benchmarks;
 
-internal class CodeRunnerQueueClient
+public class CodeRunnerQueueClient
 {
     private readonly HttpClient _client = new();
 
