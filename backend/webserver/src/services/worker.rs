@@ -41,6 +41,12 @@ async fn worker_thread(
             println!("Sweeping now...");
 
             map.retain(|&_, res| {
+                // If there is no test runner result associated with the given UUID, keep the
+                // element because no result has been produced yet.
+                if res.is_none() {
+                    return true
+                }
+
                 res.as_ref().unwrap().timestamp.elapsed().unwrap() <= config.lifetime
             });
             
