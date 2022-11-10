@@ -35,7 +35,7 @@ public class TicketedCodeRunnerBenchmark
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
         
         TimeSpan pullTime = TimeSpan.FromSeconds(5);
-        List<Task> taskList = BuildTaskList(pullTime);
+        IEnumerable<Task> taskList = BuildTaskList(pullTime);
         
         Task.WhenAll(taskList);
     }
@@ -47,7 +47,7 @@ public class TicketedCodeRunnerBenchmark
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
         
         TimeSpan pullTime = TimeSpan.FromSeconds(2);
-        List<Task> taskList = BuildTaskList(pullTime);
+        IEnumerable<Task> taskList = BuildTaskList(pullTime);
         
         Task.WhenAll(taskList);
     }
@@ -59,7 +59,7 @@ public class TicketedCodeRunnerBenchmark
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
         
         TimeSpan pullTime = TimeSpan.FromSeconds(1);
-        List<Task> taskList = BuildTaskList(pullTime);
+        IEnumerable<Task> taskList = BuildTaskList(pullTime);
         
         Task.WhenAll(taskList);
     }
@@ -71,12 +71,12 @@ public class TicketedCodeRunnerBenchmark
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
         
         TimeSpan pullTime = TimeSpan.FromMilliseconds(500);
-        List<Task> clientActions = BuildTaskList(pullTime);
+        IEnumerable<Task> clientActions = BuildTaskList(pullTime);
 
         Task.WhenAll(clientActions).Wait();
     }
 
-    private List<Task> BuildTaskList(TimeSpan pullTime)
+    private IEnumerable<Task> BuildTaskList(TimeSpan pullTime)
     {
         List<Action> clientActions = new(NumberOfRequests);
         List<Task> tasks = new(NumberOfRequests);
