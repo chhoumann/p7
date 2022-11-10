@@ -7,7 +7,7 @@ import { syllabusRouter } from "./syllabusRouter";
 import { problemRouter } from "./problemRouter";
 import { problemSetsRouter } from "./problemSetRouter";
 import { TestRouter } from "./testRouter";
-import { submissionRouter } from "./submsisionRouter";
+import { submissionRouter } from "./submissionRouter";
 
 export const appRouter = createRouter()
     .transformer(superjson)
