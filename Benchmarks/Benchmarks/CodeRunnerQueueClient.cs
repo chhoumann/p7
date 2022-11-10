@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Collections;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using dotenv.net.Utilities;
@@ -61,30 +62,20 @@ internal class CodeRunnerQueueClient
         {
             TestRunResult? codeRunResult = await GetTestRunResult(id);
 
-            if (codeRunResult is not null && codeRunResult.success.HasValue)
+            if (codeRunResult?.success != null)
             {
                 return codeRunResult;
             }
         }
 
-        throw new TimeoutException("Did not get an answer from server.");
+        throw new TimeoutException("Did not get a response from server.");
     }
 
-    public Task[] PostCodeRequest(string code, string test, int numberOfSubmissions)
+    public Task<HttpResponseMessage>[] PostCodeRequest(string code, string test, int numberOfSubmissions)
     {
-        Task[] taskList = new Task[numberOfSubmissions];
-
-        for (int i = 0; i < numberOfSubmissions; i++)
-        {
-            taskList[i] = Post(new CodeSubmit(code, test));
-        }
-
-        return taskList;
-    }
-
-    public Func<Task<TestRunResult>> CreatePostAndGetHaskellResult(string code, string test, TimeSpan timeBetweenPulls)
-    {
-        return () => PostAndGetHaskellResultTask(code, test, timeBetweenPulls);
+        CodeSubmit submission = new(code, test);
+        
+        return Enumerable.Repeat(Post(submission), numberOfSubmissions).ToArray();
     }
 
     public Task<TestRunResult> PostAndGetHaskellResultTask(string code, string test, TimeSpan timeBetweenPulls)

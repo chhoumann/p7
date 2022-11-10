@@ -26,8 +26,7 @@ public class CodeRunnerQueueClientTest
     [Fact]
     public async Task CanPostRequestAndFetchResultBefore30Sec()
     {
-        var timeBetweenPulls = new TimeSpan(0, 0, 0, 0, 500);
-        var testRunResultTask = await _client.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
+        TestRunResult testRunResultTask = await _client.PostAndGetHaskellResultTask("", "", TimeSpan.FromMilliseconds(500));
         
         Assert.False(string.IsNullOrWhiteSpace(testRunResultTask.output));
     }
@@ -43,7 +42,7 @@ public class CodeRunnerQueueClientTest
         for (int i = 0; i < numberOfRequests; i++)
         {
             CodeRunnerQueueClient codeRunnerQueueClient = new();
-            clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult("", "", timeBetweenPulls).Invoke();
+            clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         }
 
         Task.WaitAll(clientActions);
@@ -53,24 +52,18 @@ public class CodeRunnerQueueClientTest
     public Task CanTestMultipleResultsMoreAtATime()
     {
         const int numberOfRequests = 10;
-        Func<Task<TestRunResult>>[] clientActions = new Func<Task<TestRunResult>> [numberOfRequests];
+        
+        Task<TestRunResult>[] clientTasks = new Task<TestRunResult> [numberOfRequests];
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
         
-        for (int i = 0; i < clientActions.Length; i++)
+        for (int i = 0; i < clientTasks.Length; i++)
         {
             CodeRunnerQueueClient codeRunnerQueueClient = new();
-            clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult("", "", timeBetweenPulls);
+            clientTasks[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         }
 
-        Task[] res = new Task[numberOfRequests];
+        Task.WaitAll(clientTasks);
         
-        for (int index = 0; index < clientActions.Length; index++)
-        {
-            var clientAction = clientActions[index];
-            res[index] = (clientAction.Invoke());
-        }
-
-        Task.WaitAll(res);
         return Task.CompletedTask;
     }
 }

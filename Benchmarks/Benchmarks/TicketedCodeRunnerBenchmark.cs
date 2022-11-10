@@ -29,7 +29,7 @@ public class TicketedCodeRunnerBenchmark
     public void PostAndWaitForAllResultsFetched_5SecondsBetweenPolls()
     {
         TimeSpan pullTime = new(0, 0, 0, 5);
-        var taskList = BuildTaskList(pullTime);
+        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         Task.WaitAll(taskList);
     }
 
@@ -38,7 +38,7 @@ public class TicketedCodeRunnerBenchmark
     public void PostAndWaitForAllResultsFetched_2SecondsBetweenPolls()
     {
         TimeSpan pullTime = new(0, 0, 0, 2);
-        var taskList = BuildTaskList(pullTime);
+        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         Task.WaitAll(taskList);
     }
 
@@ -47,7 +47,7 @@ public class TicketedCodeRunnerBenchmark
     public void PostAndWaitForAllResultsFetched_1SecondsBetweenPolls()
     {
         TimeSpan pullTime = new(0, 0, 0, 1);
-        var taskList = BuildTaskList(pullTime);
+        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         Task.WaitAll(taskList);
     }
 
@@ -56,22 +56,21 @@ public class TicketedCodeRunnerBenchmark
     public void PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls()
     {
         TimeSpan pullTime = new(0, 0, 0, 0, 500);
-        var taskList = BuildTaskList(pullTime);
+        Task<TestRunResult>[] taskList = BuildTaskList(pullTime);
         Task.WaitAll(taskList);
     }
 
-
-    private async Task<IEnumerable<Task<Task<TestRunResult>>>> BuildTaskList(TimeSpan pullTime)
+    private Task<TestRunResult>[] BuildTaskList(TimeSpan pullTime)
     {
-        var clientActions = new List<Func<Task<TestRunResult>>>(_numberOfRequests);
+        Task<TestRunResult>[] clientActions = new Task<TestRunResult>[_numberOfRequests];
         
         for (int i = 0; i < _numberOfRequests; i++)
         {
             CodeRunnerQueueClient codeRunnerQueueClient = new();
             
-            clientActions[i] = codeRunnerQueueClient.CreatePostAndGetHaskellResult(CorrectCode, IncorrectTest, pullTime);
+            clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, pullTime);
         }
 
-        return clientActions.Select(a => Task.FromResult(a.Invoke())) as Task<Task<TestRunResult>>[] ?? throw new InvalidOperationException();
+        return clientActions;
     }
 }
