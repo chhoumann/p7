@@ -1,0 +1,98 @@
+\chapter{Specification}
+In this chapter we will discuss, the system specification. 
+% --- maybe include something more between
+
+% system introduction
+%     - Purpose of the system
+\section*{Purpose and scope of the system }
+The purpose of the system is to provide a better approach to learning functional programming in haskell using a software application.
+To do this we plan to make a system that allows students to read their exercises and solve them. The system should also be able to provide feedback on whether is able to compile, and if it fulfills the requirements of the exercise. The lecturer of the course should be able to add exercises to the course, and write tests that must be passed in order to consider the exercise completed.
+%     - project scope
+For this project we will only focus on creating a platform for the functional programming course, though it could be modified to support other languages we will not do this during this project. 
+
+%     - target users
+\section*{Target users}
+The system will have two main users, the lecturer that will conduct the course and create the exercises, and the university students who will try to solve the exercises.
+
+
+% overall description
+%     - constraint
+\section*{Constraints of the project}
+Given this project is developed as a semester project at \aau there will be some constraints that we must adhere to. 
+One of the constraints is the time constraint, we have single semester to develop the system. 
+We also had to fulfill the study regulations. The study regulations requires that we create an internet based system, that is scalable. 
+ 
+\section*{Use Cases}
+%     - product features
+%         - fetch assignments
+%         - test solutions
+
+\subsection*{Use case 0: Accounts}
+To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
+
+\subsection*{Use case 1: Solve exercises}
+A user should be able to choose an exercise session and a specific exercise. The exercise description is then retrieved and shown to the user.
+As the user completes the exercise, they should also be able to submit the exercise, and verify that their submitted solutions can compile and fulfills the requirements of the exercise. If it does not compile or fails the tests, it should provide the user with an error describing the problem. 
+
+\subsection*{Use case 2: Create exercises}
+A lecturer should be able to create and edit syllabi as well as the belonging exercise sessions and their included exercises. 
+For each given exercise the user should be able to specify an exercise description and tests that must be passed, the tests should be performed on the submitted code. Furthermore the user should be able to specify template code that will already be entered when the students opens the exercise.
+
+\subsection*{Use case 3: Show statistics over exercises}
+A lecturer should be able to view statistics about exercises, for example how many attempts were needed by users to complete it or the time taken, in order to determine if the difficulty is sufficient. To do This the system needs to log the information as the users attempt to complete the exercises.
+
+
+\subsection*{Use case 4: View solutions}
+The lecturer can view all submitted solutions, to see if the students use the correct approach. The lecturer will also be able to publish the best solutions, or solutions that have been discussed in class.  
+Students should be able to view their own solutions to old exercises, and they should be able to view other solutions which have been selected by the lecturer. 
+
+
+\section{MoSCoW}
+
+To gain an overview of which features the solution should contain we can perform a MoSCoW analysis.
+A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system.
+
+% \begin{itemize}
+%     \item students should be able to retrieve exercises.
+%     \item students should be able to submit exercise solutions.
+%     \item students should be able to verify their solutions.
+%     \item lecturers should be able to add tests for exercises.
+%     \item lecturers should be able to  add exercises to an exercise session.
+%     \item lecturers should be able to add exercise sessions.
+%     \item lecturers should be able to add sessions to the curriculum.
+%     \item A user should be able to log in to determine whether they are a student or lecturer.
+%     \item The professor should be able to track the amount of exercises solved by each enrolled student.
+%     \item The professor should be able to view additional statistics like the number of attempts used by a student to solve an exercise.
+%     \item Students should have access to discussed solutions later on.
+%     \item The professor should be able to see each student's code.
+% \end{itemize}
+
+\begin{table}[H]
+    \begin{tabular}{|l|llll}
+    \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Must have}        &  &  &  &  \\ \cline{1-1}
+    Retrieve exercises                                &  &  &  &  \\ \cline{1-1}
+    Submit exercises                                  &  &  &  &  \\ \cline{1-1}
+    Can compile submissions                           &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Should have}      &  &  &  &  \\ \cline{1-1}
+    Lecturer can add tests for exercises              &  &  &  &  \\ \cline{1-1}
+    Verify submissions                                &  &  &  &  \\ \cline{1-1}
+    Lecturers can group exercises into sessions       &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Could have}       &  &  &  &  \\ \cline{1-1}
+    Login to determine if user is student or lecturer &  &  &  &  \\ \cline{1-1}
+    Students can access old submissions               &  &  &  &  \\ \cline{1-1}
+    Lecturer can view all submissions                 &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Wont have}        &  &  &  &  \\ \cline{1-1}
+    Lecturer can share student solutions              &  &  &  &  \\ \cline{1-1}
+    Statistics for the lecturer                       &  &  &  &  \\ \cline{1-1}
+    \end{tabular}
+    \end{table}
+
+
+
+
+%     - functional requirements
+%         - must be able to compile code
+%         - need a client server system, to update assignments and send them to students
+    
+    
