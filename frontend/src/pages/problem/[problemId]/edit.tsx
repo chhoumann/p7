@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { trpc } from "../../../utils/trpc";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { GetServerSideProps } from "next";
+import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 
 interface Inputs {
     title: string;
@@ -137,4 +139,21 @@ export default function EditProblemPage() {
             </div>
         </div>
     );
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getServerAuthSession(ctx);
+
+    if (!session || !session.user || session.user.role !== 'teacher') {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: {}
+    }
 }
