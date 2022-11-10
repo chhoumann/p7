@@ -1,4 +1,6 @@
-﻿namespace Benchmarks;
+﻿using System.IO;
+
+namespace Benchmarks;
 
 public class CodeLoader
 {
