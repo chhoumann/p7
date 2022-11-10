@@ -48,7 +48,7 @@ const OverviewPage: NextPage = () => {
 
     return (
         <Layout title="Overview">
-            <div className="flex flex-col mt-10 h-screen w-2/3 mx-auto gap-16">
+            <div className="flex flex-col mt-10 h-screen w-2/3 mx-auto">
                 <Tab.Group>
                     <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
                         {data
@@ -78,25 +78,20 @@ const OverviewPage: NextPage = () => {
                                       key={problemSet.topic}
                                       className={clsx(
                                           "rounded-xl bg-white p-3",
-                                          "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
                                       )}
                                   >
                                       {problemSet.Problems.map((problem) => (
                                           <div
                                               key={problem.name}
-                                              className="flex flex-col w-2/3 mx-auto"
+                                              className="flex flex-col w-2/3 gap-4 mx-auto my-8"
                                           >
-                                              <h1 className="text-2xl">
+                                              <h1 className="text-3xl my-4">
                                                   {problem.name}
                                               </h1>
-                                              <div className="flex flex-col justify-center w-2/3 mx-auto">
-                                                  <div className="flex flex-col justify-center w-2/3 mx-auto">
-                                                      <ProblemTable
-                                                          data={
-                                                              problem.Submission
-                                                          }
-                                                      />
-                                                  </div>
+                                              <div className="flex flex-col justify-center mx-auto w-full">
+                                                  <ProblemTable
+                                                      data={problem.Submission}
+                                                  />
                                               </div>
                                           </div>
                                       ))}
@@ -140,7 +135,7 @@ function ProblemTable({ data }: { data: ProblemSubmissionData[] }) {
                 {table.getRowModel().rows.map((row) => (
                     <tr key={row.id}>
                         {row.getVisibleCells().map((cell) => (
-                            <td key={cell.id}>
+                            <td key={cell.id} className="p-2">
                                 {flexRender(
                                     cell.column.columnDef.cell,
                                     cell.getContext()
