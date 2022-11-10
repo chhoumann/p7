@@ -10,43 +10,27 @@ export const dashboardRouter = createRouter()
     })
     .query("dashboardData", {
         async resolve({ ctx }) {
-            return ctx.prisma.syllabus.findMany({
+            return await ctx.prisma.problemSet.findMany({
                 select: {
-                    _count: true,
-                    name: true,
-                    ProblemSets: {
+                    topic: true,
+                    Problems: {
                         select: {
+                            name: true,
                             _count: true,
-                            date: true,
-                            id: true,
-                            topic: true,
-                            Problems: {
+                            Submission: {
                                 select: {
-                                    _count: true,
-                                    id: true,
-                                    name: true,
-                                    Submission: {
+                                    user: {
                                         select: {
-                                            id: true,
-                                            success: true,
-                                            problem: {
-                                                select: {
-                                                    id: true,
-                                                    name: true,
-                                                }
-                                            },
-                                            user: {
-                                                select: {
-                                                    name: true,
-                                                }
-                                            },
-                                        },
+                                            _count: true,
+                                            name: true,
+                                        }
                                     },
-                                },
-                            },
-                        },
-                    },
-                },
+                                    success: true,
+                                }
+                            }
+                        }
+                    }
+                }
             });
         },
     });
