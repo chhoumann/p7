@@ -20,11 +20,9 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
 
-        CodeSubmission submission = new(codeSubmission.code, codeSubmission.test);
-        
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.Post(submission);
+            client.Post(codeSubmission);
         });
         
         Task.WhenAll(clientActions).Wait();
