@@ -9,6 +9,7 @@ use futures::stream::StreamExt;
 use crate::domain::web_api_data::{ExerciseSubmission, TestRunnerResult, TestRunnerWork};
 use crate::test_runner;
 use crate::services::sweep_configuration;
+use crate::debug;
 
 
 pub fn run(
@@ -30,7 +31,7 @@ async fn worker_thread(
     let config = sweep_configuration::from_dot_env();
     
     stream.for_each_concurrent(limit, |work| async {
-        println!("Running worker thread on UUID {}...", work.id);
+        debug!("Running worker thread on UUID {}...", work.id);
 
         let res = schedule_test(work.submission).await;
         let mut map = job_results.lock().unwrap();
@@ -38,7 +39,7 @@ async fn worker_thread(
 
         if last_sweep_time.lock().unwrap().elapsed().unwrap() > config.duration_between_sweeps {
             // Sweep old requests
-            println!("Sweeping now...");
+            debug!("Sweeping now...");
 
             map.retain(|&_, res| {
                 // If there is no test runner result associated with the given UUID, keep the

@@ -10,6 +10,9 @@ use tokio::time::timeout;
 
 use super::dir_generator;
 
+use crate::debug;
+
+
 const TIME_OUT : u64 = 10;
 const TEMP_CODE_FILE_NAME : &str = "Code.hs";
 const TEMP_TEST_FILE_NAME : &str = "Test.hs";
@@ -31,7 +34,7 @@ pub async fn execute(exercise_code: String, test_code: String) -> Result<String>
     generate_file(&dir, TEMP_CODE_FILE_NAME, &exercise_code).await;
     generate_file(&dir, TEMP_TEST_FILE_NAME, &test_code).await;
 
-    println!("Running tests using runhaskell...");
+    debug!("Running tests using runhaskell...");
 
     // Spawn "runhaskell" child process and kill after TIME_OUT
     let mut runhaskell_process = spawn_runhaskell_command(&dir, TEMP_TEST_FILE_NAME);
@@ -52,11 +55,11 @@ pub async fn execute(exercise_code: String, test_code: String) -> Result<String>
 
     if !status_code.success() {
         // Note: Tests that fail flush to stdout and not stderr
-        println!("Test failed!\nOutput: {}", output);
+        debug!("Test failed!\nOutput: {}", output);
         error_chain::bail!(output)
     }
 
-    println!("Test succeeded!");
+    debug!("Test succeeded!");
 
     return Ok(output)
 }
@@ -75,7 +78,7 @@ async fn generate_file(dir : &str, file_name : &str, content : &str) {
 
 /// Writes given code to a file at path `code_file_path`.
 async fn write_code_to_file(code : &str, file_path: &str) -> std::io::Result<()> {
-    println!("Writing code to file {}...", file_path);
+    debug!("Writing code to file {}...", file_path);
 
     let mut file = fs::File::create(file_path).await?;
     file.write(code.as_bytes()).await?;
@@ -103,7 +106,7 @@ async fn get_output(runhaskell_process : Child) -> String {
         runhaskell_process.stderr.unwrap().read_to_string(&mut output).await.unwrap();
 
         if !output.is_empty() {
-            println!("runhaskell process encountered stderr: {}", output);
+            debug!("runhaskell process encountered stderr: {}", output);
             return output
         }
     }
