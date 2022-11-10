@@ -1,11 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 using dotenv.net.Utilities;
 
 namespace Benchmarks;
@@ -36,7 +31,7 @@ public class CodeRunnerQueueClient
         return v.Uri;
     }
 
-    public Task<HttpResponseMessage> Post(CodeSubmit toSend)
+    public Task<HttpResponseMessage> Post(CodeSubmission toSend)
     {
         return _client.PostAsJsonAsync(_postProblemUrl, toSend);
     }
@@ -48,7 +43,7 @@ public class CodeRunnerQueueClient
 
     public async Task<PullIdResponse?> PostCodeRequest(string code, string test)
     {
-        CodeSubmit toSend = new(code, test);
+        CodeSubmission toSend = new(code, test);
         
         return await JsonSerializer.DeserializeAsync<PullIdResponse>(await Post(toSend).Result.Content.ReadAsStreamAsync());
     }
@@ -77,7 +72,7 @@ public class CodeRunnerQueueClient
 
     public Task<HttpResponseMessage>[] PostCodeRequest(string code, string test, int numberOfSubmissions)
     {
-        CodeSubmit submission = new(code, test);
+        CodeSubmission submission = new(code, test);
         
         return Enumerable.Repeat(Post(submission), numberOfSubmissions).ToArray();
     }

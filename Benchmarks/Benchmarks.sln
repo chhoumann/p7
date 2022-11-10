@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{D33085
 		.env = .env
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BenchmarkCode", "BenchmarkCode", "{6A0112A1-A81D-43C0-BAA1-D159D2220C50}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +25,5 @@ Global
 		{5C0BE27B-F258-477A-9730-E6477FDDFC9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{6A0112A1-A81D-43C0-BAA1-D159D2220C50} = {D330859B-AFBA-4A37-A8AA-1E7E959612ED}
 	EndGlobalSection
 EndGlobal

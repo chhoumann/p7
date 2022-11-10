@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Benchmarks;
+﻿namespace Benchmarks;
 
 public static class TaskBuilder
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
 
@@ -12,11 +9,10 @@ namespace Benchmarks;
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
 public class TicketedCodeRunnerBenchmark
 {
-    private const string CorrectCode = "module Code where\n\nadd x y = x - y";
-    private const string IncorrectTest = "a";
-    
     [Params(10, 20)]
     public int NumberOfRequests { get; set; }
+
+    private CodeSubmission codeSubmission = new CodeLoader().Load()[0];
 
     [Benchmark]
     [BenchmarkCategory("Sending without fetching results")]
@@ -24,7 +20,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
 
-        CodeSubmit submission = new(CorrectCode, IncorrectTest);
+        CodeSubmission submission = new(codeSubmission.code, codeSubmission.test);
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
@@ -42,7 +38,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(5));
+            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromSeconds(5));
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -56,7 +52,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(2));
+            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromSeconds(2));
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -70,7 +66,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(1));
+            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromSeconds(1));
         });
         
         Task.WhenAll(clientActions).Wait();
@@ -84,7 +80,7 @@ public class TicketedCodeRunnerBenchmark
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromMilliseconds(500));
+            client.PostAndGetHaskellResultTask(codeSubmission.code, codeSubmission.test, TimeSpan.FromMilliseconds(500));
         });
         
         Task.WhenAll(clientActions).Wait();

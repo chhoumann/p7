@@ -1,6 +1,6 @@
 ﻿namespace Benchmarks;
 
-public record CodeSubmit(string code, string test);
+public record CodeSubmission(string code, string test);
 
 public record PullIdResponse(string id);
 

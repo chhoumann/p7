@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Benchmarks;
 using dotenv.net;
 using Xunit;
