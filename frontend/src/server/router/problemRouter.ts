@@ -12,7 +12,7 @@ export const problemRouter = createRouter()
         where: { problemSetId: id },
       });
 
-      if (!problems || problems.length === 0) {
+      if (!problems) {
         throw new trpc.TRPCError({
           code: "NOT_FOUND",
           message: `Problem with problemSetId ${id} not found`,
@@ -130,5 +130,5 @@ export const problemRouter = createRouter()
           cause: error,
         });
       }
-    }
+    },
   });

@@ -1,17 +1,21 @@
-import type { NextPage } from "next";
-import { useRef, useState } from "react";
+import type { GetServerSideProps, NextPage } from "next";
+import { useState } from "react";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
+import CodeEditor from "../../../components/codeEditor";
+import dayjs from "dayjs";
+import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
+import { PrismaClient, Submission } from "@prisma/client";
 
 enum TabState {
     Instructions,
     Result,
 }
 
-const SolveProblem: NextPage = () => {
+const SolveProblem: NextPage<{ template: string }> = ({ template }) => {
     const [tab, setTab] = useState<TabState>(TabState.Instructions);
-    const codebox = useRef<HTMLTextAreaElement>(null);
+    const [code, setCode] = useState<string>(template);
     const router = useRouter();
     const { problemId } = router.query;
 
@@ -22,9 +26,20 @@ const SolveProblem: NextPage = () => {
         enabled: router.isReady,
     });
 
+    const submissions = trpc.useQuery(
+        ["submission.byProblemId", { problemId: problemId as string }],
+        {
+            enabled: true,
+        }
+    );
+
     const mutation = trpc.useMutation("code.haskell", {
-        onSuccess: () => setTab(TabState.Result),
+        onSuccess: () => {
+            setTab(TabState.Result);
+            submissions.refetch();
+        }
     });
+
 
     // Ensure user isn't on results tab in an invalid state (no results).
     if (mutation.isError && tab === TabState.Result) {
@@ -49,24 +64,31 @@ const SolveProblem: NextPage = () => {
 
     return (
         <Layout title={problem.data.name}>
-            <main className="mx-auto h-full w-full">
-                <div className="flex flex-row gap-8 items-center justify-center h-full w-full px-10">
-                    <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
-                        <textarea
-                            ref={codebox}
-                            className="h-5/6 px-2 py-1 font-mono resize-none rounded-lg outline-0"
-                            defaultValue={problem.data.template}
+            <main className="mx-auto h-full w-full overflow-hidden">
+                <h2 className="text-3xl w-full text-center p-8">
+                    {problem.data.name}
+                </h2>
+                <div className="flex flex-row gap-8 justify-center my-auto h-full w-full px-10">
+                    <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
+                        <CodeEditor
+                            value={code}
+                            height="100%"
+                            className="h-full px-2 py-1 font-mono resize-none rounded-lg outline-0"
+                            setCode={setCode}
                         />
-                        <div className="h-1/6 w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
-                            <button className="rounded-lg bg-sky-500 hover:bg-sky-400 px-4 py-2 text-white font-semibold">
-                                Attempt
-                            </button>
+                        <div className="w-full p-4 gap-2 items-center justify-end flex flex-row border-t">
+                            <AttemptSelect
+                                submissions={submissions.data}
+                                setCode={setCode}
+                                defaultCode={template}
+                            />
                             <button
                                 className="rounded-lg bg-green-500 hover:bg-green-400 px-4 py-2 text-white font-semibold"
                                 onClick={() =>
                                     mutation.mutate({
-                                        code: codebox.current?.value ?? "test",
+                                        code,
                                         test: test.data.code,
+                                        problemId: problem.data.id,
                                     })
                                 }
                             >
@@ -74,7 +96,7 @@ const SolveProblem: NextPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="border-2 w-full h-3/4 flex flex-col rounded-lg">
+                    <div className="border-2 w-1/2 h-3/4 flex flex-col rounded-lg">
                         <div className="w-full items-center justify-around flex">
                             <Tab
                                 text="Instructions"
@@ -146,7 +168,7 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
     return (
         <div className="flex flex-col w-full">
-            <span className="w-full text-center text-3xl">
+            <span className="w-full text-center text-3xl p-2">
                 {success ? "Success!" : "Code failed to run"}
             </span>
 
@@ -154,7 +176,7 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
 
             <span className="text-xl">Output</span>
             <pre
-                className={`bg-gray-100 p-2 rounded-lg text-white ${
+                className={`bg-gray-100 p-2 rounded-lg text-white overflow-auto ${
                     success ? `bg-green-600 ` : `bg-red-700`
                 }`}
             >
@@ -164,4 +186,71 @@ function Results({ result, success }: { result?: string; success?: boolean }) {
     );
 }
 
+function AttemptSelect({
+    setCode,
+    submissions,
+    defaultCode,
+}: {
+    submissions: Submission[] | undefined
+    setCode: (code: string) => void;
+    defaultCode: string;
+}) {
+    const [selected, setSelected] = useState<string>("");
+
+    if (!submissions || submissions.length === 0) {
+        return null;
+    }
+
+    return (
+        <select
+            className="w-full p-2 rounded-lg"
+            value={selected}
+            onChange={(e) => {
+                setSelected(e.target.value);
+                setCode(e.target.value);
+            }}
+        >
+            <option value={defaultCode}>New submission</option>
+            {submissions.map((submission, i) => (
+                <option key={submission.id} value={submission.code}>
+                    #{submissions.length - i}{" "}
+                    {dayjs(submission.createdAt).format("MMM D, YYYY HH:mm")} -{" "}
+                    {submission.success ? "✅" : "❌"}
+                </option>
+            ))}
+        </select>
+    );
+}
+
 export default SolveProblem;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getServerAuthSession(ctx);
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+
+    const prisma = new PrismaClient();
+    const { problemId } = ctx.query;
+
+    const problem = await prisma.problem.findUnique({
+        where: {
+            id: problemId as string,
+        },
+        select: {
+            template: true,
+        },
+    });
+
+    return {
+        props: {
+            template: problem?.template,
+        },
+    };
+};
