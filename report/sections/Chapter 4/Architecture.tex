@@ -14,6 +14,21 @@ Based on these requirements we have created the architecture seen in figure \ref
 
 In the following sections we will describe the general structure of each component and its responsibility.
 
+\subsubsection{Frontend}
+The frontend is the user facing component of our web application. The frontend is designed such that the user-interface and the functionality on the frontend is dependent on the role of the user. 
+For example if the signed in user has a student role, the user will be able to see and complete exercises, where if the user has a role of teacher, they will have access to more functionality such as creating a syllabus or exercise.
+
+Therefore the responsibility of the frontend can be split into two categories: 
+\begin{itemize}
+    \item \textbf{Teacher}-based responsibilities and,
+    \item \textbf{Student}-based responsibilities.
+\end{itemize}
+
+\subsubsection*{Teacher-based responsibilities}
+If the signed in user is a teacher the frontend the frontend provides the user the ability to create syllabi, sessions, exercises and test cases for the given exercise, as well as they ability to complete exercises. The latter functionality was included to allow teachers to try out the exercises and ensure that the test cases behave as expected before releasing the exercise to the students.
+
+\subsubsection*{Student-based responsibilities}
+
 %Describe the following:
 %1. The system must be able to provide a suitable UI for the user, but should not use their computer for anything else 
 %2. The system must be able to provide some way to execute haskell code and assert whether or not the code is correct. 
