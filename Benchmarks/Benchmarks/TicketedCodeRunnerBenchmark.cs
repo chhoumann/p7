@@ -21,7 +21,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
         
-        List<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(client =>
         {
             client.PostCodeRequest(CorrectCode, IncorrectTest, NumberOfRequests);
         });
@@ -35,7 +35,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
         
-        List<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(5));
         });
@@ -49,7 +49,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
         
-        List<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(2));
         });
@@ -63,7 +63,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
         
-        List<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromSeconds(1));
         });
@@ -77,7 +77,7 @@ public class TicketedCodeRunnerBenchmark
     {
         Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
         
-        List<Task> clientActions = BuildTaskList(client =>
+        IEnumerable<Task> clientActions = BuildTaskList(client =>
         {
             client.PostAndGetHaskellResultTask(CorrectCode, IncorrectTest, TimeSpan.FromMilliseconds(500));
         });
@@ -85,7 +85,7 @@ public class TicketedCodeRunnerBenchmark
         Task.WhenAll(clientActions).Wait();
     }
 
-    private List<Task> BuildTaskList(Action<CodeRunnerQueueClient> action)
+    private IEnumerable<Task> BuildTaskList(Action<CodeRunnerQueueClient> action)
     {
         List<Action> clientActions = new(NumberOfRequests);
         List<Task> tasks = new(NumberOfRequests);
