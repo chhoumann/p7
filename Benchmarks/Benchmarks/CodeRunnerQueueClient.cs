@@ -10,7 +10,6 @@ internal class CodeRunnerQueueClient
     private readonly HttpClient _client = new();
 
     private static readonly Uri _postProblemUrl = CreateUri("haskell/submit");
-
     private static readonly Uri _getResultUrl = CreateUri("haskell/getResult/");
 
     public CodeRunnerQueueClient()
@@ -28,22 +27,30 @@ internal class CodeRunnerQueueClient
             Port = EnvReader.GetIntValue("PORT"),
             Path = endpointPath
         };
+        
         return v.Uri;
     }
 
-    private Task<HttpResponseMessage> Post(CodeSubmit toSend) => _client.PostAsJsonAsync(_postProblemUrl, toSend);
-    private Task<HttpResponseMessage> GetByToken(string pollToken) => _client.GetAsync(_getResultUrl + pollToken);
+    private Task<HttpResponseMessage> Post(CodeSubmit toSend)
+    {
+        return _client.PostAsJsonAsync(_postProblemUrl, toSend);
+    }
+
+    private Task<HttpResponseMessage> GetByToken(string pollToken)
+    {
+        return _client.GetAsync($"{_getResultUrl}{pollToken}");
+    }
 
     public async Task<PullIdResponse?> PostCodeRequest(string code, string test)
     {
-        return await JsonSerializer.DeserializeAsync<PullIdResponse>(
-            await Post(new CodeSubmit(code, test)).Result.Content.ReadAsStreamAsync());
+        CodeSubmit toSend = new(code, test);
+        
+        return await JsonSerializer.DeserializeAsync<PullIdResponse>(await Post(toSend).Result.Content.ReadAsStreamAsync());
     }
 
     private async Task<TestRunResult?> GetTestRunResult(string id)
     {
-        return await JsonSerializer.DeserializeAsync<TestRunResult>
-            (await GetByToken(id).Result.Content.ReadAsStreamAsync());
+        return await JsonSerializer.DeserializeAsync<TestRunResult>(await GetByToken(id).Result.Content.ReadAsStreamAsync());
     }
 
     private async Task<TestRunResult> PullUntilResponseReady(TimeSpan timeBetweenPulls, string id)
