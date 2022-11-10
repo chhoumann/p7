@@ -2,14 +2,17 @@
 The platform should be able to accomodate the ability for teachers to create a syllabus that includes sessions, exercises and test cases for the exercises. Additionally, the platform should have the ability for students to do the exercises that the teacher has provided. 
 
 The platform should be a web application, consisting of a user-interface, business logic to handle requests, authentication and compilation of the code as well as a database to persist relevant data.
+
 Based on these requirements we have created the architecture seen in figure \ref{fig:Architecture}.
 
 \begin{figure}[H]
-	\includegraphics[scale=0.6]{images/Architecture.PNG}
+	\includegraphics[scale=0.6]{Architecture.PNG}
 	\centering
-	\caption{}
-	\label{fig:GraphDrawing}
+	\caption{The architecture for the web application}
+	\label{fig:Architecture}
 \end{figure}
+
+In the following sections we will describe the general structure of each component and its responsibility.
 
 %Describe the following:
 %1. The system must be able to provide a suitable UI for the user, but should not use their computer for anything else 
@@ -34,12 +37,6 @@ This output is then sent to the service user.
 Finally, the response from the code runner, whether successful or not, is redirected back to the client, providing them with information about the compilation and execution.
 
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{sections/Chapter 2/pics/P7 arch-Backend - HS compiler.drawio.png}
-    \caption[]{The layered architecture of the code runner component for the back end system.}
-    \label{fig:code_runner}
-\end{figure}
 
 \subsection{Front-end system}
 
