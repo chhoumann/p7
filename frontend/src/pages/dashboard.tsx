@@ -77,24 +77,37 @@ const OverviewPage: NextPage = () => {
                                   <Tab.Panel
                                       key={problemSet.topic}
                                       className={clsx(
-                                          "rounded-xl bg-white p-3",
+                                          "rounded-xl bg-white p-3"
                                       )}
                                   >
-                                      {problemSet.Problems.map((problem) => (
-                                          <div
-                                              key={problem.name}
-                                              className="flex flex-col w-2/3 gap-4 mx-auto my-8"
-                                          >
-                                              <h1 className="text-3xl my-4">
-                                                  {problem.name}
-                                              </h1>
-                                              <div className="flex flex-col justify-center mx-auto w-full">
-                                                  <ProblemTable
-                                                      data={problem.Submission}
-                                                  />
+                                      {problemSet.Problems.map((problem) => {
+                                          const numSolved =
+                                              problem.Submission.filter(
+                                                  (s) => s.success
+                                              ).length;
+                                          const totalSubmissions =
+                                              problem.Submission.length;
+
+                                          return (
+                                              <div
+                                                  key={problem.name}
+                                                  className="flex flex-col w-2/3 gap-4 mx-auto my-8"
+                                              >
+                                                  <h1 className="text-3xl my-4">
+                                                      {problem.name} -{" "}
+                                                      {numSolved} /{" "}
+                                                      {totalSubmissions}
+                                                  </h1>
+                                                  <div className="flex flex-col justify-center mx-auto w-full">
+                                                      <ProblemTable
+                                                          data={
+                                                              problem.Submission
+                                                          }
+                                                      />
+                                                  </div>
                                               </div>
-                                          </div>
-                                      ))}
+                                          );
+                                      })}
                                   </Tab.Panel>
                               ))
                             : null}
