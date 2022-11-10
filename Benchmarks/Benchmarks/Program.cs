@@ -7,6 +7,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
+        new CodeLoader().Load();
         DotEnv.Fluent()
             .WithExceptions()
             .WithEnvFiles()

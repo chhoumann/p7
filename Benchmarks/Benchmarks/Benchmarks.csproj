@@ -26,4 +26,10 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="BenchmarkCode\simple.hs">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
