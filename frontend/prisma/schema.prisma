@@ -63,6 +63,11 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+// This should have been an enum. Like:
+// enum Role {
+//     student
+//     teacher
+//}
 model Role {
     name String @id
 
