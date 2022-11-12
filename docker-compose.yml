@@ -10,20 +10,20 @@ services:
       args:
         CLIENT_PORT: $PORT
         CLIENT_TARGET: webserver
-#    depends_on:
-#      - integration-test
-# 
-#  integration-test:
-#    container_name: "Integration-tests"
-#    build:
-#      dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
-#      args:
-#        CLIENT_PORT: $PORT
-#        CLIENT_TARGET: webserver
-#    depends_on:
-#      - webserver
-# 
-#  webserver:
-#    env_file: .env
-#    build:
-#      dockerfile: ./backend/Webserver/Dockerfile
+  depends_on:
+    - integration-test
+
+  integration-test:
+    container_name: "Integration-tests"
+    build:
+      dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
+      args:
+        CLIENT_PORT: $PORT
+        CLIENT_TARGET: webserver
+    depends_on:
+      - webserver
+
+  webserver:
+    env_file: .env
+    build:
+      dockerfile: ./backend/Webserver/Dockerfile
