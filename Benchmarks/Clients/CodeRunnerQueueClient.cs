@@ -1,14 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using CoderunnerClients.DataTransfer;
 using dotenv.net.Utilities;
 
-namespace Benchmarks;
+namespace CoderunnerClients;
 
 public class CodeRunnerQueueClient
 {
     private readonly HttpClient _client = new();
-
     private static readonly Uri _postProblemUrl = CreateUri("haskell/submit");
     private static readonly Uri _getResultUrl = CreateUri("haskell/getResult/");
 
@@ -16,6 +16,7 @@ public class CodeRunnerQueueClient
     {
         _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _client.DefaultRequestHeaders.Accept.Clear();
+        EnvLoader.Load();
     }
 
     private static Uri CreateUri(string endpointPath)

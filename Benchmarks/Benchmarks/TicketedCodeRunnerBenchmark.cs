@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
+using CoderunnerClients.DataTransfer;
 
 namespace Benchmarks;
 

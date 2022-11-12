@@ -1,4 +1,6 @@
-﻿namespace Benchmarks;
+﻿using CoderunnerClients.DataTransfer;
+
+namespace Benchmarks;
 
 public static class CodeLoader
 {

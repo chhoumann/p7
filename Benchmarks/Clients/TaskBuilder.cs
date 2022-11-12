@@ -1,4 +1,6 @@
-﻿namespace Benchmarks;
+﻿using CoderunnerClients;
+
+namespace Benchmarks;
 
 public static class TaskBuilder
 {
@@ -9,6 +11,7 @@ public static class TaskBuilder
         
         for (int i = 0; i < count; i++)
         {
+            
             CodeRunnerQueueClient client = new();
             clientActions.Add(() => action.Invoke(client));
         }

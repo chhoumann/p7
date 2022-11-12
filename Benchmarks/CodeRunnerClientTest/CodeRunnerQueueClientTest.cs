@@ -1,24 +1,18 @@
+
 using Benchmarks;
-using dotenv.net;
+using CoderunnerClients;
+using CoderunnerClients.DataTransfer;
 using Xunit;
 
 namespace CodeRunnerClientTest;
 
 public class CodeRunnerQueueClientTest
 {
-    private readonly CodeRunnerQueueClient _client = new();
-
-    public CodeRunnerQueueClientTest()
-    {
-        DotEnv.Fluent()
-            .WithExceptions()
-            .WithEnvFiles()
-            .Load();
-    }
 
     [Fact]
     public async Task CanPostRequest()
     {
+        CodeRunnerQueueClient _client = new();
         PullIdResponse? response = await _client.PostCodeRequest("", "");
         Assert.False(string.IsNullOrWhiteSpace(response?.id));
     }
@@ -26,6 +20,7 @@ public class CodeRunnerQueueClientTest
     [Fact]
     public async Task CanPostRequestAndFetchResultBefore30Sec()
     {
+        CodeRunnerQueueClient _client = new();
         TestRunResult testRunResultTask = await _client.PostAndGetHaskellResultTask("", "", TimeSpan.FromMilliseconds(500));
         
         Assert.False(string.IsNullOrWhiteSpace(testRunResultTask.output));

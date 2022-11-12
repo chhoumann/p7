@@ -1,4 +1,4 @@
-﻿namespace Benchmarks;
+﻿namespace CoderunnerClients.DataTransfer;
 
 public record CodeSubmission(string code, string test);
 
