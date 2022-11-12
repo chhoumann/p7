@@ -1,6 +1,4 @@
-﻿using CoderunnerClients;
-
-namespace Benchmarks;
+﻿namespace CodeRunnerClients;
 
 public static class TaskBuilder
 {

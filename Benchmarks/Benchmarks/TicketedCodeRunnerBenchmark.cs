@@ -1,11 +1,12 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Order;
-using CoderunnerClients.DataTransfer;
+using CodeRunnerClients;
+using Client.DataTransfer;
 
 namespace Benchmarks;
 
-[HtmlExporter]
+[StopOnFirstError]
 [Orderer(SummaryOrderPolicy.FastestToSlowest)]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
 public class TicketedCodeRunnerBenchmark

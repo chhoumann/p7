@@ -1,4 +1,4 @@
-﻿using CoderunnerClients.DataTransfer;
+﻿using Client.DataTransfer;
 
 namespace Benchmarks;
 

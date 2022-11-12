@@ -1,10 +1,10 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Reflection;
 using System.Text.Json;
-using CoderunnerClients.DataTransfer;
-using dotenv.net.Utilities;
+using Client.DataTransfer;
 
-namespace CoderunnerClients;
+namespace CodeRunnerClients;
 
 public class CodeRunnerQueueClient
 {
@@ -16,7 +16,6 @@ public class CodeRunnerQueueClient
     {
         _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _client.DefaultRequestHeaders.Accept.Clear();
-        EnvLoader.Load();
     }
 
     private static Uri CreateUri(string endpointPath)
@@ -24,8 +23,8 @@ public class CodeRunnerQueueClient
         UriBuilder v = new()
         {
             Scheme = "http",
-            Host = EnvReader.GetStringValue("HOST"),
-            Port = EnvReader.GetIntValue("PORT"),
+            Port = Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new EnvironmentNotSetException("HOST")),
+            Host = Environment.GetEnvironmentVariable("HOST") ?? throw new EnvironmentNotSetException("HOST"),
             Path = endpointPath
         };
         
@@ -88,5 +87,15 @@ public class CodeRunnerQueueClient
             : tokenResponse.id;
 
         return PullUntilResponseReady(timeBetweenPulls, id);
+    }
+}
+
+internal class EnvironmentNotSetException : Exception
+{
+    public EnvironmentNotSetException(string ip) : base($" \n \n The environment did not contain variable {ip}." +
+                                                       $" Did you include it in the .env file for the docker compose?" +
+                                                       $" Did you also set it in the Dockerfile for the project depending on {Assembly.GetCallingAssembly().FullName}? \n \n")
+    {
+
     }
 }

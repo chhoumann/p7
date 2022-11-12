@@ -11,11 +11,7 @@
     </PropertyGroup>
 
 
-    <ItemGroup>
-        <Content Include="../.env" Link=".env">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
+    
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />

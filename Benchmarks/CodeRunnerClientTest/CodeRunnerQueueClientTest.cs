@@ -1,14 +1,12 @@
 
-using Benchmarks;
-using CoderunnerClients;
-using CoderunnerClients.DataTransfer;
+using CodeRunnerClients;
+using Client.DataTransfer;
 using Xunit;
 
 namespace CodeRunnerClientTest;
 
 public class CodeRunnerQueueClientTest
 {
-
     [Fact]
     public async Task CanPostRequest()
     {
