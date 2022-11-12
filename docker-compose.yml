@@ -1,0 +1,27 @@
+version: "1.0"
+services:
+  integration-test:
+    container_name: "Integration tests"
+    env_file: .env
+    build:
+      dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
+      
+    depends_on:
+      - webserver
+  
+  benchmarks:
+    container_name: "Benchmarks for queue system backend"
+    env_file: .env
+    build:
+      dockerfile: ./benchmarks/Benchmarks/Benchmark.Dockerfile
+    depends_on:
+      - integration-test
+        
+
+  webserver:
+    env_file: .env
+    build: 
+      dockerfile: ./backend/Webserver/Dockerfile
+
+
+
