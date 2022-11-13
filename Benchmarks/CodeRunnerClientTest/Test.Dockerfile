@@ -14,4 +14,5 @@ COPY ./benchmarks/Clients/. ./Clients/
 ENV PORT=$CLIENT_PORT HOST=$CLIENT_TARGET
 RUN echo "Setting up tests with client sending to $CLIENT_TARGET $CLIENT_PORT"
 RUN dotnet restore "./CodeRunnerClientTest/CodeRunnerClientTest.csproj"
-RUN dotnet test "./CodeRunnerClientTest/CodeRunnerClientTest.csproj"
+#RUN dotnet test "./CodeRunnerClientTest/CodeRunnerClientTest.csproj"
+CMD ["dotnet", "test", "--no-restore"]

@@ -1,7 +1,24 @@
+﻿#FROM haskell:8.10
+#RUN cabal update
+#RUN echo "Installed haskell and updated cabal."
+#RUN cabal install --package-env=. --lib hspec hspec-contrib QuickCheck HUnit
+#RUN echo "Installed Hspec"
+#
+#FROM migueldirty/ghcup
+#RUN echo "Installed ghcup."
+#
+#
+#FROM rust:latest
+#WORKDIR /api
+#COPY . .
+#RUN ["cargo", "build", "--release", "--verbose", "--jobs", "1"]
+#CMD ["./target/release/web_server"]
+# ABOVE: Something that might work too
+
 FROM rust:latest
 
 WORKDIR /api
-COPY . .
+COPY ./backend/webserver/. .
 
 # Install GHC and other dependencies. Source: maintainer of GHCup, as seen below.
 # https://stackoverflow.com/questions/67680726/installing-haskells-cabal-or-ghcup-inside-a-dockerfile-wont-work
