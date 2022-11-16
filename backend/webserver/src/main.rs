@@ -45,6 +45,7 @@ fn create_channel() -> (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) {
 
 fn create_app(shared_state: Arc<State>) -> Router {
     let app: Router<Body> = Router::new()
+        .route("/ping", get(endpoints::ping::ping))
         .route("/haskell/submit", post(endpoints::haskell::submit))
         .route("/haskell/getResult/:id", get(endpoints::haskell::get_test_runner_result))
         .layer(Extension(shared_state));
