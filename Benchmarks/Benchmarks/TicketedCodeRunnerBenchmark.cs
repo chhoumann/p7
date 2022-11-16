@@ -11,6 +11,9 @@ namespace Benchmarks;
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
 public class TicketedCodeRunnerBenchmark
 {
+    [Params(0.5, 1, 2, 5)]
+    public double WaitTime { get; set; }
+    
     [Params(10, 20)]
     public int NumberOfRequests { get; set; }
     
@@ -20,7 +23,7 @@ public class TicketedCodeRunnerBenchmark
     public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
-    [BenchmarkCategory("Sending without fetching results")]
+    [BenchmarkCategory("Sending without fetching results.")]
     public void PostAndWaitForResponseReceived()
     {
         Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
@@ -34,58 +37,18 @@ public class TicketedCodeRunnerBenchmark
     }
 
     [Benchmark]
-    [BenchmarkCategory("Sending and then fetch results - 5 second pull time")]
-    public void PostAndWaitForAllResultsFetched_5SecondsBetweenPolls()
+    [BenchmarkCategory("Sending and then fetch results.")]
+    public void PostAndWaitForAllResultsFetched()
     {
-        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_5SecondsBetweenPolls.");
+        Console.WriteLine($"Running benchmark PostAndWaitForAllResultsFetched with seconds = {WaitTime}.");
+        
+        TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(WaitTime);
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
-            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromSeconds(5));
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPulls);
         });
         
-        Task.WhenAll(clientActions).Wait();
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Sending and then fetch results - 2 second pull time")]
-    public void PostAndWaitForAllResultsFetched_2SecondsBetweenPolls()
-    {
-        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_2SecondsBetweenPolls.");
-        
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
-        {
-            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromSeconds(2));
-        });
-        
-        Task.WhenAll(clientActions).Wait();
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Sending and then fetch results - 1 second pull time")]
-    public void PostAndWaitForAllResultsFetched_1SecondsBetweenPolls()
-    {
-        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_1SecondsBetweenPolls.");
-        
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
-        {
-            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromSeconds(1));
-        });
-        
-        Task.WhenAll(clientActions).Wait();
-    }
-
-    [Benchmark]
-    [BenchmarkCategory("Sending and then fetch results - 0.5 second pull time")]
-    public void PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls()
-    {
-        Console.WriteLine("Running benchmark PostAndWaitForAllResultsFetched_HalfSecondsBetweenPolls.");
-
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
-        {
-            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, TimeSpan.FromMilliseconds(500));
-        });
-
         Task.WhenAll(clientActions).Wait();
     }
 }
