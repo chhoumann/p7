@@ -134,7 +134,7 @@ function ProblemTable({ data }: { data: ProblemSubmissionData[] }) {
                 {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id} className="border-b">
                         {headerGroup.headers.map((header) => (
-                            <th key={header.id}>
+                            <th key={header.id} className="text-left p-2">
                                 {header.isPlaceholder
                                     ? null
                                     : flexRender(
