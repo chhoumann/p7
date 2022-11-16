@@ -27,11 +27,6 @@ const columns = [
         header: "Student",
         cell: (info) => info.getValue(),
     }),
-    // columnHelper.accessor("problem.name", {
-    //     id: "Problem",
-    //     header: "Problem",
-    //     cell: (info) => info.getValue(),
-    // }),
     columnHelper.accessor("success", {
         id: "Success",
         header: "Success",
