@@ -13,8 +13,8 @@ COPY ./benchmarks/Clients/. ./Clients/
 
 
 #Set environment for the process on build time
-ENV PORT=$CLIENT_PORT HOST=$CLIENT_TARGET
+ENV PORT=$CLIENT_PORT HOST=$CLIENT_TARGET TEST=ONEOOOOOO
 RUN echo "Setting up tests with client sending to $CLIENT_TARGET $CLIENT_PORT"
 RUN dotnet restore "./CodeRunnerClientTest/CodeRunnerClientTest.csproj"
 RUN dotnet restore "./Clients/Clients.csproj"
-CMD ["dotnet", "test", "--no-restore"]
+CMD ["dotnet", "test", "./CodeRunnerClientTest/CodeRunnerClientTest.csproj"]

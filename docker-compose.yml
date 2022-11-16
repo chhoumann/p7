@@ -29,9 +29,13 @@ services:
     container_name: "Benchmark____$ENV_FILE_VERSION"
     build:
       dockerfile: ./benchmarks/Benchmarks/Benchmark.Dockerfile
+      args:
+        CLIENT_PORT: $PORT
+        CLIENT_TARGET: webserver
     depends_on:
-      - integration-test
-  
+      integration-test:
+        condition: service_completed_successfully
+        
   
 
 
