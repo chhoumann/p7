@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { trpc } from "../utils/trpc";
@@ -40,12 +40,58 @@ const columns = [
 ];
 
 const OverviewPage: NextPage = () => {
-    const { data, isSuccess } = trpc.useQuery(["dashboard.dashboardData"]);
+    const [selectedSyllabus, setSelectedSyllabus] = useState<string>("");
+    const [didSetSyllabusAfterFirstLoad, setDidSetSyllabusAfterFirstLoad] =
+        useState(false);
+
+    const syllabi = trpc.useQuery(["syllabus.findAll"]);
+    const { data, isSuccess } = trpc.useQuery(
+        ["dashboard.dashboardData", selectedSyllabus],
+        {
+            enabled: !!selectedSyllabus,
+        }
+    );
+
+    useEffect(() => {
+        if (didSetSyllabusAfterFirstLoad) return;
+
+        if (
+            syllabi.isSuccess &&
+            syllabi.data &&
+            syllabi.data.length &&
+            syllabi.data[0]?.name
+        ) {
+            setSelectedSyllabus(syllabi.data[0].name);
+            setDidSetSyllabusAfterFirstLoad(true);
+        }
+    }, [syllabi, didSetSyllabusAfterFirstLoad]);
 
     return (
         <Layout title="Overview">
+            {!syllabi.isSuccess ? (
+                <div></div>
+            ) : (
+                <div className="container w-1/4 mx-auto">
+                    <select
+                        className="w-full p-2 rounded-lg"
+                        name="syllabiSelector"
+                        id="syllabiSelector"
+                        onChange={(evt) =>
+                            setSelectedSyllabus(evt.target.value)
+                        }
+                        value={selectedSyllabus}
+                    >
+                        <option value="">Select a syllabus</option>
+                        {syllabi.data.map(({ name }) => (
+                            <option value={name} key={name}>
+                                {name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
             {!isSuccess ? (
-                <div>Loading...</div>
+                <div></div>
             ) : (
                 <div className="flex flex-col mt-10 h-screen w-2/3 mx-auto">
                     <Tab.Group>

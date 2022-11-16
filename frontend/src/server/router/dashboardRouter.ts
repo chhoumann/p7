@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { createRouter } from "./context";
 
 export const dashboardRouter = createRouter()
@@ -9,7 +10,8 @@ export const dashboardRouter = createRouter()
         return next();
     })
     .query("dashboardData", {
-        async resolve({ ctx }) {
+        input: z.string(),
+        async resolve({ ctx, input: syllabusName, }) {
             const res = await ctx.prisma.problemSet.findMany({
                 select: {
                     topic: true,
@@ -31,6 +33,9 @@ export const dashboardRouter = createRouter()
                         },
                     },
                 },
+                where: {
+                    syllabusName
+                }
             });
 
             const r = res.map((problemSet) => {
