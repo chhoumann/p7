@@ -42,78 +42,80 @@ const columns = [
 const OverviewPage: NextPage = () => {
     const { data, isSuccess } = trpc.useQuery(["dashboard.dashboardData"]);
 
-    if (!isSuccess) {
-        return <div>Loading...</div>;
-    }
-
     return (
         <Layout title="Overview">
-            <div className="flex flex-col mt-10 h-screen w-2/3 mx-auto">
-                <Tab.Group>
-                    <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
-                        {data
-                            ? data.map((problemSet) => (
-                                  <Tab
-                                      key={problemSet.topic}
-                                      className={({ selected }) =>
-                                          clsx(
-                                              "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
-                                              "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-                                              selected
-                                                  ? "bg-white shadow"
-                                                  : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
-                                          )
-                                      }
-                                  >
-                                      {problemSet.topic}
-                                  </Tab>
-                              ))
-                            : null}
-                    </Tab.List>
+            {!isSuccess ? (
+                <div>Loading...</div>
+            ) : (
+                <div className="flex flex-col mt-10 h-screen w-2/3 mx-auto">
+                    <Tab.Group>
+                        <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+                            {data
+                                ? data.map((problemSet) => (
+                                      <Tab
+                                          key={problemSet.topic}
+                                          className={({ selected }) =>
+                                              clsx(
+                                                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
+                                                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                                                  selected
+                                                      ? "bg-white shadow"
+                                                      : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                                              )
+                                          }
+                                      >
+                                          {problemSet.topic}
+                                      </Tab>
+                                  ))
+                                : null}
+                        </Tab.List>
 
-                    <Tab.Panels>
-                        {data
-                            ? data.map((problemSet) => (
-                                  <Tab.Panel
-                                      key={problemSet.topic}
-                                      className={clsx(
-                                          "rounded-xl bg-white p-3"
-                                      )}
-                                  >
-                                      {problemSet.Problems.map((problem) => {
-                                          const numSolved =
-                                              problem.Submission.filter(
-                                                  (s) => s.success
-                                              ).length;
-                                          const totalSubmissions =
-                                              problem.Submission.length;
+                        <Tab.Panels>
+                            {data
+                                ? data.map((problemSet) => (
+                                      <Tab.Panel
+                                          key={problemSet.topic}
+                                          className={clsx(
+                                              "rounded-xl bg-white p-3"
+                                          )}
+                                      >
+                                          {problemSet.Problems.map(
+                                              (problem) => {
+                                                  const numSolved =
+                                                      problem.Submission.filter(
+                                                          (s) => s.success
+                                                      ).length;
+                                                  const totalSubmissions =
+                                                      problem.Submission.length;
 
-                                          return (
-                                              <div
-                                                  key={problem.name}
-                                                  className="flex flex-col w-2/3 gap-4 mx-auto my-8"
-                                              >
-                                                  <h1 className="text-3xl my-4">
-                                                      {problem.name} -{" "}
-                                                      {numSolved} /{" "}
-                                                      {totalSubmissions}
-                                                  </h1>
-                                                  <div className="flex flex-col justify-center mx-auto w-full">
-                                                      <ProblemTable
-                                                          data={
-                                                              problem.Submission
-                                                          }
-                                                      />
-                                                  </div>
-                                              </div>
-                                          );
-                                      })}
-                                  </Tab.Panel>
-                              ))
-                            : null}
-                    </Tab.Panels>
-                </Tab.Group>
-            </div>
+                                                  return (
+                                                      <div
+                                                          key={problem.name}
+                                                          className="flex flex-col w-2/3 gap-4 mx-auto my-8"
+                                                      >
+                                                          <h1 className="text-3xl my-4">
+                                                              {problem.name} -{" "}
+                                                              {numSolved} /{" "}
+                                                              {totalSubmissions}
+                                                          </h1>
+                                                          <div className="flex flex-col justify-center mx-auto w-full">
+                                                              <ProblemTable
+                                                                  data={
+                                                                      problem.Submission
+                                                                  }
+                                                              />
+                                                          </div>
+                                                      </div>
+                                                  );
+                                              }
+                                          )}
+                                      </Tab.Panel>
+                                  ))
+                                : null}
+                        </Tab.Panels>
+                    </Tab.Group>
+                </div>
+            )}
         </Layout>
     );
 };
