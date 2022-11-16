@@ -25,6 +25,14 @@ function Navbar() {
                             </a>
                         </Link>
                     ) : null}
+
+                    {session && session.user?.role === 'teacher' ? (
+                        <Link href="/dashboard">
+                            <a className="ml-10 font-bold link link-underline link-underline-black text-xl hover:text-sky-400 cursor-pointer">
+                                Dashboard
+                            </a>
+                        </Link>
+                    ) : null}
                 </div>
                 <div>
                     {status !== "loading" && session ? (
