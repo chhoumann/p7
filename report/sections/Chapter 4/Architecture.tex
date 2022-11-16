@@ -25,27 +25,28 @@ Therefore the responsibility of the frontend can be split into two categories:
 \end{itemize}
 
 \subsubsection*{Teacher-based responsibilities}
-If the signed in user is a teacher the frontend provides the user the ability to create syllabi, sessions, exercises and test cases for the given exercise, as well as they ability to complete exercises. The latter functionality was included to allow teachers to try out the exercises and ensure that the test cases behave as expected before releasing the exercise to the students.
+If the signed in user is a teacher the frontend provides the user the ability to create syllabi, sessions, exercises and test cases for the given exercise, as well as they ability to complete exercises. The latter functionality was included to allow teachers to try out the exercises and ensure that the test cases behave as expected before releasing the exercise to the students. Additionally, the teacher will also have access to a dashbord that shows which students have completed which exercises for a given session, in order to track progress and potential pain points.
 
 \subsubsection*{Student-based responsibilities}
-Conversely, if the signed in user is a student the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. Note that student role 
+Conversely, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed. 
 
+\vspace{0.5cm}
 
-\vspace{5cm}
+Regardless of the roles of the user the frontend has the ability to persist data and execute code through communication with the backend system.
 
-Regardless of the roles the frontend sends the requests to the backend....
-
-%Describe the following:
-%1. The system must be able to provide a suitable UI for the user, but should not use their computer for anything else 
-%2. The system must be able to provide some way to execute haskell code and assert whether or not the code is correct. 
-%3. .... therefore we choose to split the system into multiple subsystem, each being responsible for providing different functionalities to the full system and can run independently of one another. 
-%4. .... by doing this we gain.....
-
-% Why do we choose the front end we do --- why do we have the 'front end backend?' --- Is the front end system only on the client? No? Why not?
 
 \subsection{Back-end system}
+The backend system has several responsibilities including routing, data retrieval and updates, execution of code tests and communication with the authentication provider. The backend provides all the functionality that is essential to our web application and operates as a traditional server in a client-server architechture. 
 
+In order persist data the backend retrieves and updates data in the database through CRUD (create, read,update, delete) operations, which are requested from the frontend. The specific type of requests will be dependent on two things:
+\begin{enumerate}
+	\item The routing information.
+	\item The request parameters.
+\end{enumerate}
 
+Based on this, if the request requires communication with the database the backend system will send the appropiate request to the database.
+
+\subsection{Database}
 \subsubsection{Code runner}
 Our system needs to be able to compile and run haskell code on back-end and verify whether this code is syntactically correct or not.
 To accomodate this, a code runner module has been implement in a layered architecture (\ref{røde aalborg}).
@@ -64,3 +65,11 @@ Finally, the response from the code runner, whether successful or not, is redire
 \subsubsection{UI}
 
 \subsubsection{UI business layer}
+
+%Describe the following:
+%1. The system must be able to provide a suitable UI for the user, but should not use their computer for anything else 
+%2. The system must be able to provide some way to execute haskell code and assert whether or not the code is correct. 
+%3. .... therefore we choose to split the system into multiple subsystem, each being responsible for providing different functionalities to the full system and can run independently of one another. 
+%4. .... by doing this we gain.....
+
+% Why do we choose the front end we do --- why do we have the 'front end backend?' --- Is the front end system only on the client? No? Why not?
