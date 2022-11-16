@@ -1,28 +1,30 @@
 version: "1.0"
 services:
-  webserver:
-    container_name: "WEBAPP____$ENV_FILE_VERSION"
-    build:
-      dockerfile: ./backend/webserver/Dockerfile2
-    healthcheck: # I need help defining this
-      test: [ "CMD", "curl", "-f", "http://localhost:$PORT/haskell" ]
-      interval: 10m
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-  
-  
-  
-  
   
   integration-test:
     container_name: "Integration-tests-$ENV_FILE_VERSION"
-    depends_on:
-      webserver:
-        condition: service_healthy
     build:
       dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
       args:
         CLIENT_PORT: $PORT
         CLIENT_TARGET: webserver
+    depends_on:
+      webserver:
+        condition: service_healthy
+        
+  webserver:
+    container_name: "WEBAPP____$ENV_FILE_VERSION"
+    ports:
+      - $PORT:$PORT
+    build:
+      dockerfile: ./backend/webserver/Dockerfile2
+    healthcheck: # I need help defining this
+      test: ["CMD", "curl", "-f", "http://localhost:$PORT/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+  
+  
+
 
