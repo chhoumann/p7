@@ -25,10 +25,8 @@ services:
       retries: 3
       start_period: 5s
       
-  Benchmark:
+  benchmark:
     container_name: "Benchmark____$ENV_FILE_VERSION"
-    ports:
-      - $PORT:$PORT
     build:
       dockerfile: ./benchmarks/Benchmarks/Benchmark.Dockerfile
     depends_on:

@@ -17,13 +17,13 @@ public class CodeRunnerQueueClient
         _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _client.DefaultRequestHeaders.Accept.Clear();
     }
-
+    
     private static Uri CreateUri(string endpointPath)
     {
         UriBuilder v = new()
         {
             Scheme = "http",
-            Port = Int32.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new EnvironmentNotSetException("HOST")),
+            Port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new EnvironmentNotSetException("PORT")),
             Host = Environment.GetEnvironmentVariable("HOST") ?? throw new EnvironmentNotSetException("HOST"),
             Path = endpointPath
         };
