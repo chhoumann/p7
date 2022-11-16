@@ -26,8 +26,6 @@ public class TicketedCodeRunnerBenchmark
     [BenchmarkCategory("Sending without fetching results.")]
     public void PostAndWaitForResponseReceived()
     {
-        Console.WriteLine("Running benchmark PostAndWaitForResponseReceived.");
-
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
         {
             client.Post(CodeSubmission);
@@ -40,8 +38,6 @@ public class TicketedCodeRunnerBenchmark
     [BenchmarkCategory("Sending and then fetch results.")]
     public void PostAndWaitForAllResultsFetched()
     {
-        Console.WriteLine($"Running benchmark PostAndWaitForAllResultsFetched with seconds = {WaitTime}.");
-        
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(WaitTime);
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList(NumberOfRequests, client =>
