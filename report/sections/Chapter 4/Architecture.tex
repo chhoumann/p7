@@ -34,7 +34,6 @@ Conversely, if the signed in user is a student, the fronted provides the user th
 
 Regardless of the roles of the user the frontend has the ability to persist data and execute code through communication with the backend system.
 
-
 \subsection{Back-end system}
 The backend system has several responsibilities including routing, data retrieval and updates, execution of code tests and communication with the authentication provider. The backend provides all the functionality that is essential to our web application and operates as a traditional server in a client-server architechture. 
 
@@ -47,6 +46,15 @@ In order persist data the backend retrieves and updates data in the database thr
 Based on this, if the request requires communication with the database the backend system will send the appropiate request to the database.
 
 \subsection{Database}
+The database is a regular relational database using Postgres. 
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{Database.png}
+	\centering
+	\caption{Entity relationship diagram of the database}
+	\label{fig:Database}
+\end{figure}
+
 \subsubsection{Code runner}
 Our system needs to be able to compile and run haskell code on back-end and verify whether this code is syntactically correct or not.
 To accomodate this, a code runner module has been implement in a layered architecture (\ref{røde aalborg}).
