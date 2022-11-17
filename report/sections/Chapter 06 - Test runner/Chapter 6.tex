@@ -15,7 +15,7 @@ The client will eagerly request new data to stay up to date with instructions or
 We deemed that this short cache storage time is useful for when teachers update test code during an exercise session.
 This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
 
-When a user submits their exercise solution attempt, a mutation\footnote{In the framework we use, a mutation is simply an umbrella term for create, update, and delete operations.} is sent to the Next.js backend.
+When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
 In this request, the necessary code and test code is included. 
 One could argue that fetching the test code on the backend when processing this mutation would be more approriate.
 However, we want to eventually display the test code to the user so they may gain a better understanding of the solution requirements, although this will not be done in this iteration of the project.
