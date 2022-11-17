@@ -1,8 +1,6 @@
 \section{Architecture}
 The platform should be able to accomodate the ability for teachers to create a syllabus that includes sessions, exercises and test cases for the exercises. Additionally, the platform should have the ability for students to do the exercises that the teacher has provided. 
-
 The platform should be a web application, consisting of a user-interface, business logic to handle requests, authentication and compilation of the code as well as a database to persist relevant data.
-
 Based on these requirements we have created the architecture seen in figure \ref{fig:Architecture}.
 
 \begin{figure}[H]
@@ -41,9 +39,12 @@ The backend system has several responsibilities including routing, data retrieva
 In order persist data the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations. 
 The backend then queries the database and returns the relevant data. 
 
-The database component is implemented as a Postgres database which is a regular relational database. The entities and their relationships contained within the database is shown as an entity relationship diagram in figure \ref{fig:Database}.
+The database component is implemented as a Postgres database which is a regular relational database. The entities and their relationships contained within the database is shown in figure \ref{fig:Database}. In the figure each box represents an entity-set and attributes for the entities. A diamond represent a relationship between two or more entity-sets.
 
-Note that the dotted lines represent a partial participation and the full lines represent total participation.
+A dotted line connecting an entity-set to a relationship represent a partial participation of the connected entities and the other participants in the relationship. This means that an entity can exist in the database without participating in the relationship.
+A full line connecting an entity-set to a relationship represents total participation of the entity-set symbolising that an entity must participate in the relationship. 
+This means that an entity cannot exist in the database without participating in the relationship.
+The numbers and letters at the beginning of each relationship line represents the cardinality. A \textit{number} between a relationship and an entity-set represents the number of times an entity can participate in the relationship. Similarily, an \textit{N} represents that entities can participate $0$ or more times.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.4]{Database.png}
@@ -53,29 +54,21 @@ Note that the dotted lines represent a partial participation and the full lines 
 \end{figure}
 
 
-\subsubsection{Code runner}
-Our system needs to be able to compile and run haskell code on back-end and verify whether this code is syntactically correct or not.
-To accomodate this, a code runner module has been implement in a layered architecture (\ref{røde aalborg}).
-For this type of architecture each component can depend only on components on a lower or same level, thus if component A is on a lower level than component B, component A cannot use component B.
-The component is implemented as a HTTP server as seen on Figure \ref{fig:code_runner}.
-Whenever the server recieves a HTTP request, a service request is sent to a \textit{code runner} service that in turn writes the content recieved to a Haskell file and invokes the GHC compiler.
-If the compilation of the haskell file fails, the code runner will send the GHC compiler's compilation error as response to the service user.
-If the file compiles successfully the code runner will then run the executable file and fetch the produced output of the program.
-This output is then sent to the service user.
-Finally, the response from the code runner, whether successful or not, is redirected back to the client, providing them with information about the compilation and execution.
+\subsubsection{Test runner}
+As mentioned previously the platform needs to be able to run code on back-end and verify whether this code is syntactically correct and safisfies the teacher defined tests.
+The component is structured as a layered architecture where each layer is a module and each module has a single responsibility with no global state and full encapsulation.
+This means that each component can depend only on components on a lower or same level. For example if component A is on a lower level than component B, component A cannot use component B.
+This makes the architecture decoupled and therefore it is easy to add, replace and modify components.
+
+The component structure can be seen in figure \ref{fig:TestRunner}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.4]{TestRunner.jpg}
+	\centering
+	\caption{The test runner component architecture}
+	\label{fig:TestRunner}
+\end{figure}
+
+\subsection{Authentication provider}
 
 
-
-\subsection{Front-end system}
-
-\subsubsection{UI}
-
-\subsubsection{UI business layer}
-
-%Describe the following:
-%1. The system must be able to provide a suitable UI for the user, but should not use their computer for anything else 
-%2. The system must be able to provide some way to execute haskell code and assert whether or not the code is correct. 
-%3. .... therefore we choose to split the system into multiple subsystem, each being responsible for providing different functionalities to the full system and can run independently of one another. 
-%4. .... by doing this we gain.....
-
-% Why do we choose the front end we do --- why do we have the 'front end backend?' --- Is the front end system only on the client? No? Why not?
