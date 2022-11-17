@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
 import { StudentRowItem } from "../../../components/StudentRowItem";
 import { TeacherRowItem } from "../../../components/TeacherRowItem";
-import { PrismaClient } from "@prisma/client";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
 import { Transition, Dialog } from "@headlessui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -309,9 +308,8 @@ function CreateProblemModal({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getServerAuthSession(ctx);
-    const prisma = new PrismaClient();
 
-    if (!session) {
+    if (!session || !session.user) {
         return {
             redirect: {
                 destination: "/",
@@ -320,19 +318,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         };
     }
 
-    const userRole = await prisma.role.findFirst({
-        where: {
-            users: {
-                some: {
-                    id: session?.user?.id,
-                },
-            },
-        },
-    });
-
     return {
         props: {
-            role: userRole?.name,
+            role: session.user.role
         },
     };
 };

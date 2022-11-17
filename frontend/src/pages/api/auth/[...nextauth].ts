@@ -12,6 +12,10 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
+
+        if (user.roleName === 'student' || user.roleName === 'teacher') {
+          session.user.role = user.roleName;
+        }
       }
       return session;
     },

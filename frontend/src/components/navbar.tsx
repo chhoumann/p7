@@ -1,6 +1,9 @@
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import { LogOut, User } from "react-feather";
+import { Menu } from "@headlessui/react";
+import clsx from "clsx";
 
 function Navbar() {
     const { status, data: session } = useSession();
@@ -22,6 +25,14 @@ function Navbar() {
                             </a>
                         </Link>
                     ) : null}
+
+                    {session && session.user?.role === 'teacher' ? (
+                        <Link href="/dashboard">
+                            <a className="ml-10 font-bold link link-underline link-underline-black text-xl hover:text-sky-400 cursor-pointer">
+                                Dashboard
+                            </a>
+                        </Link>
+                    ) : null}
                 </div>
                 <div>
                     {status !== "loading" && session ? (
@@ -37,11 +48,35 @@ function Navbar() {
 
 function UserProfile({ name }: { name: string }) {
     return (
-        <div className="flex flex-col rounded-full">
-            <span className="mr-2 p-1 px-3 rounded-full text-gray-200 bg-sky-700 outline outline-gray-500 outline-1 font-bold text-lg">
-                {name.at(0)}
-            </span>
-        </div>
+        <Menu>
+            <Menu.Button>
+                <User />
+            </Menu.Button>
+            <Menu.Items className="absolute border p-4 right-4 z-10 pointer-events-auto rounded-lg bg-white w-48">
+                <Menu.Item>
+                    <div className="container">
+                        <p className="text-gray-700 font-semibold text-center">{name}</p>
+                    </div>
+                </Menu.Item>
+                <Menu.Item>
+                    <div className="border-b my-4" />
+                </Menu.Item>
+                <Menu.Item>
+                    {({ active }) => (
+                        <button
+                            className={clsx(
+                                active && "bg-gray-100",
+                                "p-2 w-full rounded font-semibold",
+                                "flex flex-row gap-4 items-center justify-center"
+                            )}
+                            onClick={() => signOut()}
+                        >
+                            <LogOut /> Log Out
+                        </button>
+                    )}
+                </Menu.Item>
+            </Menu.Items>
+        </Menu>
     );
 }
 

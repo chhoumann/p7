@@ -16,7 +16,7 @@ use crate::domain::shared_state::State;
 mod domain;
 mod endpoints;
 mod services;
-
+mod debug;
 
 #[tokio::main]
 async fn main() {

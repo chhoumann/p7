@@ -5,7 +5,6 @@ import Layout from "../../components/layout";
 import { Dialog, Transition } from "@headlessui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
-import { PrismaClient } from "@prisma/client";
 import { StudentRowItem } from "../../components/StudentRowItem";
 import { TeacherRowItem } from "../../components/TeacherRowItem";
 
@@ -195,9 +194,8 @@ function CreateSyllabusModal({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getServerAuthSession(ctx);
-    const prisma = new PrismaClient();
 
-    if (!session) {
+    if (!session || !session.user) {
         return {
             redirect: {
                 destination: "/",
@@ -205,20 +203,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             },
         };
     }
-
-    const userRole = await prisma.role.findFirst({
-        where: {
-            users: {
-                some: {
-                    id: session?.user?.id,
-                },
-            },
-        },
-    });
-
     return {
         props: {
-            role: userRole?.name,
+            role: session.user.role
         },
     };
 };
