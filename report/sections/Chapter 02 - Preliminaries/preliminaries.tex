@@ -1,4 +1,4 @@
-The following chapter contains short introductions to the most important technologies used in the report. 
+The following chapter contains short introductions to the most important technologies used in the project. 
 
 \section*{Glasgow Haskell Compiler} %-- Haskell afsnit istedet??
 Out of the three currently available Haskell compilers available the Glasgow Haskell Compiler (GHC) is used on the backend for interpreting the Haskell exercises and running the test suite. GHC was chosen over the other up-to-date compilers due to it being the standard compiler recommended by the Haskell Organization \cite{Haskell_GHC} as well as it being the compiler used in the Haskell Course.
@@ -6,7 +6,7 @@ Out of the three currently available Haskell compilers available the Glasgow Has
 \section*{Hspec}
 To enable running Haskell tests on the backend we needed a test framework that allowed us to define tests for the exercises. 
 
-Here Hspec was chosen over Hunit since it allows the professor to define the tests in an easy-to-understand domain-specific language(DSL). 
+Here Hspec was chosen other test frameworks since it allows the professor to define the tests in an easy-to-understand domain-specific language (DSL). 
 This makes the framework easier to work with as well as gives us the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise.
 
 Hspec allows integration with other Haskell test frameworks if needed and automatic discovery of test files. 
@@ -28,6 +28,12 @@ Furthermore, Hspec also allows for parallel test execution which is preferable w
 \end{lstlisting}
 
 \section*{Rust}
+The webserver responsible for running tests is written in Rust. 
+The reason is twofold: 
+Firstly, Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself. 
+Secondly, Rust features safe implementations of threading and concurrency which we use for scalibility reasons.
+\todo{We need to reason why this isd desirable. Need something to refer to regarding our aim for scalability}
+
 Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla. 
 The project was then sponsored by Mozilla from 2009 to 2021 where the project along with all trademarks was moved to the newly create Rust Foundation. 
 
@@ -55,6 +61,7 @@ TRPC is a library that enables developers to build type safe APIs without having
 It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code. 
 This in turn allows developers to not have the actual server code exposed in the \frontend{} 
 Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project, which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
+In tRPC, a query is like a read operation, while a mutation is similar to create, update, or delete operations.
 
 \section*{Prisma}
 Prisma is a 2nd generation object-relational mapper(ORM) developed for usage in Node.js and \typescript{} back-ends. 
