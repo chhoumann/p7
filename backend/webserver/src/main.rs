@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::path::Path;
 use std::sync::{Arc, Mutex};
 use axum::{routing::post, Router, Extension};
 use axum::body::Body;
@@ -20,15 +21,17 @@ mod debug;
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
+    if !Path::new("/.dockerenv").exists() {
+        dotenv().ok();
+    }
     
-    let (tx, rx) = create_channel(); 
+    let (tx, rx) = create_channel();
     let job_results = Arc::new(Mutex::new(Box::new(HashMap::new())));
     let shared_state = Arc::new(State {
         tx,
         job_results: job_results.clone()
     });
-    
+
     let app = create_app(shared_state);
 
     run_worker(rx, job_results);
@@ -37,7 +40,10 @@ async fn main() {
 
 
 fn create_channel() -> (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) {
-    let buffer_capacity = dotenv::var("CHANNEL_BUFFER_CAPACITY").unwrap().parse::<usize>().unwrap();
+    let buffer_capacity = dotenv::var("CHANNEL_BUFFER_CAPACITY")
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
     let (tx, rx): (Sender<TestRunnerWork>, Receiver<TestRunnerWork>) = mpsc::channel(buffer_capacity);
     (tx, rx)
 }
