@@ -18,6 +18,13 @@ services:
       - $PORT:$PORT
     build:
       dockerfile: ./backend/webserver/Dockerfile2
+      args:
+        MAX_THREADS: $MAX_THREADS
+        CHANNEL_BUFFER_CAPACITY: $CHANNEL_BUFFER_CAPACITY
+        DURATION_BETWEEN_SWEEPS: $DURATION_BETWEEN_SWEEPS
+        REQUEST_LIFETIME: $REQUEST_LIFETIME
+        PORT: $PORT
+        IP: $IP
     healthcheck: # I need help defining this
       test: ["CMD", "curl", "-f", "http://localhost:$PORT/ping"]
       interval: 10s

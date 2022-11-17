@@ -17,8 +17,11 @@
 
 FROM rust:latest
 
+
+
 WORKDIR /api
 COPY ./backend/webserver/. .
+COPY ./.env .
 
 # Install GHC and other dependencies. Source: maintainer of GHCup, as seen below.
 # https://stackoverflow.com/questions/67680726/installing-haskells-cabal-or-ghcup-inside-a-dockerfile-wont-work
@@ -59,6 +62,14 @@ RUN \
 ARG GHC=8.10.7
 ARG CABAL=latest
 
+ARG MAX_THREADS=$MAX_THREADS
+ARG CHANNEL_BUFFER_CAPACITY=$CHANNEL_BUFFER_CAPACITY
+ARG DURATION_BETWEEN_SWEEPS=$DURATION_BETWEEN_SWEEPS
+ARG REQUEST_LIFETIME=$REQUEST_LIFETIME
+ARG PORT=$PORT
+ARG IP=$IP
+
+ENV MAX_THREADS=$MAX_THREADS CHANNEL_BUFFER_CAPACITY=$CHANNEL_BUFFER_CAPACITY DURATION_BETWEEN_SWEEPS=$DURATION_BETWEEN_SWEEPS REQUEST_LIFETIME=$REQUEST_LIFETIME  PORT=$PORT IP=$IP RUST_BACKTRACE=1
 # Install GHC and cabal
 RUN \
     ghcup -v install ghc --isolate /usr/local --force ${GHC} && \
