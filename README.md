@@ -41,3 +41,8 @@ Which depends on the port you set for the backend.
 
 ## Database
 We use Prisma. From the `frontend` folder, use `npx prisma db push` to get set up.
+
+Docker example:
+```bash
+$ docker run --name postgres -e POSTGRES_PASSWORD=1234 -p "5432:5432" -d postgres
+```
