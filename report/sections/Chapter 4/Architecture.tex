@@ -37,23 +37,21 @@ Regardless of the roles of the user the frontend has the ability to persist data
 \subsection{Back-end system}
 The backend system has several responsibilities including routing, data retrieval and updates, execution of code tests and communication with the authentication provider. The backend provides all the functionality that is essential to our web application and operates as a traditional server in a client-server architechture. 
 
-In order persist data the backend retrieves and updates data in the database through CRUD (create, read,update, delete) operations, which are requested from the frontend. The specific type of requests will be dependent on two things:
-\begin{enumerate}
-	\item The routing information.
-	\item The request parameters.
-\end{enumerate}
-
-Based on this, if the request requires communication with the database the backend system will send the appropiate request to the database.
-
 \subsection{Database}
-The database is a regular relational database using Postgres. 
+In order persist data the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations. 
+The backend then queries the database and returns the relevant data. 
+
+The database component is implemented as a Postgres database which is a regular relational database. The entities and their relationships contained within the database is shown as an entity relationship diagram in figure \ref{fig:Database}.
+
+Note that the dotted lines represent a partial participation and the full lines represent total participation.
 
 \begin{figure}[H]
-	\includegraphics[scale=0.5]{Database.png}
+	\includegraphics[scale=0.4]{Database.png}
 	\centering
 	\caption{Entity relationship diagram of the database}
 	\label{fig:Database}
 \end{figure}
+
 
 \subsubsection{Code runner}
 Our system needs to be able to compile and run haskell code on back-end and verify whether this code is syntactically correct or not.
