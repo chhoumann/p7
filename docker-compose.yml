@@ -25,7 +25,7 @@ services:
         REQUEST_LIFETIME: $REQUEST_LIFETIME
         PORT: $PORT
         IP: $IP
-    healthcheck: # I need help defining this
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:$PORT/ping"]
       interval: 10s
       timeout: 5s
