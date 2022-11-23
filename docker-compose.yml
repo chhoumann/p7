@@ -1,6 +1,5 @@
 version: "1.0"
 services:
-  
   integration-test:
     container_name: "Integration-tests-$ENV_FILE_VERSION"
     build:
@@ -47,7 +46,8 @@ services:
     depends_on:
       integration-test:
         condition: service_completed_successfully
-        
+    volumes:
+      - benchmarksartifact:/src/bin/publish/BenchmarkDotNet.Artifacts
+volumes:
+  - benchmarksartifact
   
-
-
