@@ -43,12 +43,22 @@ To do this a database keeping a track of the code used for each attempt submitte
 \subsection*{Use case: Best solutions} 
 The Lecturer should be able to select code solutions submitted by the Students to publish to all other Students allowing them to view exercises discussed during class.
 
-\section{MoSCoW}
+With the use cases that are contained in our scope described, we need a way to prioritize them. This then allows us to make a prioritized list of the features that are needed in-order to fulfill our use cases. 
 
+\section{MoSCoW}
 To gain an overview of which features the solution must, should, could and wont contain we perform a MoSCoW analysis.
 A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system. 
 
+Here table \ref{tab:MOSCOW} provides an overview of where the different needed features were placed in order to gain a working solution. 
+The must have section includes the features required for students to solve exercises. These are seen as must-have features as all use cases other than the Account one require these.  
+The should-have category includes the additional features that are needed to fulfill the Solve Exercises use case as well as the Create Exercise one. 
+These are prioritized as should have as they are needed in order to provide the users with the main expected features of an exercise platform for coding. 
+Account Handling, as well as exercise attempt logging features, are placed in the could have category as they are both nice to have but indeed needed in order to provide a usable solution. 
+Lastly, statistics and solution highlighting are placed in the wont have category as they have been deemed out of scope according to the constraints of the problem.
+
+
 \begin{table}[H]
+\begin{center}
     \begin{tabular}{|l|llll}
     \cline{1-1}
     \cellcolor[HTML]{C0C0C0}\textbf{Must have}                                      &  &  &  &  \\ \cline{1-1}
@@ -67,5 +77,10 @@ A MoSCoW analysis is split into four categories, Must have, Should have, Could h
     Lecturers can share submitted solutions so they are viewable by other Students  &  &  &  &  \\ \cline{1-1}
     Lectures can access statistics over the exercise attempts                       &  &  &  &  \\ \cline{1-1}
     \end{tabular}
-    \end{table}
+    \caption{\label{tab:MOSCOW}MoSCoW Analysis}
+\end{center}
+\end{table}
+
+With the use cases the system needs to fulfill specified as well as their required features prioritized through a MoSCoW analysis the system can now be designed. 
     
+
