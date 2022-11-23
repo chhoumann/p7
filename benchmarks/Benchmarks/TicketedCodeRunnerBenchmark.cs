@@ -1,13 +1,10 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Order;
 using CodeRunnerClients;
 using Client.DataTransfer;
 
 namespace Benchmarks;
 
 [StopOnFirstError]
-
 public class TicketedCodeRunnerBenchmark
 {
     [Params(0.5, 1, 2, 5)]
