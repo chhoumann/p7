@@ -49,5 +49,5 @@ services:
     volumes:
       - /benchmarksartifact:/src/bin/publish/BenchmarkDotNet.Artifacts
 volumes:
-  :benchmarksartifact
+  benchmarksartifact:
   
