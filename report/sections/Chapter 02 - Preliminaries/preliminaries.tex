@@ -39,13 +39,11 @@ In order to achieve this goal Rust provides a large number of safety features am
 Considering a research article by Microsoft Security Research Center stating that invalid data access is behind 70\% of serious security bugs in modern programs this is a large deal\cite{Safe_Systems_Languages}. 
 Instead of relying on the developer to deal with it, Rust's compiler guarantees any compiled program is memory-safe.
 
-The webserver responsible for running tests is written in the programming language Rust. 
-The reason is twofold: 
+Our reason for using Rust is twofold: 
 \begin{enumerate}
-    \item Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself. 
-    \item Rust features safe implementations of threading and concurrency which we use for scalibility reasons.
-\end{enumerate}    
-\todo{We need to reason why this is desirable. Need something to refer to regarding our aim for scalability}
+    \item Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself.
+    \item Rust features safe implementations of threading and concurrency which is useful for web applications where scalibility is a priority.
+\end{enumerate}
 
 \section*{Docker}
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
@@ -59,7 +57,7 @@ We use Docker to set up local development environments for the APIs and Database
 tRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation. 
 It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code. 
 This in turn allows developers to not have the actual server code exposed in the \frontend{}. 
-Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project, which a language-agnostic framework like GraphQL cannot\cite{tRPC}.
+Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project, which a language-agnostic framework\cite{tRPC}.
 In tRPC, a query is like a read operation, while a mutation is similar to create, update, or delete operations.
 
 \section*{Prisma}
@@ -70,18 +68,13 @@ This goal is achieved by providing type-safe database queries allowing for valid
 The goal for the 2nd generation ORMs is to move closer to raw SQL in terms of high control while improving on the 1st generation ORMs productivity improvements. 
 Prisma enables this productivity improvement by allowing developers to define their applications models through a data modeling language allowing an easier way of configuring their applications' data sources and models\cite{Prisma_Doc}.
 
-\section*{JavaScript}
-\javascript{} is a lightweight interpreted programming language best known for its use for developing interactive elements for websites\cite{JavaScript_Mozilla}.
-The language was originally created only for use in web programming but has over time become a core component of servers and applications like Node.js. 
-
-
 \section*{TypeScript}
 As the server-side use of \javascript{} keeps growing in popularity its inability to provide developers with access to strong type checking and compile time error checking continues to prevent it from being the go-to language.
 As a way to address these problems, \typescript{} was designed to try and bridge this gap without requiring developers to learn a new language.
 Instead, \typescript{} was developed as a syntactic superset to \javascript{} allowing developers to keep building into their already existing knowledge but with the addition of additional features. 
 This also allows for all \javascript{} projects to be converted to \typescript{} projects allowing for easier movement between the two languages\cite{TypeScript}. 
 \typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling all the written instructions to its \javascript{} equivalents during the compilation process. 
-This is possible due to \typescript{} itself being a compiled language but its compiler compiles the code to \javascript{} which is an interpreted language. 
+This is possible because \typescript{} itself is compiled into \javascript{}, which is an interpreted language. 
 
 \section*{Next.js}
 Next.js (Next) is an open-source React framework created by Vercel that enables react web applications to use server-side rendering as well as generate static websites. The Next framework was created in order to counter the potential drawbacks of React relying on client-side rendering such as potential security issues. By enabling websites to be fully or partially server-side rendered instead Next provides a solution to this issues\cite {Nextjs_Docks}. 
