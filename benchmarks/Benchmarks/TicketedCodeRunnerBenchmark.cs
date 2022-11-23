@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Order;
 using CodeRunnerClients;
 using Client.DataTransfer;
@@ -8,9 +7,7 @@ using Client.DataTransfer;
 namespace Benchmarks;
 
 [StopOnFirstError]
-//TODO Remove from real bench
-[SimpleJob(RunStrategy.ColdStart, launchCount:10)]
-//TODO Remove from real bench
+
 public class TicketedCodeRunnerBenchmark
 {
     [Params(0.5, 1, 2, 5)]
