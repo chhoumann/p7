@@ -12,17 +12,17 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 
 The architecture for the system is based on a client-server structure. Additionally, we have added an API running a separate server instance to handle code execution and test, called \textit{Test runner}. As each component is introduced, in the following sections, we will elaborate on the choices made for each component, in relation to this structure.
 
+\section{Back-end system}
+The backend system has several responsibilities including routing, data retrieval and updates, execution of code tests and communication with an authentication provider. The backend is the link between all the components in the system. It operates as a traditional server in a client-server architechture. 
+
+\subsection*{Authentication provider}
+SOMEONE QUALIFIED SHOULD WRITE THIS hilsen Marco og Ivik.
+
 \section{Frontend}
 The frontend is the user facing component of our web application. The frontend is designed such that its user-interface and functionality is dependent on the role of the user. 
 For example if a student has signed in, the student is able to see and complete exercises. In turn if a lecturer signs in, they will have access to more functionality such as creating a syllabus or exercise.
 
 Regardless of the roles of the user the frontend has the ability to persist data and execute code through communication with the backend system.
-
-\section{Back-end system}
-The backend system has several responsibilities including routing, data retrieval and updates, execution of code tests and communication with an authentication provider. The backend provides all the functionality that is essential to our web application. It operates as a traditional server in a client-server architechture. 
-
-\subsection*{Authentication provider}
-
 
 \section{Database}
 In order persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations. 
