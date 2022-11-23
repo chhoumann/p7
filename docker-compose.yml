@@ -46,3 +46,8 @@ services:
     depends_on:
       integration-test:
         condition: service_completed_successfully
+    volumes:
+      - benchmarksartifacts:/src/bin/publish/BenchmarkDotNet.Artifacts
+volumes:
+  benchmarksartifacts:
+  
