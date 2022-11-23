@@ -1,7 +1,7 @@
 version: "1.0"
 services:
   integration-test:
-    container_name: "Integration-tests-$ENV_FILE_VERSION"
+    container_name: "IntegrationTests_$ENV_FILE_VERSION"
     build:
       dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
       args:
@@ -12,7 +12,7 @@ services:
         condition: service_healthy
         
   webserver:
-    container_name: "WEBAPP____$ENV_FILE_VERSION"
+    container_name: "WEBAPP_$ENV_FILE_VERSION"
     ports:
       - $PORT:$PORT
     build:
@@ -37,7 +37,7 @@ services:
       start_period: 5s
       
   benchmark:
-    container_name: "Benchmark____$ENV_FILE_VERSION"
+    container_name: "Benchmark_$ENV_FILE_VERSION"
     build:
       dockerfile: ./benchmarks/Benchmarks/Benchmark.Dockerfile
       args:
@@ -48,6 +48,7 @@ services:
         condition: service_completed_successfully
     volumes:
       - benchmarks-artifacts:/src/bin/
+      #- benchmarks-artifacts:/src/bin/publish/BenchmarkDotNet.Artifacts
 volumes:
   benchmarks-artifacts:
   
