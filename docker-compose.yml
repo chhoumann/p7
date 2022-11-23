@@ -46,8 +46,3 @@ services:
     depends_on:
       integration-test:
         condition: service_completed_successfully
-    volumes:
-      - benchmarksartifacts:/bin/bash/bin/Release/net6.0/BenchmarkDotNet.Artifacts
-volumes:
-  benchmarksartifacts:
-  
