@@ -25,6 +25,11 @@ services:
         REQUEST_LIFETIME: $REQUEST_LIFETIME
         PORT: $PORT
         IP: $IP
+    ulimits:
+        nproc: 65535
+        nofile:
+            soft: 26677
+            hard: 46677
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:$PORT/ping"]
       interval: 10s
