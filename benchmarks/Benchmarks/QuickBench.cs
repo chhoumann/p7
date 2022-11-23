@@ -6,7 +6,7 @@ namespace Benchmarks;
 
 [SimpleJob(RunStrategy.ColdStart, targetCount: 5)]
 [MinColumn, MaxColumn, MeanColumn, MedianColumn]
-public class TestBench
+public class QuickBench
 {
 
         private const int N = 10000;
@@ -15,7 +15,7 @@ public class TestBench
         private readonly SHA256 sha256 = SHA256.Create();
         private readonly MD5 md5 = MD5.Create();
 
-        public TestBench()
+        public QuickBench()
         {
             data = new byte[N];
             new Random(42).NextBytes(data);

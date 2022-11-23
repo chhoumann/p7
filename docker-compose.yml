@@ -46,10 +46,9 @@ services:
     depends_on:
       integration-test:
         condition: service_completed_successfully
-    command: tail -F anything
-    tty: true #attach a terminal: this keeps the container alive!
     volumes:
       - benchmarks-artifacts:/src/bin/publish/BenchmarkDotNet.Artifacts #might not be necessary to use volume.
+    
 volumes:
   benchmarks-artifacts:
   
