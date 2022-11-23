@@ -3,25 +3,27 @@ use std::path::Path;
 
 const CONTAINER_DIR_NAME : &str = "haskell-code";
 
-pub async fn generate_dir() -> String {
-    if !Path::new(CONTAINER_DIR_NAME).is_dir() {
-        fs::create_dir(CONTAINER_DIR_NAME)
-            .await
-            .expect(&format!("Could not create directory \"{}\"!", CONTAINER_DIR_NAME));
+pub async fn create_container_dir() {
+    if Path::new(CONTAINER_DIR_NAME).is_dir() {
+        fs::remove_dir_all(CONTAINER_DIR_NAME).await.unwrap();
     }
-
-    return create_code_directory().await
+    
+    fs::create_dir(CONTAINER_DIR_NAME)
+        .await
+        .expect(&format!("Could not create directory \"{}\"!", CONTAINER_DIR_NAME));
 }
 
-async fn create_code_directory() -> String {
+
+pub async fn generate_dir() -> String {
     let dir_name = generate_code_dir_name();
-    
+
     fs::create_dir(&dir_name)
         .await
         .expect(&format!("Could not create directory \"{}\"!", dir_name));
 
-    return dir_name
+    dir_name
 }
+
 
 fn generate_code_dir_name() -> String {
     let mut dir_name : String;
@@ -41,5 +43,5 @@ fn generate_code_dir_name() -> String {
          }
     }
 
-    return dir_name
+    dir_name
 }
