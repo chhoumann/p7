@@ -117,5 +117,11 @@ async fn get_output(runhaskell_process : Child) -> String {
 }
 
 async fn clean_up_code_dir(dir : &str) {
+    let paths = std::fs::read_dir(dir).unwrap();
+
+    for path in paths {
+        println!("Name: {}", path.unwrap().path().display());
+    }
+    
     fs::remove_dir_all(dir).await.unwrap();
 }
