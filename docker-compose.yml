@@ -10,6 +10,8 @@ services:
     depends_on:
       webserver:
         condition: service_healthy
+    volumes:
+      - /benchmarksartifacts:/.
         
   webserver:
     container_name: "WEBAPP____$ENV_FILE_VERSION"
@@ -47,7 +49,7 @@ services:
       integration-test:
         condition: service_completed_successfully
     volumes:
-      - /benchmarksartifact:/src/bin/publish/BenchmarkDotNet.Artifacts
+      - /benchmarksartifacts:/src/bin/publish/BenchmarkDotNet.Artifacts
 volumes:
-  benchmarksartifact:
+  benchmarksartifacts:
   
