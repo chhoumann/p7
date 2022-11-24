@@ -4,7 +4,7 @@ use crate::domain::code_runner_result::CodeRunnerResponse;
 use crate::services::code_runner;
 
 
-#[post("/haskell", format="json", data = "<exercise_submission_request>")]
+#[post("/haskell/submit", format="json", data = "<exercise_submission_request>")]
 pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> { 
     let exercise_submission = ExerciseSubmissionRequest 
     {
