@@ -2,15 +2,15 @@
 
 public static class TaskBuilder
 {
-    public static IEnumerable<Task> BuildClientTaskList(int count, Action<CodeRunnerQueueClient> action)
+    public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
+        where T : CodeRunnerClient, new()
     {
         List<Action> clientActions = new(count);
         List<Task> tasks = new(count);
         
         for (int i = 0; i < count; i++)
         {
-            
-            CodeRunnerQueueClient client = new();
+            T client = new();
             clientActions.Add(() => action.Invoke(client));
         }
         
