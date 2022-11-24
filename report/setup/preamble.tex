@@ -1,4 +1,5 @@
 \documentclass[11pt,twoside,a4paper,openany]{report}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Language, Encoding and Fonts
 % http://en.wikibooks.org/wiki/LaTeX/Internationalization
@@ -100,6 +101,7 @@
 \fancyhead[RE]{\small\nouppercase\leftmark} %even page - chapter title
 \fancyhead[LO]{\small\nouppercase\rightmark} %uneven page - section title
 \fancyhead[LE,RO]{\thepage} %page number on all pages
+\setlength{\headheight}{14pt}
 % Do not stretch the content of a page. Instead,
 % insert white space at the bottom of the page
 \raggedbottom
@@ -264,5 +266,6 @@
     }
 \usepackage{multirow}
 \usepackage{csquotes}
+\graphicspath{ {images/} }
 
 \usepackage{colortbl}
