@@ -1,8 +1,7 @@
 version: "1.0"
 services:
-  
   integration-test:
-    container_name: "Integration-tests-$ENV_FILE_VERSION"
+    container_name: "IntegrationTests_$ENV_FILE_VERSION"
     build:
       dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
       args:
@@ -13,7 +12,7 @@ services:
         condition: service_healthy
         
   webserver:
-    container_name: "WEBAPP____$ENV_FILE_VERSION"
+    container_name: "WEBAPP_$ENV_FILE_VERSION"
     ports:
       - $PORT:$PORT
     build:
@@ -25,6 +24,11 @@ services:
         REQUEST_LIFETIME: $REQUEST_LIFETIME
         PORT: $PORT
         IP: $IP
+    ulimits:
+        nproc: 65535
+        nofile:
+            soft: 26677
+            hard: 46677
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:$PORT/ping"]
       interval: 10s
@@ -33,7 +37,7 @@ services:
       start_period: 5s
       
   benchmark:
-    container_name: "Benchmark____$ENV_FILE_VERSION"
+    container_name: "Benchmark_$ENV_FILE_VERSION"
     build:
       dockerfile: ./benchmarks/Benchmarks/Benchmark.Dockerfile
       args:
@@ -42,7 +46,9 @@ services:
     depends_on:
       integration-test:
         condition: service_completed_successfully
-        
+    volumes:
+      - benchmarks-artifacts:/src/bin/publish/BenchmarkDotNet.Artifacts #might not be necessary to use volume.
+    
+volumes:
+  benchmarks-artifacts:
   
-
-

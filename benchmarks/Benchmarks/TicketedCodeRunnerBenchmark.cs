@@ -1,17 +1,16 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Order;
+using BenchmarkDotNet.Engines;
 using CodeRunnerClients;
 using Client.DataTransfer;
 
 namespace Benchmarks;
 
 [StopOnFirstError]
-[Orderer(SummaryOrderPolicy.FastestToSlowest)]
-[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
+//launchCount = #processes, warmup iterations, target is actual bench count.
+[SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 50)]
 public class TicketedCodeRunnerBenchmark
 {
-    [Params(0.5, 1, 2, 5)]
+    [Params(0.5, 1, 2, 3)]
     public double PollTime { get; set; }
     
     [Params(10, 20, 50, 100)]
