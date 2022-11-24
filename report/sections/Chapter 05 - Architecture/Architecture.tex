@@ -1,6 +1,6 @@
 In this chapter we will describe the architecture of the entire system by first showing the overall structure followed by a short description of the individual components. 
 The platform allows lecturers to create a syllabus that includes problemsets, exercises and test cases for the exercises. Additionally, students can do the exercises that the lecturer has provided. 
-The platform is a web application, consisting of a user-interface, business logic to handle requests, authentication and compilation of the code as well as a database to persist relevant data.
+The platform is a web application with a user-interface. It has business logic to handle user requests and authentication with roles, which means users of varying roles have different permissions. The platform can run tests against code, to check whether it satisfies given requirements. Account data, test runs, and syllabus data is persisted in a database.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
 
 \begin{figure}[H]
