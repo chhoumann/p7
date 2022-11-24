@@ -48,7 +48,7 @@ public class CodeRunnerQueueClientTest
     {
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
 
-        IEnumerable<Task> tasks = TaskBuilder.BuildClientTaskList(10, client =>
+        IEnumerable<Task> tasks = TaskBuilder.BuildClientTaskList<CodeRunnerQueueClient>(10, client =>
         {
             client.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
         });
