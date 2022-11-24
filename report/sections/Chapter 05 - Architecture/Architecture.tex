@@ -57,5 +57,5 @@ The \textit{Submission} entity is in a many-to-one relationship with the \textit
 The remaining entities \textit{Account}, \textit{Session} and \textit{VerificationToken} are entities which are required by authentication services and are not developed by us.
 
 \section{Test runner}
-As mentioned previously the platform is able run code by sending the submitted code to the API Test runner which will verify whether this code is syntactically correct and safisfies the lecturer defined tests.
+As previously mentioned, the platform is able execute code by sending the submitted code to the Test Runner API which verifies whether the code is syntactically correct and satisifies the tests defined by the lecturer.
 Since the Test runner is running on its own server instance, we created endpoints that allow the backend to communicate with the Test runner API. When the submitted code has been processed the output will be returned to the caller.
