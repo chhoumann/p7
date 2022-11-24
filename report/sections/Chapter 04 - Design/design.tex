@@ -7,23 +7,27 @@ The wireframe in figure \ref{fig:wfExercise} shows the page intended for solving
 % primary use cases
 % solve exercises
 \begin{figure}[H]
-	\includegraphics[scale=0.13]{WireframeSolveExercise.png}
+	\includegraphics[scale=0.15]{WireframeSolveExercise.png}
 	\centering
 	\caption{wireframe for solving an exercise}
 	\label{fig:wfExercise}
 \end{figure}
 
-For both images in figure \ref{fig:wfExercise} a text input field can be seen located on the left. This text input field is where the user can input code for submission. On the right side of the left-most image of figure \ref{fig:wfExercise}, a box can be seen containing two tabs. The currently selected tab of this image is the \textit{Instructions} tab which is where the instructions for the current exercise is displayed. On the right ride of the right-most image is a similar view, except that the \textit{Result} tab has now been selected. This tab shows the result of the submitted code, whether it passed the tests for the exercise and whether it compiled. This satisfies the requirements that an exercise should have a description and that a user should be able to submit and verify their code and exercise submission stated in the \textbf{Use case: Solve exercises}.
+For both images in figure \ref{fig:wfExercise} a text input field can be seen located on the left. This text input field is where the user can input code for submission. On the right side of the top image of figure \ref{fig:wfExercise}, a box can be seen containing two tabs. The currently selected tab of this image is the \textit{Instructions} tab which is where the instructions for the current exercise is displayed. On the right side of the bottom image is a similar view, except that the \textit{Result} tab has now been selected. This tab shows the result of the submitted code, whether it passed the tests for the exercise and whether it compiled. This design satisfies the requirements that an exercise should have a description and that a user should be able to submit and verify their code and exercise submission stated in the use case \textbf{Solve exercises}.
 
-The page displayed in figure \ref{fig:wfExercise} does not satisfy the entirety of the use case \textbf{Use case: Solve exercises}, as we have designed a separate page to browse exercises as well as sessions and syllabi. The page structure for all of these are similar, and therefore we only show an example of a page for browsing syllabi.
+\section{Wireframe for browsing}
+The design for the page displayed in figure \ref{fig:wfExercise} does not satisfy the entirety of the use case \textbf{Solve exercises}, as we have designed a separate page to browse exercises as well as sessions and syllabi. The page structure for all of these are similar, and therefore we only show an example of a page for browsing syllabi.
 % Structure of creating sessions and syllabi
 \begin{figure}[H]
-    \includegraphics[scale=0.6]{browseSyllabus.png}
+    \includegraphics[scale=0.3]{browseSyllabus.png}
     \centering
     \caption{wireframe for browsing a syllabus}
     \label{fig:wfSyllabus}
 \end{figure}
-Note that the buttons related to creating new items or updating items in the list will only be available to the lecturer. The items shown in the list corresponds to which page that the user is on. If the user is browsing syllabi, then the items contained in the list will be syllabi. If the user is browsing sessions, the list will contain sessions. Similarly for exercises.
+Note that the buttons related to creating new items or updating items in the list will only be available to the lecturer. The items shown in the list corresponds to which page that the user is on. If the user is browsing syllabi, then the items contained in the list will be syllabi. If the user is browsing sessions, the list will contain sessions. Similarly for exercises. This design satisfies the section of the use case \textbf{Solve exercises}, related to choosing sessions and exercises. Additionally, it also satisfies part of the use case \textbf{Create exercises} related to having the ability to create and edit syllabi and exercises.
+
+\section{Wireframe for creating an exercise}
+The wireframe in figure \ref{fig:wfProblem}, shows the page that the lecturer will see, when the create exercise button when browsing exercises. 
 % create exercises
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{createProblem.jpg}
@@ -32,7 +36,6 @@ Note that the buttons related to creating new items or updating items in the lis
 	\label{fig:wfProblem}
 \end{figure}
 
+This page allows the lecturer to create an exercise with a title, test, function template and description. These are fields required to provide the information necessary for a student to solve the exercises. Additionally, test field allows a lecturer to specify the tests that student's code must pass. The function template field allows the lecturer to specify functions that the test will call, and which will be included in the editor on the solve exercise page. This satisfies the remaining requirements of the use case \textbf{Create exercises}.
 
-% secondary
-% view solutions
-% account use case
+As mentioned previously not all the use cases have been designed for, because the remaining use cases and related features were deemed as nonessential for a minimal viable product. The next chapter will cover the system architecture.
