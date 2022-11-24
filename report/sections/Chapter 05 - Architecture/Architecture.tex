@@ -10,7 +10,7 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 	\label{fig:Architecture}
 \end{figure}
 
-The architecture for the system is based on a client-server structure. Additionally, we have added an API running a separate server instance to handle code execution and test, called \textit{Test runner}. As each component is introduced, in the following sections, we will elaborate on the choices made for each component, in relation to this structure.
+The architecture for the system is based on a client-server structure\todo{explain client-server structure}. Additionally, we have added an API running a separate server instance to handle code execution and test, called \textit{Test runner}. As each component is introduced, in the following sections, we will elaborate on the choices made for each component, in relation to this structure.
 
 \section{Back-end system}
 The back-end system has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. The backend is the link between all the components in the system. It operates as a traditional server in a client-server architechture. 
