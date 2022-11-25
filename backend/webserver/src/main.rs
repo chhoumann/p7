@@ -10,6 +10,7 @@ use dotenv::dotenv;
 use uuid::Uuid;
 
 use crate::services::test_runner;
+use crate::services::dir_generator;
 use crate::services::worker;
 use crate::domain::web_api_data::{TestRunnerResult, TestRunnerWork};
 use crate::domain::shared_state::State;
@@ -33,7 +34,9 @@ async fn main() {
     });
 
     let app = create_app(shared_state);
-
+    
+    dir_generator::create_container_dir().await;
+    
     run_worker(rx, job_results);
     bind_server(app).await;
 }

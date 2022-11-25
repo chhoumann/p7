@@ -1,4 +1,4 @@
-version: "1.0"
+﻿version: "1.0"
 services:
   integration-test:
     container_name: "IntegrationTests_$ENV_FILE_VERSION"
@@ -16,7 +16,7 @@ services:
     ports:
       - $PORT:$PORT
     build:
-      dockerfile: ./backend/webserver/Dockerfile2
+      dockerfile: ./backend/webserver - rocket/Dockerfile
       args:
         MAX_THREADS: $MAX_THREADS
         CHANNEL_BUFFER_CAPACITY: $CHANNEL_BUFFER_CAPACITY

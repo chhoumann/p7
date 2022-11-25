@@ -4,10 +4,21 @@ This chapter presents an overview of our system using a system specification con
 The purpose of the system is to provide a better approach to learning functional programming in Haskell using a software application.
 We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution compiles, and whether it fulfills the requirements of the exercise. 
 In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
-To reduce the scope, we choose to focus is to create a platform for the functional programming course, while ensuring the system abstractions support other languages, that could be supported in the future.
+To reduce the scope of the project, we choose to focus on creating a platform for the Programming Paradigms course, while ensuring the system abstractions support other languages, that could be supported in the future.
 
 \section*{Target users}
-The system will have two main users, the Lecturer that will conduct the course and create the exercises, and the university Students who will try to solve the exercises.
+The system will have two main users, the lecturer that will conduct the course, and the university students who will take the course.
+Therefore the responsibility of the frontend can be split into two categories: 
+\begin{itemize}
+    \item \textbf{Lecturer}-based responsibilities.
+    \item \textbf{Student}-based responsibilities.
+\end{itemize}
+
+\subsubsection*{Lecturer-based responsibilities}
+If the signed in user is a lecturer the frontend provides the lecturer the ability to create syllabi, sessions, exercises and test cases for the exercises, as well as they ability to solve and submit exercises. The ability for the lecturer to solve and submit exercises was included to allow lecturers to try out the exercises and ensure that the test cases behave as expected before releasing the exercises to the students. Additionally, the lecturer will also have access to a dashboard that shows which students have completed which exercises for a given session, in order to track progress and .
+
+\subsubsection*{Student-based responsibilities}
+Conversely, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed. 
 
 
 \section*{Constraints of the project}
@@ -46,10 +57,10 @@ The Lecturer should be able to select code solutions submitted by the Students t
 With the use cases that are contained in our scope described, we need a way to prioritize them. This then allows us to make a prioritized list of the features that are needed in-order to fulfill our use cases. 
 
 \section{MoSCoW}
-To gain an overview of which features the solution must, should, could and wont contain we perform a MoSCoW analysis.
+To gain an overview of which features the solution must, should, could and won't contain we perform a MoSCoW analysis.
 A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system. 
 
-Here table \ref{tab:MOSCOW} provides an overview of where the different needed features were placed in order to gain a working solution. 
+Table \ref{tab:MOSCOW} shows the feature prioritizations for a working solution. 
 The must have section includes the features required for students to solve exercises. These are seen as must-have features as all use cases other than the Account one require these.  
 The should-have category includes the additional features that are needed to fulfill the Solve Exercises use case as well as the Create Exercise one. 
 These are prioritized as should have as they are needed in order to provide the users with the main expected features of an exercise platform for coding. 
