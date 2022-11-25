@@ -66,7 +66,8 @@ By summarizing the main problems following the switch to the new teaching approa
 
 \section{Solution}
 To alleviate the problem defined in the problem statement, a platform supporting evaluation of Haskell code is developed. It is necessary for this platform to evaluate whether a student's Haskell program solves a given problem defined in an exercise. The platform supports the definition of these exercises as well as software tests defining solution criteria for a particular exercise. These software tests are executed using a Haskell interpreter, and results of the tests presented to the user of the platform on a web based user interface.  
-Information about submitted solutions are persisted in a relational database such that they can later be presented to users of the platform.  
+Information about submitted solutions are persisted in a relational database such that they can later be presented to users of the platform.
+To examine the scalability of the solution essential parts of the platform have been stress-tested to ensure availability and reliability when performing under unexpectedly many users \todo{source saying that it ensures QoS and R}.
 
 In the following chapters, we describe this platform and how it aims to solve the problem of quickly verifying whether a submitted Haskell program satisfies certain solution criteria defined in test code. 
 In chapter \ref{chap:preliminaries} we present the theory and terminology necessary to understand the developed solution. 
