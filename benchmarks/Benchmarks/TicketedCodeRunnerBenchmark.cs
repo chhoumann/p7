@@ -6,14 +6,14 @@ using CodeRunnerClients.DataTransfer;
 namespace Benchmarks;
 
 [StopOnFirstError]
-[SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 5, targetCount: 10)]
+[SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 5, targetCount: 40)]
 [CsvMeasurementsExporter]
 [HtmlExporter]
 [CsvExporter]
 [MarkdownExporterAttribute.Default]
 public class TicketedCodeRunnerBenchmark
 {
-    [Params(0.5, 1.0, 2.0, 3.0)]
+    [Params(0.5, 1, 2, 3)]
     public double PollTime { get; set; }
     
     [Params(10, 20, 50, 100)]
