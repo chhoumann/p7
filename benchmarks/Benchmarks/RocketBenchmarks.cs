@@ -1,11 +1,12 @@
-﻿/*
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using CodeRunnerClients;
 using CodeRunnerClients.DataTransfer;
 
 namespace Benchmarks;
+
 [StopOnFirstError]
+//launchCount = #processes, warmup iterations, target is actual bench count.
 [SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 50)]
 public class RocketBenchmarks
 {
@@ -28,4 +29,3 @@ public class RocketBenchmarks
         Task.WhenAll(clientActions).Wait();
     }
 }
-*/
