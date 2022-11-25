@@ -1,7 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using CodeRunnerClients;
-using Client.DataTransfer;
+using CodeRunnerClients.DataTransfer;
 
 namespace Benchmarks;
 

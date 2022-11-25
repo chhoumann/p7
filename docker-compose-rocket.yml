@@ -1,16 +1,6 @@
 ﻿version: "1.0"
 services:
-  integration-test:
-    container_name: "IntegrationTests_$ENV_FILE_VERSION"
-    build:
-      dockerfile: ./benchmarks/CodeRunnerClientTest/Test.Dockerfile
-      args:
-        CLIENT_PORT: $PORT
-        CLIENT_TARGET: webserver
-    depends_on:
-      webserver:
-        condition: service_healthy
-        
+
   webserver:
     container_name: "WEBAPP_$ENV_FILE_VERSION"
     ports:
@@ -43,9 +33,6 @@ services:
       args:
         CLIENT_PORT: $PORT
         CLIENT_TARGET: webserver
-    depends_on:
-      integration-test:
-        condition: service_completed_successfully
     volumes:
       - benchmarks-artifacts:/src/bin/publish/BenchmarkDotNet.Artifacts #might not be necessary to use volume.
     
