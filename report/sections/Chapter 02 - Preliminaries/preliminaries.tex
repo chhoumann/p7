@@ -1,16 +1,19 @@
 The following chapter contains short introductions to the most important technologies used in the project. 
 
 \section*{Glasgow Haskell Compiler} %-- Haskell afsnit istedet??
-Out of the currently available Haskell compilers we use the Glasgow Haskell Compiler (GHC) on the backend for interpreting the Haskell exercises and running the test suite. GHC was chosen over the other compilers due to it being the standard compiler recommended by the Haskell Organization \cite{Haskell_GHC} and it being the compiler used in the Haskell Course.
+Out of the currently available Haskell compilers we use the Glasgow Haskell Compiler (GHC) on the backend\todo{no mention of architecture in prelim. } for interpreting the Haskell exercises \todo{What exercises? We need to establish that we want students to be able to submit execercises before we can make this claim.} and running the test suite \todo{What is a test suit? We use 'the' - I don't know what it refers to.}. The GHC compiler recommended by the Haskell Organisation and is recommended as the go-to compiler/interpreter by the Programming Paradigms teacher.
+
 
 \section*{Hspec}
 To enable running Haskell tests on the backend we needed a test framework. Here a test framework allows us to define the tests that need to be automatically run on the coding exercises the students submit. This allows us to confirm if the students completed the exercise and if not provide them with feedback on what tests their code failed.
-Here Hspec was chosen instead of other test frameworks since it allows the professor to define the tests in an easy-to-understand domain-specific language (DSL). 
+Hspec was chosen instead of other test frameworks since it allows the professor to define the tests in an easy-to-understand domain-specific language (DSL). 
+
 This makes the framework easier to work with as a DSL is a language targeted towards a specific domain it allows Hspec to tests to be easily written and understandable without having an in-depth understanding of Hspec and Haskell. 
 This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise. 
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
 
-An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student’s code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable x and the expected output is y.
+An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student’s code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
+
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec Test.}, label={lst:HspecTestExample}]
 {
