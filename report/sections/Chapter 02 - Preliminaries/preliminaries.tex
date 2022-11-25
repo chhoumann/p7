@@ -11,7 +11,7 @@ This makes the framework easier to work with as a DSL is a language targeted tow
 This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise. 
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
 
-An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student’s code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
+An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec Test.}, label={lst:HspecTestExample}]
 {
@@ -36,14 +36,14 @@ Most other programming languages today operate in a band where either safety or 
 Here Rust provides the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages like Python. 
 As such, the main overall goal of Rust is to provide as much safety as possible in a low-level programming language without sacrificing any speed\cite{Rust_in_Action}.
 
-In order to achieve this goal Rust provides a large number of safety features among these is its most distinguishing feature which prevents invalid data access at compile time. 
+In order to achieve this goal Rust provides a large number of safety features among these are its most distinguishing feature which prevents invalid data access at compile time. 
 Considering a research article by Microsoft Security Research Center stating that invalid data access is behind 70\% of serious security bugs in modern programs this is a large deal\cite{Safe_Systems_Languages}. 
 Instead of relying on the developer to deal with it, Rust's compiler guarantees any compiled program is memory-safe.
 
 Our reason for using Rust is twofold: 
 \begin{enumerate}
     \item Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself.
-    \item Rust features safe implementations of threading and concurrency which is useful for web applications where scalibility is a priority.
+    \item Rust features safe implementations of threading and concurrency which is useful for web applications where scalability is a priority.
 \end{enumerate}
 
 \section*{Docker}
@@ -90,7 +90,7 @@ PostgreSQL (Postgres) is an open-source object-relational database management sy
 As a rule, the Postgres development team tries to conform to the SQL Standards whenever these standards do not contradict Postgres features or when the standards could lead to a deterioration of the architecture or performance\cite{Postgres_Docs}. 
 
 Today Postgres features transactions with supports Atomicity, Consistency, Isolation, and Durability (ACID) properties, as well as automatic update of views, foreign keys, and procedures. 
-Furthermore modern Postgres supports a wide variety of deployment options from single machine usage to data warehouses and web services\cite{Postgres_Docs}.
+Furthermore, modern Postgres supports a wide variety of deployment options from single machine usage to data warehouses and web services\cite{Postgres_Docs}.
 
 \section*{Usability testing}
 To evaluate a user interface, it can be useful to test its usability. ISO 9421 defines usability as
@@ -104,3 +104,15 @@ Before the test, the interviewers have to ensure a test plan, tasks, and questio
 During the test, representative users should interact with the design while solving tasks and thinking out loud. The interviewer collects data during this process.
 Afterwards, the interviewers analyze the data and create a list of problems from it.
 \cite{deb7}
+
+
+\section*{BenchmarkDotnet}
+Availability is a quality measurement used to describe the probability of a system being available to a user when needed. Similarly, reliability is a measurement for determining the likelihood of correct system operation within a given time-frame. \cite{reliabilityAvailability}
+Stress testing is an approach that can help identify unintended behavior of a system that are only reached when the system performs under heavy workloads or finding an approximation to when the system stops functioning.
+Usually one performs stress testing by exposing the system under test to a number of computations that are beyond its expected capabilities such that it either stops or produces results too slow to consider the system usable. \cite{Sommerville10}
+The expected capabilities is often described in an operational profile\cite{OperationalProfiles}. 
+Such profile can, in combination with stress testing, be used to ensure that a system is both reliable and available even when pushed beyond its expected workload.
+
+BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in dotnet runtimes. 
+It allows for the parameterization of measured operations and provides ways to introduce warm-up operation and adjustments. 
+We use this framework to create a stress test environment that also measures the response times for the system under test. 
