@@ -41,7 +41,7 @@ This way, we can pass the path to this isolated directory to the GHC interpeter 
 Once the tests have been run, the directory and its contents are deleted again.
 The \texttt{stdout} of the process is then read to determine whether the tests succeeded or not.
 Finally, the interpreter output and the test success flag is packaged into a JSON object and sent back to the client.
-Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, as described in chapter \todo{ref benchmarks}.
+Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, as described in chapter \todo{ref benchmarks}. \todo{Make a transition to the queue system chapter}
 
 % Lægger op til at vi kan snakke om hvordan vi har gjort det Blazingly Fast (TM)
 
