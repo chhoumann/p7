@@ -1,6 +1,6 @@
 
 using CodeRunnerClients;
-using Client.DataTransfer;
+using CodeRunnerClients.DataTransfer;
 using Xunit;
 
 namespace CodeRunnerClientTest;

@@ -1,14 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Client.DataTransfer;
+using CodeRunnerClients.DataTransfer;
 
 namespace CodeRunnerClients;
 
 public class CodeRunnerClient
 {
     protected readonly HttpClient _client = new();
-    protected static readonly Uri _postProblemUrl = CreateUri("haskell/submit");
+    private static readonly Uri _postProblemUrl = CreateUri("haskell/submit");
 
     public CodeRunnerClient()
     {

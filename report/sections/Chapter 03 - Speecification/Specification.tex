@@ -4,6 +4,7 @@ This chapter presents an overview of our system using a system specification con
 The purpose of the system is to provide a better approach to learning functional programming in Haskell using a software application.
 We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution compiles, and whether it fulfills the requirements of the exercise. 
 In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
+
 To reduce the scope of the project, we choose to focus on creating a platform for the Programming Paradigms course, while ensuring the system abstractions support other languages, that could be supported in the future.
 
 \section*{Target users}
@@ -35,7 +36,7 @@ The following sections contain the use cases we have outlined that fall under ou
 \subsection*{Use case: Accounts}
 To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
 
-\subsection*{Use case: Solve exercises} \label{sec:hej}
+\subsection*{Use case: Solve exercises}
 A Student should be able to choose an exercise session and a specific exercise. The exercise description is then retrieved and shown to the user.
 As the user completes the exercise, they should also be able to submit the exercise, and verify that their submitted solutions can compile and fulfills the requirements of the exercise. If it does not compile or fails the tests, it should provide the user with an error describing the problem. 
 
@@ -61,6 +62,7 @@ To gain an overview of which features the solution must, should, could and won't
 A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system. 
 
 Table \ref{tab:MOSCOW} shows the feature prioritizations for a working solution. 
+
 The must have section includes the features required for students to solve exercises. These are seen as must-have features as all use cases other than the Account one require these.  
 The should-have category includes the additional features that are needed to fulfill the Solve Exercises use case as well as the Create Exercise one. 
 These are prioritized as should have as they are needed in order to provide the users with the main expected features of an exercise platform for coding. 
