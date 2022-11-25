@@ -13,7 +13,7 @@ namespace Benchmarks;
 [MarkdownExporterAttribute.Default]
 public class TicketedCodeRunnerBenchmark
 {
-    [Params(0.5, 1, 2, 3)]
+    [Params(0.5, 1.0, 2.0, 3.0)]
     public double PollTime { get; set; }
     
     [Params(10, 20, 50, 100)]

@@ -6,6 +6,8 @@ We aim to make a system where students can solve exercises. The system should be
 In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
 
 To reduce the scope of the project, we choose to focus on creating a platform for the Programming Paradigms course, while ensuring the system abstractions support other languages, that could be supported in the future.
+Currently \todo{find number} students attend the course, thus we do not expect many of the following usecases to be performed at the same time. 
+We will use the number of course attendees to create an estimation of an operational profile which will be used to stress test the solution, as described in \ref{chap:Benchmarking}
 
 \section*{Target users}
 The system will have two main users, the lecturer that will conduct the course, and the university students who will take the course.
@@ -19,7 +21,7 @@ Therefore the responsibility of the frontend can be split into two categories:
 If the signed in user is a lecturer the frontend provides the lecturer the ability to create syllabi, sessions, exercises and test cases for the exercises, as well as they ability to solve and submit exercises. The ability for the lecturer to solve and submit exercises was included to allow lecturers to try out the exercises and ensure that the test cases behave as expected before releasing the exercises to the students. Additionally, the lecturer will also have access to a dashboard that shows which students have completed which exercises for a given session, in order to track progress and .
 
 \subsubsection*{Student-based responsibilities}
-Conversely, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed. 
+Conversely to the Lecturer-based responsibilities, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed. 
 
 
 \section*{Constraints of the project}
