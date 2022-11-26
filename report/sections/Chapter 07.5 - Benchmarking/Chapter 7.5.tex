@@ -1,1 +1,18 @@
 \chapter{Benchmarking} \label{chap:Benchmarking}
+To ensure that the developed platform can handle an appropriate amount of users, the Test Runner has been stress tested and benchmarked.
+In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotnet (see \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
+
+\section{Orchestration and Test Runner parameterization}
+The benchmark and test components are managed in their own docker containers, and are connected to a network connecting them to a Test Runner container. 
+
+\todo{create a picture for the orchestration}
+\section{Simulating client behavior}
+
+
+The test project consists of three components: clients, tests, and benchmarks.
+The client component provides implementation for client behaviors. Different clients provide different ways of contacting the Test Runner.
+
+The client project detail different client behaviors
+The benchmark contain different benchmarks
+The test contains test that ensure that the Test Runner can be contacted before running the benchmark.
