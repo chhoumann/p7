@@ -1,7 +1,7 @@
 FROM rust:latest
 
 workdir /api
-COPY . .
+COPY ./backend/webserver/. .
 
 # Install GHC and other dependencies. Source: maintainer of GHCup, as seen below.
 # https://stackoverflow.com/questions/67680726/installing-haskells-cabal-or-ghcup-inside-a-dockerfile-wont-work

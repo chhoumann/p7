@@ -7,7 +7,7 @@ namespace Benchmarks;
 
 [StopOnFirstError]
 //launchCount = #processes, warmup iterations, target is actual bench count.
-[SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 50)]
+[SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 40)]
 public class RocketBenchmarks
 {
     [Params(10, 20, 50, 100)]
