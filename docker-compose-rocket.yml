@@ -33,6 +33,9 @@ services:
       args:
         CLIENT_PORT: $PORT
         CLIENT_TARGET: webserver
+    depends_on:
+      webserver:
+        condition: service_healthy
     volumes:
       - benchmarks-artifacts:/src/bin/publish/BenchmarkDotNet.Artifacts #might not be necessary to use volume.
     
