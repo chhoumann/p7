@@ -10,7 +10,7 @@ namespace Benchmarks;
 [SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 40)]
 public class RocketBenchmarks
 {
-    [Params(10, 20, 50, 100)]
+    [Params(10)]
     public int NumberOfRequests { get; set; }
     
     [ParamsSource(nameof(CodeSubmissions))]
@@ -21,11 +21,12 @@ public class RocketBenchmarks
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, client =>
-        {
-            client.Post(CodeSubmission);
-        });
-        
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, Action);
         Task.WhenAll(clientActions).Wait();
+    }
+
+    private async void Action(CodeRunnerClient client)
+    {
+        await client.Post(CodeSubmission);
     }
 }
