@@ -10,7 +10,7 @@ namespace Benchmarks;
 [SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 40)]
 public class RocketBenchmarks
 {
-    [Params(10)]
+    [Params(10, 20, 50, 100)]
     public int NumberOfRequests { get; set; }
     
     [ParamsSource(nameof(CodeSubmissions))]
