@@ -6,7 +6,7 @@ using CodeRunnerClients.DataTransfer;
 namespace Benchmarks;
 
 [StopOnFirstError]
-[SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 5, targetCount: 10)]
+[SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 5, targetCount: 40)]
 [CsvMeasurementsExporter]
 [HtmlExporter]
 [CsvExporter]
