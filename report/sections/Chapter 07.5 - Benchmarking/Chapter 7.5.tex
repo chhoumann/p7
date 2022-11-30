@@ -1,6 +1,6 @@
 \chapter{Benchmarking} \label{chap:Benchmarking}
 To ensure that the developed platform can handle an appropriate amount of users, the Test Runner has been stress tested and benchmarked.
-In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotNet (see \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
 a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
 
 \section{Orchestration and Test Runner parameterization}
@@ -25,16 +25,5 @@ One such class implements behavior varying in poll time and code submission cont
 During stress testing, the BenchmarkDotNet framework creates all possible combinations of these behavioral variables.
 This exposes the system to groups of varying size with a variety of different poll times and code submission contents.
 The idea with this is to give information about how the platform behaves when a classroom of students all work on the same exercises at the same time.
-The results of these stress tests are presented in section \ref{sec:Evaluation}.
-
-- how does client behavior vary
-- we want to examine how these variations and combinations of these variations affect the benchmark. 
-
-The underlying implementation of the client classes use an HTTP client
-
-The test project consists of three components: clients, tests, and benchmarks.
-The client component provides implementation for client behaviors. Different clients provide different ways of contacting the Test Runner.
-
-The client project detail different client behaviors
-The benchmark contain different benchmarks
-The test contains test that ensure that the Test Runner can be contacted before running the benchmark.
+The underlying implementation of the client classes use an HTTP client.
+The results of these stress tests are presented in section \ref{sec:TestEvaluation}.
