@@ -1,6 +1,7 @@
 mod domain;
 mod endpoints;
 mod services;
+mod debug;
 
 #[macro_use]
 extern crate rocket;

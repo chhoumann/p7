@@ -28,7 +28,7 @@ pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
     generate_file(&dir, TEMP_CODE_FILE_NAME, &exercise_code);
     generate_file(&dir, TEMP_TEST_FILE_NAME, &test_code);
 
-    println!("Running tests using runhaskell...");
+    debug!("Running tests using runhaskell...");
 
     // Spawn "runhaskell" child process and kill after TIME_OUT
     let mut runhaskell_process = spawn_runhaskell_command(&dir, TEMP_TEST_FILE_NAME);
@@ -49,11 +49,11 @@ pub fn execute(exercise_code: String, test_code: String) -> Result<String> {
 
     if !status_code.success() {
         // Note: Tests that fail flush to stdout and not stderr
-        println!("Test failed!\nOutput: {}", output);
+        debug!("Test failed!\nOutput: {}", output);
         error_chain::bail!(output)
     }
 
-    println!("Test succeeded!");
+    debug!("Test succeeded!");
 
     return Ok(output)
 }
@@ -71,7 +71,7 @@ fn generate_file(dir : &str, file_name : &str, content : &str) {
 
 /// Writes given code to a file at path `code_file_path`.
 fn write_code_to_file(code : &str, file_path: &str) -> std::io::Result<()> {
-    println!("Writing code to file {}...", file_path);
+    debug!("Writing code to file {}...", file_path);
 
     let mut file = File::create(file_path)?;
     file.write_all(code.as_bytes())?;
@@ -99,7 +99,7 @@ fn get_output(runhaskell_process : Child) -> String {
         runhaskell_process.stderr.unwrap().read_to_string(&mut output).unwrap();
 
         if !output.is_empty() {
-            println!("runhaskell process encountered stderr: {}", output);
+            debug!("runhaskell process encountered stderr: {}", output);
             return output
         }
     }
