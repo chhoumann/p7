@@ -1,7 +1,7 @@
 FROM rust:latest
 
 workdir /api
-COPY ./backend/webserver/. .
+COPY ./backend/webserver-rocket/. .
 
 # Install GHC and other dependencies. Source: maintainer of GHCup, as seen below.
 # https://stackoverflow.com/questions/67680726/installing-haskells-cabal-or-ghcup-inside-a-dockerfile-wont-work
@@ -49,6 +49,6 @@ RUN \
 
 RUN cabal update && cabal install --package-env=. --lib hspec hspec-contrib QuickCheck HUnit
 
-RUN ["cargo", "build", "--release", "--verbose", "--jobs", "1"]
+RUN ["cargo", "build","--release", "--verbose", "--jobs", "1"]
 
 CMD ["./target/release/web_server"]

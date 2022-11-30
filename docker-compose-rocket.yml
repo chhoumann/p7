@@ -6,7 +6,7 @@ services:
     ports:
       - $PORT:$PORT
     build:
-      dockerfile: ./backend/webserver - rocket/Dockerfile
+      dockerfile: ./backend/webserver-rocket/Dockerfile
       args:
         MAX_THREADS: $MAX_THREADS
         CHANNEL_BUFFER_CAPACITY: $CHANNEL_BUFFER_CAPACITY
@@ -20,8 +20,8 @@ services:
             soft: 26677
             hard: 46677
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:$PORT/ping"]
-      interval: 10s
+      test: ["CMD", "curl", "-f", "http://localhost:$PORT/"]
+      interval: 5s
       timeout: 5s
       retries: 3
       start_period: 5s
