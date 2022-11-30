@@ -1,5 +1,5 @@
 \chapter{Test Runner} \label{chap:TestRunner}
-One of the primary goals of this application to give the professor a way to specificy what constitutes a correct problem solution.
+One of the primary goals of this application to give the professor a way to specify what constitutes a correct problem solution.
 As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
 
 \section{Client-Server Interaction}
@@ -16,7 +16,7 @@ This way, all students have the latest test code shortly after the update while 
 
 When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
 In this request, the necessary code and test code is included. 
-One could argue that fetching the test code on the backend when processing this mutation would be more approriate.
+One could argue that fetching the test code on the backend when processing this mutation would be more appropriate.
 However, we want to eventually display the test code to the user so they may gain a better understanding of the solution requirements, although this will not be done in this iteration of the project.
 
 To handle this mutation, the Next.js server requests the test runner to process the given solution and test code.
@@ -32,26 +32,19 @@ When the test runner receives the request from Next.js, its singular goal is to 
 In order to run the tests, we need to run the GHC interpeter on the test code, which, in turns, need access to the exercise submission code.
 The GHC interpreter can be run from the command line with arguments specifying the path Haskell file to run.
 In other words, the test runner needs to write the user submission and corresponding test code to a file.
-However, if more users were to make a submission at the same time, the content of the file could potentially be ovewrwritten while the GHC interpreter is running the tests.
+However, if more users were to make a submission at the same time, the content of the file could potentially be overwritten while the GHC interpreter is running the tests.
 
 To address this, we generate a new directory with a unique name for each submission.
 Then, the user submission is written to two  \texttt{.hs} files inside this directory - a \texttt{code.hs} file containing the exercise submission, and a \texttt{test.hs} file containing the corresponding tests.
-This way, we can pass the path to this isolated directory to the GHC interpeter process as an argument.
+This way, we can pass the path to this isolated directory to the GHC interpreter process as an argument.
 Once the tests have been run, the directory and its contents are deleted again.
 The \texttt{stdout} of the process is then read to determine whether the tests succeeded or not.
 Finally, the interpreter output and the test success flag is packaged into a JSON object and sent back to the client.
+
 Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, as described in chapter \todo{ref benchmarks}. \todo{Make a transition to the queue system chapter}
+In order to address this, we started by refactoring the code base to allow running several instances of the GHC interpreter process at the same time.
+However, despite this running faster for a small number of clients, this approach in itself is not sufficiently stable:
+If multiple clients were to post a code submission at the same time, the test runner will start a new process for each request.
+Given a large enough number of requests, this would crash the test runner web server.
+Therefore, we needed a way to limit the number of running GHC interpreter processes while at the same time storing subsequent requests for future processing.
 
-% Lægger op til at vi kan snakke om hvordan vi har gjort det Blazingly Fast (TM)
-
-% What happens on the front end?
-    % Created by the teacher
-    % Stored in the database
-    % Fetched from db when student loads an exercise
-    % Sent along with the request to the backend
-% What happens on the backend?
-    % Endpoint receieves request
-    % We use hspec because it was human readable DSL (easier to read than i.e. HUnit).
-    % runhaskell process is started which executes the tests
-    % Random directory generator + clean-up
-    % Upon completion of tests, result is sent back to the frontend/student/user.
