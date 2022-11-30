@@ -1,4 +1,4 @@
-The following chapter contains short introductions to the most important technologies used in the project. Additionally, we also introduce relevant theory.
+The following chapter contains short introductions to the most important technologies used in the project.
 
 \section*{Glasgow Haskell Compiler}
 Out of the currently available Haskell compilers we use the Glasgow Haskell Compiler (GHC) for interpreting the Haskell exercises and running tests for the submissions. The GHC compiler is recommended by the Haskell Organisation and it is recommended as the go-to compiler/interpreter by the Programming Paradigms lecturer\cite{Haskell_GHC}.
@@ -37,13 +37,13 @@ An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestE
 Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla. 
 The project was then sponsored by Mozilla from 2009 to 2021 where the project along with all trademarks was moved to the newly create Rust Foundation. 
 The idea behind Rust was to challenge the idea that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}.
-Most other programming languages today operate in a band where either safety or control is valued highest and the other diminished. An example of this is C that has high level control but lacks safety.
+Most other programming languages today operate in a band where either safety or control is valued highest and the other diminished. An example of this is C that has high level control but lacks safety.\todo{source}
 Here Rust provides the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages like Python. 
 As such, the main overall goal of Rust is to provide as much safety as possible in a low-level programming language without sacrificing any speed\cite{Rust_in_Action}.
 
 In order to achieve this goal Rust provides a large number of safety features among these are its most distinguishing feature which prevents invalid data access at compile time. 
 Considering a research article by Microsoft Security Research Center stating that invalid data access is behind 70\% of serious security bugs in modern programs this is a large deal\cite{Safe_Systems_Languages}. 
-Instead of relying on the developer to deal with it, Rust's compiler guarantees any compiled program is memory-safe.
+Instead of relying on the developer to deal with it, Rust's compiler guarantees any compiled program is memory-safe\todo{source}.
 
 Our reason for using Rust is twofold: 
 \begin{enumerate}
@@ -63,7 +63,7 @@ We use Docker to set up local development environments for the APIs and Database
 tRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation. 
 It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code. 
 This in turn allows developers to not have the actual server code exposed in the \frontend{}. 
-Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project, which is a language-agnostic framework\cite{tRPC}.
+Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project\cite{tRPC}.
 In tRPC, a query is like a read operation, while a mutation is similar to create, update, or delete operations.
 
 \section*{Prisma}
@@ -78,7 +78,7 @@ Prisma enables this productivity improvement by allowing developers to define th
 As the server-side use of \javascript{} keeps growing in popularity its inability to provide developers with access to strong type checking and compile time error checking continues to prevent it from being the go-to language.
 As a way to address these problems, \typescript{} was designed to try and bridge this gap without requiring developers to learn a new language.
 Instead, \typescript{} was developed as a syntactic superset to \javascript{} allowing developers to keep building into their already existing knowledge but with additional features. 
-This also allows for all \javascript{} projects to be converted to \typescript{} projects allowing for easier movement between the two languages\cite{TypeScript}. 
+This means that all \javascript{} projects are syntactically valid in \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably.\cite{TypeScript}. 
 \typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling all the written instructions to its \javascript{} equivalents during the compilation process. 
 This is possible because \typescript{} itself is compiled into \javascript{}, which is an interpreted language. 
 
