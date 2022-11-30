@@ -5,13 +5,14 @@ mod debug;
 
 #[macro_use]
 extern crate rocket;
-#[launch]
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
-    rocket::build()
-        .mount("/", routes![endpoints::index::index]).await?
-        .mount("/", routes![endpoints::haskell::new]).await?
-        .attach(endpoints::cors::CORS);
+    let _rocket = rocket::build()
+        .mount("/", routes![endpoints::index::index])
+        .mount("/", routes![endpoints::haskell::new])
+        .attach(endpoints::cors::CORS)
+        .ignite().await?
+        .launch().await?;
         
     Ok(())
 }
