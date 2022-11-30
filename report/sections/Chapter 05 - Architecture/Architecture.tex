@@ -1,6 +1,8 @@
 In this chapter we will describe the architecture of the entire system by first showing the overall structure followed by a short description of the individual components. 
 The platform allows lecturers to create a syllabus that includes problem sets, exercises and test cases for the exercises. Additionally, students can do the exercises that the lecturer has provided. 
-The platform is a web application with a user-interface. It has business logic to handle user requests and authentication with roles, which means users of varying roles have different permissions. The platform can run tests against code, to check whether it satisfies given requirements. Account data, test runs, and syllabus data is persisted in a database.
+The platform is a web application designed using a client-server architecture. Using this architecture the client communicates with a server using HTTP to send \textit{request} messages. The server waits for client requests and processes the requests when they arrive and replies to the requests with a \textit{response} message.
+
+The platform has a user-interface as well as business logic to handle user requests. The platform supports role-based authentication with roles, meaning that users of varying roles have access to different functionality. The platform can run tests, to check whether a piece of code solves an exercise. Account data, test runs, and syllabus data is persisted in a database.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
 
 \begin{figure}[H]
@@ -10,7 +12,7 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 	\label{fig:Architecture}
 \end{figure}
 
-The architecture for the system is based on a client-server structure\todo{explain client-server structure}. Additionally, we have added an API running a separate server instance to handle code execution and test, called \textit{Test runner}. As each component is introduced, in the following sections, we will elaborate on the choices made for each component, in relation to this structure.
+Note that the platform has an API running on a separate server instance to handle code execution and test, called \textit{Test runner}. As components are introduced in the following sections, we elaborate on the choices made for each component, in relation to this structure.
 
 \section{Back-end system}
 The back-end system has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture. 
@@ -43,7 +45,7 @@ The structure of database can be explained through the two types of users of the
 In order to support different roles in the system, we have created the entities \textit{Role} and \textit{User}. The \textit{Role} entity has one attribute called \textbf{Name}. This corresponds to the name of the role. The \textit{User} entity has the attributes \textbf{Id}, which is a unique identifier, \textbf{Name}, \textbf{Email}, \textbf{EmailVerifed} which is when the email was verified and an \textbf{Image} attribute which contains the URL for an image of the user. The \textit{User} entity has a many-to-one relationship with the entity \textit{Role}, which means that users can only have one role.
 
 To support a lecturer in creating a syllabus for a semester course we have created the entities \textit{Syllabus}, \textit{Problemset}, \textit{Problem} and \textit{test}. For each entity, a set of attributes have been added to contain the relevant data and relationships between these entities to annotate their relation.
-For the \textit{Problem} entity we have added an \textbf{Id} attribute as a unique identifier, a \textbf{Name} attribute, a \textbf{Template} attribute, which contains code that will be automatically included in the editor when starting a problem. This ensures that the functions that required for the tests are included, as described in section Hspec \todo{Need proper ref - May not be hspec}. The final attribute is the \textbf{Description}, which contains the description of the exercise.
+For the \textit{Problem} entity we have added an \textbf{Id} attribute as a unique identifier, a \textbf{Name} attribute, a \textbf{Template} attribute, which contains code that will be automatically included in the editor when starting a problem. This ensures that the functions are included in a module which can later be accessed by \textbf{Hspec}. The final attribute is the \textbf{Description}, which contains the description of the exercise.
 
 The \textit{Test} entity has the attribute \textbf{Code}. This contains the test code that the lecturer has written for a problem. A \textit{Problem} and a \textit{Test} are in a one-to-many relationship with each other, where a \textit{Problem} has many \textit{tests}. This allows a lecturer to define multiple tests for a problem.
 
@@ -59,3 +61,5 @@ The remaining entities \textit{Account}, \textit{Session} and \textit{Verificati
 \section{Test runner}
 As previously mentioned, the platform is able execute code by sending the submitted code to the Test Runner API which verifies whether the code is syntactically correct and satisfies the tests defined by the lecturer.
 Since the Test runner is running on its own server instance, we created endpoints that allow the backend to communicate with the Test runner API. When the submitted code has been processed the output will be returned to the caller.
+
+In the following chapters we will elaborate on the most important components of our system. In these chapters we will give a detailed description of how the components work and their structure.
