@@ -1,22 +1,21 @@
-The Haskell programming language is purely functional\cite{} and builds upon the lambda calculus model of computation \cite{}.
+The Haskell programming language is purely functional\cite{Haskell_landing} and builds upon the lambda calculus model of computation \cite{Haskell_book}.
 Unlike many other programming languages, Haskell can both be interpreted or compiled into an executable binary file.
 It is a statically typed language implementing many mathematical constructs such as currying, set-builder notation, recursive definitions of both types and functions, and more.
 This allows the programmer to create concise solutions that would normally be quite verbose in other programming paradigms.
-Therefore, many companies such as Meta and Galois use Haskell for cryptography, avionics monitoring and spam filtering.
+Therefore, many companies such as Meta and Galois use Haskell for cryptography, avionics monitoring and spam filtering\cite{Haskell_companies}.
 Thus, Haskell and other languages within the functional programming paradigm are useful tools for software engineers.
 
 
 Haskell is taught in the Programming Paradigms course on the 1st semester of the Software Master's Degree at \aau{}.
 Most students attending this course failed in the past.
 This resulted in a survey being sent out, and a student task force being assembled to understand the issues that caused the high failure rate.
-Here, many students mentioned not feeling experienced enough with the programming languages used in the course to teach the functional and logical programming paradigms.
+Here, many students mentioned not feeling experienced enough with the programming languages used in the course to teach the functional and logical programming paradigms. This can be seen in appendix \ref{chap:PP-intro}.
 
 
 Consequently, \aau{} chose to restructure the course entirely.
 Rather than teaching many different programming languages within the functional and logical programming paradigms, the course was restructured to focus only on Haskell.
 Furthermore, the course now features more practical programming exercises with classroom discussion in-between, rather than traditional lectures followed by a separate exercise session.
-Supporting this way of teaching, the course lectures have been moved to a more classical classroom setup.
-By using a shared monitor at each table, multiple students can work together in groups to solve given problem sets.
+Supporting this way of teaching, the course lectures have been moved to a more specialized classroom setup. The classroom has been set up, such that it has tables for all student groups, each having a monitor that can be shared between the students. This allows the student groups to work together on solving problems given in the lecture.
 In addition, a primary monitor at the lecture desk enables the professor to view and share other groups' monitors such that student solutions can be used for classroom discussions.
 
 
@@ -38,7 +37,7 @@ These platforms offer an alternative approach to learning programming languages 
 The feedback loop for each platform is quite different, however.
 
 
-Codewars focuses on competitive programming, meaning users compete to solve problems fastest and most efficient way.
+CodeWars focuses on competitive programming, meaning users compete to solve problems in the fastest and most efficient way.
 When a user submits a solution to a problem, one or more tests are used to verify whether or not the submitted code solves the given problem. 
 However, the problems do not constrain the user to use specific programming language constructs in their solution.
 Therefore the solutions with the highest ratings can include language constructs that are foreign to a new programmer. 
@@ -70,7 +69,7 @@ Information about submitted solutions are persisted in a relational database suc
 To examine the scalability of the solution essential parts of the platform have been stress-tested to ensure availability and reliability when performing under unexpectedly many users \todo{source saying that it ensures QoS and R}.
 
 In the following chapters, we describe this platform and how it aims to solve the problem of quickly verifying whether a submitted Haskell program satisfies certain solution criteria defined in test code. 
-In chapter \ref{chap:preliminaries} we present the theory and terminology necessary to understand the developed solution. 
+In chapter \ref{chap:preliminaries} we present the theory and technology necessary to understand the developed solution. 
 Chapter \ref{chap:Specification} introduces specifications and use-cases that the developed solution must satisfy. 
 Chapter \ref{chap:Design} and \ref{chap:Architecture} details the architecture and design of the solution in terms of components and user interface.
 Chapters \ref{chap:TestRunner} -- \ref{chap:QueueSystem} presents a detailed description of key functionality of the solution, and chapter \ref{chap:Benchmarking} describes an approach to benchmarking and stress-testing the solution. 
