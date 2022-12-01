@@ -64,6 +64,7 @@ The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt
 A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} package.
 This allows us to combine functionality from the two packages.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
+
 Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} package to run a number of tasks asynchronously but with the aforementioned limit. 
 The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
 
@@ -74,3 +75,7 @@ Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other
 
 In summary, a specified number of concurrent threads in a thread pool continuously receive code submissions from the \texttt{ReceiverStream} channel.
 Each submission is then processed by one of these threads, and the result of the test runner is packaged into the hashmap where the UUID serves as a key to look up the result.
+
+While this approach solved the initial of only being able to process one code submission at a time, the astute reader may have considered that the hashmap continuously grows over time, never releasing the memory contained within.
+Eventually, the memory use of the web server would exceed its capacity, resulting in a crash.
+In the following chapter, we introduce a sweeping system as a solution to this problem.
