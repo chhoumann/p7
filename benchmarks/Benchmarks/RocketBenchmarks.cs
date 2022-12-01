@@ -32,7 +32,7 @@ public class RocketBenchmarks
             actions.Add(async () =>
             {
                 var post = await client.Post(CodeSubmission);
-                Console.WriteLine(post.Content);
+                Console.WriteLine(post);
                 post.EnsureSuccessStatusCode();
                 var result = await JsonSerializer.DeserializeAsync<RocketTestRunResult>(
                     await post.Content.ReadAsStreamAsync()
