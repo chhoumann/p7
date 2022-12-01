@@ -5,6 +5,8 @@ public static class TaskBuilder
     public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
         where T : CodeRunnerClient, new()
     {
+        Console.WriteLine("\n \n \n HERE");
+
         List<Action> clientActions = new(count);
         List<Task> tasks = new(count);
         
