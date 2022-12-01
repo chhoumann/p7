@@ -45,7 +45,7 @@ The creation and content of the the thread pools can be seen in code snippet \re
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
-    limit : usize
+    limit: usize
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
     
@@ -87,7 +87,7 @@ Describe sweeping here...
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
-    limit : usize
+    limit: usize
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
     let last_sweep_time = Arc::new(Mutex::new(SystemTime::now()));
@@ -98,13 +98,15 @@ async fn worker_thread(
         let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res));
 
-        if last_sweep_time.lock().unwrap().elapsed().unwrap() > config.duration_between_sweeps {
+        if last_sweep_time.lock().unwrap().elapsed().unwrap() > 
+            config.duration_between_sweeps {
             map.retain(|&_, res| {
                 if res.is_none() {
                     return true
                 }
 
-                res.as_ref().unwrap().timestamp.elapsed().unwrap() <= config.lifetime
+                res.as_ref().unwrap().timestamp.elapsed().unwrap() <= 
+                    config.lifetime
             });
             
             *last_sweep_time.lock().unwrap() = SystemTime::now();
