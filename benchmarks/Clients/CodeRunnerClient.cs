@@ -30,8 +30,6 @@ public class CodeRunnerClient
 
     public Task<HttpResponseMessage> Post(CodeSubmission toSend)
     {
-        Console.WriteLine(toSend);
-
         return _client.PostAsJsonAsync(_postProblemUrl, toSend);
     }
     

@@ -29,7 +29,7 @@ public class RocketBenchmarks
     { 
         HttpResponseMessage  response = await client.Post(CodeSubmission);
         
-        Console.WriteLine(response);
+        Console.WriteLine(response.ToString());
         Console.WriteLine(response.StatusCode);
 
         Console.WriteLine(await response.Content.ReadAsStringAsync());
