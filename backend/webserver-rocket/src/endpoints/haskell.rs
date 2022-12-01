@@ -11,6 +11,8 @@ pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json
          code: exercise_submission_request.code.to_string(),
          test: exercise_submission_request.test.to_string()
     };
+
+    std::thread::sleep(std::time::Duration::from_secs(1));
     
     let json_exercise_submission = Json(exercise_submission)
         .into_inner();
