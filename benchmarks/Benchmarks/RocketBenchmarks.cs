@@ -32,6 +32,7 @@ public class RocketBenchmarks
             actions.Add(async () =>
             {
                 var post = await client.Post(CodeSubmission);
+                Console.WriteLine(post.Content);
                 post.EnsureSuccessStatusCode();
                 var result = await JsonSerializer.DeserializeAsync<RocketTestRunResult>(
                     await post.Content.ReadAsStreamAsync()
@@ -44,6 +45,7 @@ public class RocketBenchmarks
             tasks.Add(Task.Run(action));
         }
 
+        
         Task.WhenAll(clientActions).Wait();
     }
 
