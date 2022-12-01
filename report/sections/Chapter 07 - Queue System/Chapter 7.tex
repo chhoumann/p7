@@ -77,5 +77,5 @@ In summary, a specified number of concurrent threads in a thread pool continuous
 Each submission is then processed by one of these threads, and the result of the test runner is packaged into the hashmap where the UUID serves as a key to look up the result.
 
 While this approach solved the initial problem of only being able to process one code submission at a time, a new problem is the fact that the hashmap continuously grows over time --- data is only ever added to the hashmap and never removed.
-Consequently, the memory use of the web server would eventually exceed its capacity, resulting in a crash.
+Consequently, the memory use of the test runner would eventually exceed its capacity, resulting in a crash.
 In the following chapter, we introduce a sweeping system as a solution to this problem.
