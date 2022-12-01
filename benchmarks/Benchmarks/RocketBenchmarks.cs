@@ -21,13 +21,17 @@ public class RocketBenchmarks
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
-        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, Action);
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, client =>
+        {
+            client.Post(CodeSubmission);
+        } );
 
         Task.WhenAll(clientActions).Wait();
     }
 
     private async void Action(CodeRunnerClient client)
     {
+        
         HttpResponseMessage response = await client.Post(CodeSubmission);
         response.EnsureSuccessStatusCode();
     }
