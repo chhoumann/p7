@@ -8,7 +8,7 @@ namespace CodeRunnerClients;
 public class CodeRunnerClient
 {
     protected readonly HttpClient _client = new();
-    private static readonly Uri _postProblemUrl = CreateUri("haskell/submit");
+    private static readonly Uri _postProblemUrl = CreateUri("haskell/submit/");
 
     public CodeRunnerClient()
     {
@@ -25,7 +25,8 @@ public class CodeRunnerClient
             Host = Environment.GetEnvironmentVariable("HOST") ?? throw new EnvironmentNotSetException("HOST"),
             Path = endpointPath
         };
-        
+        Console.WriteLine("\n \n herrrrrrrrrr");
+        Console.WriteLine(v.ToString());
         return v.Uri;
     }
 
