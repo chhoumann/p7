@@ -11,12 +11,11 @@ namespace Benchmarks;
 [SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 0, targetCount: 10)]
 public class RocketBenchmarks
 {
-    [Params(10, 20, 50, 100)]
-    public int NumberOfRequests { get; set; }
-    
+    [Params(10, 20, 50, 100)] public int NumberOfRequests { get; set; }
+
     [ParamsSource(nameof(CodeSubmissions))]
     public CodeSubmission CodeSubmission { get; set; }
-    
+
     public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
@@ -24,25 +23,36 @@ public class RocketBenchmarks
     {
         var clientActions = new List<Task>(NumberOfRequests);
         List<Task> tasks = new(NumberOfRequests);
-        
+        List<Action> actions = new List<Action>(NumberOfRequests);
+
         for (int i = 0; i < NumberOfRequests; i++)
         {
             CodeRunnerClient client = new();
-             p;
-            p.Add(async () =>
-            {
-                var Result = await JsonSerializer.DeserializeAsync<PullIdResponse>(await client.Post(CodeSubmission).Result.Content.ReadAsStreamAsync());
 
-                
-            };
+            actions.Add(async () =>
+            {
+                var post = await client.Post(CodeSubmission);
+                Console.WriteLine(post);
+                Console.WriteLine("kill!!!!");
+                post.EnsureSuccessStatusCode();
+                var result = await JsonSerializer.DeserializeAsync<RocketTestRunResult>(
+                    await post.Content.ReadAsStreamAsync()
+                );
+            });
         }
+
+        foreach (Action action in actions)
+        {
+            tasks.Add(Task.Run(action.Invoke));
+        }
+
         
         Task.WhenAll(clientActions).Wait();
     }
 
     private async void Action(CodeRunnerClient client)
-    { 
-        HttpResponseMessage  response = await client.Post(CodeSubmission);
+    {
+        HttpResponseMessage response = await client.Post(CodeSubmission);
         response.EnsureSuccessStatusCode();
     }
 }
