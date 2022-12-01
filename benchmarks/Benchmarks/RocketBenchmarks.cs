@@ -21,15 +21,14 @@ public class RocketBenchmarks
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
-        Console.WriteLine("New operation\n \n \n");
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, Action);
         Task.WhenAll(clientActions).Wait();
     }
 
     private async void Action(CodeRunnerClient client)
     { 
-        HttpResponseMessage  response = await client.Post(CodeSubmission);
         Console.WriteLine("\n \n \n HERE");
+        HttpResponseMessage  response = await client.Post(CodeSubmission);
         Console.WriteLine(await response.Content.ReadAsStringAsync());
         if (!response.IsSuccessStatusCode)
         {
