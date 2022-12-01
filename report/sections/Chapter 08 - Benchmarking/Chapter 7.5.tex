@@ -1,6 +1,9 @@
-\chapter{Benchmarking} \label{chap:Benchmarking}
-To ensure that the developed platform can handle an appropriate amount of users, the Test Runner has been stress tested and benchmarked.
-In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+\chapter{Benchmark and stress testing} \label{chap:Benchmark}
+In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation.
+The goal of the stress tests and benchmarks are twofold: 
+First, it helps us determine an upper limit of simultaneous users before response times renders a student unproductive.
+Secondly, it helps us determine pull times for clients using the Test Runner.
+To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
 a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
 
 \section{Orchestration and Test Runner parameterization}
