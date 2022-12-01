@@ -7,7 +7,7 @@ namespace Benchmarks;
 
 [StopOnFirstError]
 //launchCount = #processes, warmup iterations, target is actual bench count.
-[SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 10, targetCount: 40)]
+[SimpleJob(RunStrategy.Monitoring, launchCount: 5, warmupCount: 0, targetCount: 10)]
 public class RocketBenchmarks
 {
     [Params(10, 20, 50, 100)]
@@ -28,14 +28,6 @@ public class RocketBenchmarks
     private async void Action(CodeRunnerClient client)
     { 
         HttpResponseMessage  response = await client.Post(CodeSubmission);
-        
-        Console.WriteLine(response.ToString());
-        Console.WriteLine(response.StatusCode);
-
-        Console.WriteLine(await response.Content.ReadAsStringAsync());
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception();
-        }
+        response.EnsureSuccessStatusCode();
     }
 }
