@@ -5,13 +5,16 @@ use crate::services::code_runner;
 
 
 #[post("/haskell/submit", format="json", data = "<exercise_submission_request>")]
-pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> { 
-    let exercise_submission = ExerciseSubmissionRequest 
+pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json<CodeRunnerResponse> {
+    println!("exercise gotten");
+
+    let exercise_submission = ExerciseSubmissionRequest
     {
          code: exercise_submission_request.code.to_string(),
          test: exercise_submission_request.test.to_string()
     };
 
+    std::thread::sleep(std::time::Duration::from_secs(1));
 
     let json_exercise_submission = Json(exercise_submission)
         .into_inner();
@@ -19,7 +22,7 @@ pub fn new(exercise_submission_request: Json<ExerciseSubmissionRequest>) -> Json
     let exercise_code = json_exercise_submission.code;
     let test_code = json_exercise_submission.test;
     let result = code_runner::execute(exercise_code, test_code);
-
+    println!("exercise done");
     let output = match result {
         Ok(output) => Json(CodeRunnerResponse { 
             success: true,

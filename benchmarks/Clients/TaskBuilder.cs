@@ -18,9 +18,6 @@ public static class TaskBuilder
         {
             tasks.Add(Task.Run(clientAction));
         }
-
-        Console.WriteLine("DET ER HELT FUCKED");
-        
         return tasks;
     }
 }

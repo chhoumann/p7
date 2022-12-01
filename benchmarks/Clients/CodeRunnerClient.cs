@@ -22,7 +22,7 @@ public class CodeRunnerClient
         {
             Scheme = "http",
             Port = 8000,
-            Host = "localhost",
+            Host = "127.0.0.1",
             Path = endpointPath
         };
         return v.Uri;
@@ -30,7 +30,6 @@ public class CodeRunnerClient
 
     public Task<HttpResponseMessage> Post(CodeSubmission toSend)
     {
-        Console.WriteLine("fucked");
         return _client.PostAsJsonAsync(_postProblemUrl, toSend);
     }
     
