@@ -25,8 +25,6 @@ public class CodeRunnerClient
             Host = Environment.GetEnvironmentVariable("HOST") ?? throw new EnvironmentNotSetException("HOST"),
             Path = endpointPath
         };
-        Console.WriteLine("\n \n herrrrrrrrrr");
-        Console.WriteLine(v.ToString());
         return v.Uri;
     }
 

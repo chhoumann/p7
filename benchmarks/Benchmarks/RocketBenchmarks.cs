@@ -26,7 +26,11 @@ public class RocketBenchmarks
     }
 
     private async void Action(CodeRunnerClient client)
-    {
-        await client.Post(CodeSubmission);
+    { 
+        HttpResponseMessage  response = await client.Post(CodeSubmission);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception();
+        }
     }
 }
