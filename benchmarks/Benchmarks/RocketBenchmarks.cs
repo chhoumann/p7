@@ -21,32 +21,8 @@ public class RocketBenchmarks
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
-        var clientActions = new List<Task>(NumberOfRequests);
-        List<Task> tasks = new(NumberOfRequests);
-        List<Action> actions = new List<Action>(NumberOfRequests);
+        IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, Action);
 
-        for (int i = 0; i < NumberOfRequests; i++)
-        {
-            CodeRunnerClient client = new();
-
-            actions.Add(async () =>
-            {
-                var post = await client.Post(CodeSubmission);
-                Console.WriteLine(post);
-                Console.WriteLine("kill!!!!");
-                post.EnsureSuccessStatusCode();
-                var result = await JsonSerializer.DeserializeAsync<RocketTestRunResult>(
-                    await post.Content.ReadAsStreamAsync()
-                );
-            });
-        }
-
-        foreach (Action action in actions)
-        {
-            tasks.Add(Task.Run(action.Invoke));
-        }
-
-        
         Task.WhenAll(clientActions).Wait();
     }
 
