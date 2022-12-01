@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using CodeRunnerClients;
 using CodeRunnerClients.DataTransfer;
