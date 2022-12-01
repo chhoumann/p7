@@ -83,7 +83,7 @@ In the following section, we introduce a sweeping system as a solution to this p
 \section{Sweeping system}
 Describe sweeping here...
 
-\begin{lstlisting}[language=rust, escapechar=|, caption={Temp}, label={lst:sweeping}]
+\begin{lstlisting}[language=rust, escapechar=~, caption={Temp}, label={lst:sweeping}]
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
@@ -94,19 +94,12 @@ async fn worker_thread(
     let config = sweep_configuration::from_dot_env();
     
     stream.for_each_concurrent(limit, |work| async {
-        debug!("Running worker thread on UUID {}...", work.id);
-
         let res = schedule_test(work.submission).await;
         let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res));
 
         if last_sweep_time.lock().unwrap().elapsed().unwrap() > config.duration_between_sweeps {
-            // Sweep old requests
-            debug!("Sweeping now...");
-
             map.retain(|&_, res| {
-                // If there is no test runner result associated with the given UUID, keep the
-                // element because no result has been produced yet.
                 if res.is_none() {
                     return true
                 }
