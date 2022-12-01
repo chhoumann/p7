@@ -13,15 +13,12 @@ public static class TaskBuilder
             T client = new();
             clientActions.Add(() => action.Invoke(client));
         }
-        Console.WriteLine("\n \n \n HERE");
 
         foreach (Action clientAction in clientActions)
         {
             tasks.Add(Task.Run(clientAction));
         }
-
-        Console.WriteLine("\n \n \n HERE");
-
+        
         return tasks;
     }
 }

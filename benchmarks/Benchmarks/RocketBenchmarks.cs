@@ -27,8 +27,8 @@ public class RocketBenchmarks
 
     private async void Action(CodeRunnerClient client)
     { 
+        Console.WriteLine("HERE");
         HttpResponseMessage  response = await client.Post(CodeSubmission);
-        Console.WriteLine("\n \n \n HERE");
         Console.WriteLine(response.StatusCode);
 
         Console.WriteLine(await response.Content.ReadAsStringAsync());
