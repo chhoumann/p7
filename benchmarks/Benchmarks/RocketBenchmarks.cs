@@ -21,6 +21,7 @@ public class RocketBenchmarks
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
+        Console.WriteLine("New operation\n \n \n");
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, Action);
         Task.WhenAll(clientActions).Wait();
     }
