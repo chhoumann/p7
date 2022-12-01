@@ -30,6 +30,7 @@ public class CodeRunnerClient
 
     public Task<HttpResponseMessage> Post(CodeSubmission toSend)
     {
+        Console.WriteLine("fucked");
         return _client.PostAsJsonAsync(_postProblemUrl, toSend);
     }
     
