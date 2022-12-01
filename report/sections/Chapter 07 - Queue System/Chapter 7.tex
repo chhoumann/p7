@@ -22,9 +22,9 @@ There are three possible responses from this endpoint:
 
 In summary, the test runner web server features two endpoints.
 The first endpoint expects a POST request containing a code submission which it enqueues into a worker queue along.
-It then responds to the client with a unique token.
-This token is also used by the web server as a key to look up the given code submissions in the queue.
-The second endpoint expects a GET request with a token as a parameter that is then used to look up the result of processing the code submission with the matching token ID.
+It then responds to the client with a unique token (UUID).
+This UUID is also used by the web server as a key to look up the given code submissions in the queue.
+The second endpoint expects a GET request with a UUID as a parameter that is then used to look up the result of processing the code submission with the matching UUID.
 It then responds to the client with the result of processing that submission if it was found.
 
 \section{The queue}
@@ -34,7 +34,7 @@ The \texttt{layer} feature is axum's default implementation of middleware for pr
 In our case, there are two key variables inside the shared state structure that both endpoints need access to:
 \begin{enumerate}
     \item \textbf{A sender channel:} In practice, this channel is used as a worker queue in which code submission requests are enqueued for processing. It has a corresponding \textbf{receiver channel}, which is to dequeue and schedule work. Importantly, requests sent via the sender channel are received in a first-in-first-out order.
-    \item \textbf{The job results hashmap:} Upon first receiving a code submission request, a unique token is generated and used as a key to reference an empty piece of work inside the hashmap. When the test runner has processed the code submission, it inserts the result of the work in the hashmap as the value in the hashmap using the token as the key. This value can then be looked up when the client requests the result processing their code submission, since the client is provided with the token upon sending a code submission, as previously mentioned.
+    \item \textbf{The job results hashmap:} Upon first receiving a code submission request, a UUID is generated and used as a key to reference an empty piece of work inside the hashmap. When the test runner has processed the code submission, it inserts the result of the work in the hashmap as the value in the hashmap using the UUID as the key. This value can then be looked up when the client requests the result processing their code submission, since the client is provided with the UUID upon sending a code submission, as previously mentioned.
 \end{enumerate}
 
 In order to limit the number of GHC interpreter processes, a thread pool with a specified size is created whose responsibility is to process code submissions.
@@ -66,3 +66,11 @@ This allows us to combine functionality from the two packages.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
 Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} package to run a number of tasks asynchronously but with the aforementioned limit. 
 The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
+
+The \texttt{schedule\_test} function calls the test runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code from the client, as described in chapter \ref{chap:TestRunner}.
+Once the result is computed, the thread acquires the mutex lock to the hashmap or blocks until it can acquire the lock.
+It then inserts the result into the hashmap by using the UUID as the key.
+Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other threads may access the hashmap.
+
+In summary, a specified number of concurrent threads in a thread pool continuously receive code submissions from the \texttt{ReceiverStream} channel.
+Each submission is then processed by one of these threads, and the result of the test runner is packaged into the hashmap where the UUID serves as a key to look up the result.
