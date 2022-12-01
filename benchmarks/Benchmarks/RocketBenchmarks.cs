@@ -43,7 +43,7 @@ public class RocketBenchmarks
 
         foreach (Action action in actions)
         {
-            tasks.Add(Task.Run(action));
+            tasks.Add(Task.Run(action.Invoke));
         }
 
         
