@@ -8,7 +8,7 @@ namespace CodeRunnerClients;
 public class CodeRunnerClient
 {
     protected readonly HttpClient _client = new();
-    private static readonly Uri _postProblemUrl = CreateUri("haskell/submit/");
+    private static readonly Uri _postProblemUrl = CreateUri("haskell/submit");
 
     public CodeRunnerClient()
     {
