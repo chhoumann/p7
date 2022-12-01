@@ -28,6 +28,41 @@ The second endpoint expects a GET request with a token as a parameter that is th
 It then responds to the client with the result of processing that submission if it was found.
 
 \section{The queue}
+We have two endpoints that need to share data, and the Rust programming language does not allow global variables.
+Therefore, we opted to create a shared state data structure using the \texttt{layer} feature in the axum framework.
+The \texttt{layer} feature is axum's default implementation of middleware for processing data across a group of endpoints.
+In our case, there are two key variables inside the shared state structure that both endpoints need access to:
+\begin{enumerate}
+    \item \textbf{A sender channel:} In practice, this channel is used as a worker queue in which code submission requests are enqueued for processing. It has a corresponding \textbf{receiver channel}, which is to dequeue and schedule work. Importantly, requests sent via the sender channel are received in a first-in-first-out order.
+    \item \textbf{The job results hashmap:} Upon first receiving a code submission request, a unique token is generated and used as a key to reference an empty piece of work inside the hashmap. When the test runner has processed the code submission, it inserts the result of the work in the hashmap as the value in the hashmap using the token as the key. This value can then be looked up when the client requests the result processing their code submission, since the client is provided with the token upon sending a code submission, as previously mentioned.
+\end{enumerate}
 
-% Outline...
-%
+In order to limit the number of GHC interpreter processes, a thread pool with a specified size is created whose responsibility is to process code submissions.
+These threads have access to the aforementioned receiver channel containing work to be processed.
+The creation and content of the the thread pools can be seen in code snippet \ref{lst:worker-thread}.
+
+\begin{lstlisting}[language=rust, escapechar=|, caption={Rust code showing allocation of thread pools and scheduling of code submission processing.}, label={lst:worker-thread}]
+async fn worker_thread(
+    rx: Receiver<TestRunnerWork>,
+    job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    limit : usize
+) {
+    let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
+    
+    stream.for_each_concurrent(limit, |work| async {
+        debug!("Running worker thread on UUID {}...", work.id); |\label{line:concurrent-start}|
+
+        let res = schedule_test(work.submission).await;
+        let mut map = job_results.lock().unwrap();
+        map.insert(work.id, Some(res)); |\label{line:concurrent-end}|
+    }).await;
+}
+\end{lstlisting}
+
+We use the \texttt{futures} package in Rust to allocate some number of threads dictated by the variable \texttt{limit} of type \texttt{usize}.
+The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility pacckage.
+A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} package.
+This allows us to combine functionality from the two packages.
+In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
+Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} package to run a number of tasks asynchronously but with the aforementioned limit. 
+The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
