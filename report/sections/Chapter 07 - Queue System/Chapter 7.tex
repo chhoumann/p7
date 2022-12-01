@@ -60,7 +60,7 @@ async fn worker_thread(
 \end{lstlisting}
 
 We use the \texttt{futures} package in Rust to allocate some number of threads dictated by the variable \texttt{limit} of type \texttt{usize}.
-The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility pacckage.
+The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility package.
 A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} package.
 This allows us to combine functionality from the two packages.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
