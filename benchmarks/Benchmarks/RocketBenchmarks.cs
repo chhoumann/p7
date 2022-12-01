@@ -33,6 +33,7 @@ public class RocketBenchmarks
             {
                 var post = await client.Post(CodeSubmission);
                 Console.WriteLine(post);
+                Console.WriteLine("kill!!!!");
                 post.EnsureSuccessStatusCode();
                 var result = await JsonSerializer.DeserializeAsync<RocketTestRunResult>(
                     await post.Content.ReadAsStreamAsync()
