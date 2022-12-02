@@ -84,7 +84,7 @@ In the following section, we introduce a sweeping system as a solution to this p
 Data is added to the job results hashmap every time a client posts a code submission.
 As a reminder, this is simply a key-value pair consisting of a UUID and a Rust \texttt{Option} of type \texttt{TestRunnerResult}.
 To solve the problem of the continuously growing size of the hashmap, our first idea was to remove data from the hashmap when the client polls for it.
-In other words, the data is kept in memory \textit{until} the client requests it, at which point it is returned to the client through a HTTP response and subsequently removed from the job results hashmap.
+In other words, the data is kept in memory \textit{until} the client requests it, at which point it is returned to the client through an HTTP response and subsequently removed from the job results hashmap.
 While this worked fine under ideal circumstances, two potential issues with this approach may arise in practice:
 \begin{itemize}
     \item The result being removed immediately upon being requested means that if some client-side error occurs, the client is unable to request the data again.
