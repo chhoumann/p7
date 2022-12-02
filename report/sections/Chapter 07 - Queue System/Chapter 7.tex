@@ -137,3 +137,8 @@ Line \ref{line:sweep-config} loads the sweeping configuration data structure by 
 The configurable variables include the duration between sweeps as well as the lifetime of data inside the hashmap.
 Lines \ref{line:sweep-start} --- \ref{line:sweep-end} is the sweeping algorithm itself.
 For each element in the hashmap where the \texttt{Option} type has a value, job results are removed if their elapsed time exceeds the configured lifetime.
+This is achieved using the \texttt{retain()} function, a function that retains elements in the hashmap if and only if they fulfill some predicate.
+
+This sweeping system achieves the desired result of removing job result data from the hashmap to prevent it from continuously growing while still retaining the data for some time, allowing clients to request the same data multiple times should an error occur.
+Furthermore, one can tweak the aforementioned environment variables to best suit the circumstances under which the system is used.
+For example, lowering the duration between sweeps would result in the sweeping algorithm running more frequently, decreasing the system's memory usage but increasing the CPU usage.
