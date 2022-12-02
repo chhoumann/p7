@@ -10,7 +10,7 @@ However, this introduces a new problem.
 The server can no longer directly respond to a POST request with the test runner results because the request may be handled at a later point in time.
 This means that if the request were enqueued for long enough, it would eventually time out.
 In order to solve this, the test runner web server sends back a unique token to the client immediately upon receiving a POST request.
-This token serves as a ticket for the client. 
+This token serves as a ticket for the client.
 Using it, the client can continuously poll the server for the result of processing the request.
 To achieve this, we implemented a new endpoint which expects the token as a parameter.
 There are three possible responses from this endpoint:
@@ -34,7 +34,7 @@ The \texttt{layer} feature is axum's default implementation of middleware for pr
 In our case, there are two key variables inside the shared state structure that both endpoints need access to:
 \begin{enumerate}
     \item \textbf{A sender channel:} In practice, this channel is used as a worker queue in which code submission requests are enqueued for processing. It has a corresponding \textbf{receiver channel}, which is to dequeue and schedule work. Importantly, requests sent via the sender channel are received in a first-in-first-out order.
-    \item \textbf{The job results hashmap:} Upon first receiving a code submission request, a UUID is generated and used as a key to reference an empty piece of work inside the hashmap. When the test runner has processed the code submission, it inserts the result of the work in the hashmap as the value in the hashmap using the UUID as the key. This value can then be looked up when the client requests the result processing their code submission, since the client is provided with the UUID upon sending a code submission, as previously mentioned.
+    \item \textbf{The job results hashmap:} Upon first receiving a code submission request, a UUID is generated. This is used as a key inside the job results hashmap, where the value is initially set to Rust \texttt{Option} value of type \texttt{TestRunnerResult} --- in other words, a key-value pair with the UUID referencing an empty job result, indicating that the work has not yet been completed. An \texttt{Option} type is simply a nullable data structure in Rust; an optional value. When the test runner has processed the code submission, the result is inserted as the value of the \texttt{Option} type. This value can then be looked up when the client requests the result processing their code submission, since the client is provided with the UUID upon sending a code submission, as previously mentioned.
 \end{enumerate}
 
 In order to limit the number of GHC interpreter processes, a thread pool with a specified size is created whose responsibility is to process code submissions.
@@ -48,7 +48,7 @@ async fn worker_thread(
     limit: usize
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
-    
+
     stream.for_each_concurrent(limit, |work| async {
         debug!("Running worker thread on UUID {}...", work.id); |\label{line:concurrent-start}|
 
@@ -65,7 +65,7 @@ A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Strea
 This allows us to combine functionality from the two packages.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
 
-Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} package to run a number of tasks asynchronously but with the aforementioned limit. 
+Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} package to run a number of tasks asynchronously but with the aforementioned limit.
 The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
 
 The \texttt{schedule\_test} function calls the test runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code from the client, as described in chapter \ref{chap:TestRunner}.
@@ -81,7 +81,17 @@ Consequently, the memory use of the test runner would eventually exceed its capa
 In the following section, we introduce a sweeping system as a solution to this problem.
 
 \section{Sweeping system}
-Describe sweeping here...
+Data is added to the job results hashmap every time a client posts a code submission.
+As a reminder, this is simply a key-value pair consisting of a UUID and a Rust \texttt{Option} of type \texttt{TestRunnerResult}.
+To solve the problem of the continuously growing size of the hashmap, our first idea was to remove data from the hashmap when the client polls for it.
+In other words, the data is kept in memory \textit{until} the client requests it, at which point it is returned to the client through a HTTP response and subsequently removed from the job results hashmap.
+While this worked fine under ideal circumstances, two potential issues with this approach may arise in practice:
+\begin{itemize}
+    \item The result being removed immediately upon being requested means that if some client-side error occurs, the client is unable to request the data again.
+    \item If the client posts a code submission but never polls for the result (say, as a result of losing connection), the data still continues to remain in memory.
+\end{itemize}
+
+
 
 \begin{lstlisting}[language=rust, escapechar=~, caption={Temp}, label={lst:sweeping}]
 async fn worker_thread(
@@ -92,23 +102,23 @@ async fn worker_thread(
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
     let last_sweep_time = Arc::new(Mutex::new(SystemTime::now()));
     let config = sweep_configuration::from_dot_env();
-    
+
     stream.for_each_concurrent(limit, |work| async {
         let res = schedule_test(work.submission).await;
         let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res));
 
-        if last_sweep_time.lock().unwrap().elapsed().unwrap() > 
+        if last_sweep_time.lock().unwrap().elapsed().unwrap() >
             config.duration_between_sweeps {
             map.retain(|&_, res| {
                 if res.is_none() {
                     return true
                 }
 
-                res.as_ref().unwrap().timestamp.elapsed().unwrap() <= 
+                res.as_ref().unwrap().timestamp.elapsed().unwrap() <=
                     config.lifetime
             });
-            
+
             *last_sweep_time.lock().unwrap() = SystemTime::now();
         }
     }).await;
