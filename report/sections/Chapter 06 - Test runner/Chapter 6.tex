@@ -28,6 +28,12 @@ Lastly, the result is sent to the client and displayed on the page.
 \todo{Lots of screenshots! Show problem create modal, success code output and unsuccessful code output}.
 
 \section{Test runner process} \label{sec:test_runner_process}
+The test runner exposes an endpoint \texttt{/haskell/submit/}, which is used to post code submissions.
+Originally, we used the Rust crate Rocket to implement this endpoint.
+However, we eventually switched to using the axum crate instead, as it is developed and maintained by the same developers behind the Tokio package we make heavy use of for asynchronous programming and multithreading.
+Furthermore, it was deemed easier to implement a shared state among endpoints by leveraging axum's \texttt{layer} feature.
+We give an overview and a more technical explanation of how this was done in section \ref{sec:queue-system}.
+
 When the test runner receives the request from Next.js, its singular goal is to run the tests against the code and send the result of this back as fast as possible.
 In order to run the tests, we need to run the GHC interpeter on the test code, which, in turns, need access to the exercise submission code.
 The GHC interpreter can be run from the command line with arguments specifying the path Haskell file to run.
@@ -47,4 +53,3 @@ However, despite this running faster for a small number of clients, this approac
 If multiple clients were to post a code submission at the same time, the test runner will start a new process for each request.
 Given a large enough number of requests, this would crash the test runner web server.
 Therefore, we needed a way to limit the number of running GHC interpreter processes while at the same time storing subsequent requests for future processing.
-\todo{We need to mention which framework we use for endpoints (axum) - and maybe also mention that we used Rocket first but switched to axum for easier state sharing?}
