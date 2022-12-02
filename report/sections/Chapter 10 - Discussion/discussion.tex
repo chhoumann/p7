@@ -1,6 +1,25 @@
 In this chapter we will discuss how we fulfilled the learning goals for the semester as well as our own requirements for the project as stated in the MoSCoW analysis of table \ref{tab:MOSCOW}. We will also compare our system to current state of the art solutions. Finally we will discuss how we approached testing and benchmarking.
 
 \section{Learning goals}
+This semester required us to fulfill several learning goals related to building a web application or service. During this project we have designed and implemented a multilayer architecture for a web application. This architecture was based on a client-server structure with an additional API responsible for testing the code submissions as well as a database to persist data. This design was chosen because we just needed a standard approach to serving a website to users and be able to handle traffic in a regular way. The difference being that we also wanted to be able to compile Haskell code submissions and return the result to the users. This left us with the choice of either building this capability into the backend web server or provide a separate service. The issues that we had to consider were that the service had to be scalable, both in terms of speed, but also in terms of having the ability to compile other programming languages in the future. 
+To address the speed aspect, meaning how quickly we can serve users as the user count grows, we decided on the Rust programming language. In addition, we also decided to try using the Rust web framework \textit{Rocket}, but due to issues related to concurrency and asynchronous behavior, we later decided to switch to the web framework \textit{axum}. Having then built the API as a separate web server also gave us the the ability to potentially just add or remove new APIs in the future. Essentially, giving us the building blocks to transition into other architectures, such as micro services, if required.
+
+%decoupled - an advantage
+%strukturere en applikation i en flerlagsarkitektur ved hjælp af gængse programmønstre
+
+%designe, realisere og afteste en internetapplikation eller - service
+
+%gennemføre systematisk aftestning af applikationen/servicen og påvise at applikationen/servicen svarer til intentioner og brugernes behov
+%demonstrere færdigheder i udvikling af en internetapplikation eller – service af høj, intern og ekstern kvalitet, hvor der fokuseres på en skalérbar arkitektur og ”quality of service”
+
+
+%gennemføre systematisk evaluering af den valgte brugergrænseflade 
+
+%udvikle en kørende internetapplikation eller – service som løser brugernes problem
+
+
+
+
 %did we accomplish all of the learning goals of the semester?
 
 \section{Requirements}
