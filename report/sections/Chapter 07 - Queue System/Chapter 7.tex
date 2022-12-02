@@ -41,7 +41,7 @@ In order to limit the number of GHC interpreter processes, a thread pool with a 
 These threads have access to the aforementioned receiver channel containing work to be processed.
 The creation and content of the the thread pools can be seen in code snippet \ref{lst:worker-thread}.
 
-\begin{lstlisting}[language=rust, escapechar=|, caption={Rust code showing allocation of thread pools and scheduling of code submission processing.}, label={lst:worker-thread}]
+\begin{lstlisting}[language=rust, escapechar=~, caption={Rust code showing allocation of thread pools and scheduling of code submission processing.}, label={lst:worker-thread}]
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
@@ -50,11 +50,11 @@ async fn worker_thread(
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
 
     stream.for_each_concurrent(limit, |work| async {
-        debug!("Running worker thread on UUID {}...", work.id); |\label{line:concurrent-start}|
+        debug!("Running worker thread on UUID {}...", work.id); ~\label{line:concurrent-start}~
 
         let res = schedule_test(work.submission).await;
         let mut map = job_results.lock().unwrap();
-        map.insert(work.id, Some(res)); |\label{line:concurrent-end}|
+        map.insert(work.id, Some(res)); ~\label{line:concurrent-end}~
     }).await;
 }
 \end{lstlisting}
