@@ -97,7 +97,7 @@ This ensures that sweeping will not happen several times every second if multipl
 To achieve this, we introduced a new \texttt{timestamp} field to the \texttt{TestRunnerResult} data structure, which is set when a thread finishes processing a code submission.
 This timestamp simply denotes the point in time at it was added to the job results hashmap.
 Then, outdated data are removed from the hashmap if the difference between its timestamp and the current time is greater than some lifetime set through an environment variable.
-Code snippet \ref{lst:sweeping} shows the same function as code snippet \ref{lst:worker-thread}, however lines \ref{line:last-sweep-time} --- \ref{line:sweep-config} and lines \ref{line:sweep-start} --- \ref{line:sweep-end} have been added.
+Code snippet \ref{lst:sweeping} shows the same function as code snippet \ref{lst:worker-thread}, however lines \ref{line:last-sweep-time} --- \ref{line:sweep-config} and lines \ref{line:sweep-start} --- \ref{line:sweep-end} have been introduced to implement the sweeping system.
 
 
 \begin{lstlisting}[language=rust, escapechar=~, caption={Temp}, label={lst:sweeping}]
