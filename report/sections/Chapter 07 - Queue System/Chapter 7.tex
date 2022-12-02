@@ -27,7 +27,7 @@ This UUID is also used by the web server as a key to look up the given code subm
 The second endpoint expects a GET request with a UUID as a parameter that is then used to look up the result of processing the code submission with the matching UUID.
 It then responds to the client with the result of processing that submission if it was found.
 
-\section{The queue}
+\section{The queue} \label{sec:queue-system}
 We have two endpoints that need to share data, and the Rust programming language does not allow global variables.
 Therefore, we opted to create a shared state data structure using the \texttt{layer} feature in the axum framework.
 The \texttt{layer} feature is axum's default implementation of middleware for processing data across a group of endpoints.
@@ -100,7 +100,7 @@ Then, outdated data are removed from the hashmap if the difference between its t
 Code snippet \ref{lst:sweeping} shows the same function as code snippet \ref{lst:worker-thread}, however lines \ref{line:last-sweep-time} --- \ref{line:sweep-config} and lines \ref{line:sweep-start} --- \ref{line:sweep-end} have been introduced to implement the sweeping system.
 
 
-\begin{lstlisting}[language=rust, escapechar=~, caption={Temp}, label={lst:sweeping}]
+\begin{lstlisting}[language=rust, escapechar=~, caption={The  function introduced in section \ref{sec:queue-system} updated with sweeping.}, label={lst:sweeping}]
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
