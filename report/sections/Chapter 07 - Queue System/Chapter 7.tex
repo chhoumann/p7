@@ -91,6 +91,13 @@ While this worked fine under ideal circumstances, two potential issues with this
     \item If the client posts a code submission but never polls for the result (say, as a result of losing connection), the data still continues to remain in memory.
 \end{itemize}
 
+Since this idea would only work under ideal circumstances, we opted for a safer solution inspired by the garbage collectors and the concept of sweeping.
+The idea is to sweep old data from the hashmap when new data is added, but only if long enough time has passed since the last time sweeping was performed.
+This ensures that sweeping will not happen several times every second if multiple clients were to post a code submission at the same time.
+To achieve this, we introduced a new \texttt{timestamp} field to the \texttt{TestRunnerResult} data structure, which is set when a thread finishes processing a code submission.
+This timestamp simply denotes the point in time at it was added to the job results hashmap.
+Then, outdated data are removed from the hashmap if the difference between its timestamp and the current time is greater than some lifetime set through an environment variable.
+Code snippet \ref{lst:sweeping} shows the same function as code snippet \ref{lst:worker-thread}, however lines \ref{line:last-sweep-time} --- \ref{line:sweep-config} and lines \ref{line:sweep-start} --- \ref{line:sweep-end} have been added.
 
 
 \begin{lstlisting}[language=rust, escapechar=~, caption={Temp}, label={lst:sweeping}]
@@ -100,15 +107,15 @@ async fn worker_thread(
     limit: usize
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
-    let last_sweep_time = Arc::new(Mutex::new(SystemTime::now()));
-    let config = sweep_configuration::from_dot_env();
+    let last_sweep_time = Arc::new(Mutex::new(SystemTime::now())); ~\label{line:last-sweep-time}~
+    let config = sweep_configuration::from_dot_env(); ~\label{line:sweep-config}~
 
     stream.for_each_concurrent(limit, |work| async {
         let res = schedule_test(work.submission).await;
         let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res));
 
-        if last_sweep_time.lock().unwrap().elapsed().unwrap() >
+        if last_sweep_time.lock().unwrap().elapsed().unwrap() > ~\label{line:sweep-start}~
             config.duration_between_sweeps {
             map.retain(|&_, res| {
                 if res.is_none() {
@@ -120,7 +127,13 @@ async fn worker_thread(
             });
 
             *last_sweep_time.lock().unwrap() = SystemTime::now();
-        }
+        } ~\label{line:sweep-end}~
     }).await;
 }
 \end{lstlisting}
+
+Line \ref{line:last-sweep-time} initializes the last sweeping time variable as the current time, and wraps it in a mutex to prevent race conditions from arising.
+Line \ref{line:sweep-config} loads the sweeping configuration data structure by reading defined values from a \texttt{.env} file using the helper function \texttt{from\_dot\_env()}.
+The configurable variables include the duration between sweeps as well as the lifetime of data inside the hashmap.
+Lines \ref{line:sweep-start} --- \ref{line:sweep-end} is the sweeping algorithm itself.
+For each element in the hashmap where the \texttt{Option} type has a value, job results are removed if their elapsed time exceeds the configured lifetime.
