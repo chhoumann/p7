@@ -72,30 +72,32 @@ Account Handling, as well as exercise attempt logging features, are placed in th
 Lastly, statistics and solution highlighting are placed in the wont have category as they have been deemed out of scope according to the constraints of the problem.
 
 
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
 \begin{table}[H]
-\begin{center}
     \begin{tabular}{|l|llll}
     \cline{1-1}
-    \cellcolor[HTML]{C0C0C0}\textbf{Must have}                                      &  &  &  &  \\ \cline{1-1}
-    Students can retrieve exercises descriptions                                    &  &  &  &  \\ \cline{1-1}
-    Students can submit exercise attempts                                           &  &  &  &  \\ \cline{1-1}
-    The back-end can interpret exercise attempts                                    &  &  &  &  \\ \cline{1-1}
-    \cellcolor[HTML]{C0C0C0}\textbf{Should have}                                    &  &  &  &  \\ \cline{1-1}
-    Lecturers can add tests for exercises                                           &  &  &  &  \\ \cline{1-1}
-    The back-end can verify if the Students exercise attempts completes the tests   &  &  &  &  \\ \cline{1-1}
-    Lecturers can group exercises into sessions                                     &  &  &  &  \\ \cline{1-1}
-    \cellcolor[HTML]{C0C0C0}\textbf{Could have}                                     &  &  &  &  \\ \cline{1-1}
-    Users can login to determine if they are a Student or a Lecturer                &  &  &  &  \\ \cline{1-1}
-    Students can access old exercise attempts                                       &  &  &  &  \\ \cline{1-1}
-    Lecturers can view all exercise attempts submitted by the Students              &  &  &  &  \\ \cline{1-1}
-    \cellcolor[HTML]{C0C0C0}\textbf{Wont have}                                      &  &  &  &  \\ \cline{1-1}
-    Lecturers can share submitted solutions so they are viewable by other Students  &  &  &  &  \\ \cline{1-1}
-    Lectures can access statistics over the exercise attempts                       &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Must have}                                    &  &  &  &  \\ \cline{1-1}
+    Students can retrieve exercise descriptions                                   &  &  &  &  \\ \cline{1-1}
+    Students can submit exercise attempts                                         &  &  &  &  \\ \cline{1-1}
+    The system can interpret exercise attempts                                    &  &  &  &  \\ \cline{1-1}
+    Lecturers can group exercises into sessions                                   &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Should have}                                  &  &  &  &  \\ \cline{1-1}
+    Lecturer can add tests for exercises                                          &  &  &  &  \\ \cline{1-1}
+    The system can verify if the students exercise attempt completes the test     &  &  &  &  \\ \cline{1-1}
+    Users can login to determine if they are a student or a lecturer              &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Could have}                                   &  &  &  &  \\ \cline{1-1}
+    Students can access old exercise attempts                                     &  &  &  &  \\ \cline{1-1}
+    Lecturer can view all exercise attempts submitted by students                 &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Wont have}                                    &  &  &  &  \\ \cline{1-1}
+    Lecturer can share submitted solutions so they are viewable by other students &  &  &  &  \\ \cline{1-1}
+    Lecturer can access statistics over the exercise attempts                     &  &  &  &  \\ \cline{1-1}
     \end{tabular}
     \caption{\label{tab:MOSCOW}MoSCoW Analysis}
-\end{center}
 \end{table}
 
-With the use cases the system needs to fulfill specified as well as their required features prioritized through a MoSCoW analysis the system can now be designed. 
+The \textit{Must have} category from the MoSCoW analysis represents the minimal amount of features that we want to include to satisfy the goals of the project. Throughout the report we will refer to this as the Minimal Viable Product (MVP).
+In the following chapter we will describe the design of the system which is based on the MVP. 
     
 

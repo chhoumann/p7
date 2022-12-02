@@ -59,13 +59,13 @@ async fn worker_thread(
 }
 \end{lstlisting}
 
-We use the \texttt{futures} package in Rust to allocate some number of threads dictated by the variable \texttt{limit} of type \texttt{usize}.
-The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility package.
-A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} package.
-This allows us to combine functionality from the two packages.
+We use the \texttt{futures} crate in Rust to allocate some number of threads dictated by the variable \texttt{limit} of type \texttt{usize}.
+The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility crate.
+A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} crate.
+This allows us to combine functionality from the two crates.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
 
-Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} package to run a number of tasks asynchronously but with the aforementioned limit.
+Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} crate to run a number of tasks asynchronously but with the aforementioned limit.
 The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
 
 The \texttt{schedule\_test} function calls the test runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code from the client, as described in chapter \ref{chap:TestRunner}.
