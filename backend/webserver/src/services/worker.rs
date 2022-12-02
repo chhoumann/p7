@@ -13,9 +13,9 @@ use crate::debug;
 
 
 pub fn run(
-    rx : Receiver<TestRunnerWork>,
+    rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
-    limit : usize
+    limit: usize
 ) {
     task::spawn(worker_thread(rx, job_results, limit));
 }
@@ -24,7 +24,7 @@ pub fn run(
 async fn worker_thread(
     rx: Receiver<TestRunnerWork>,
     job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
-    limit : usize
+    limit: usize
 ) {
     let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
     let last_sweep_time = Arc::new(Mutex::new(SystemTime::now()));
