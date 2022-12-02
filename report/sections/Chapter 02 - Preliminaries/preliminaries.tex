@@ -15,7 +15,7 @@ This makes the framework easier to work with as a DSL is a language targeted tow
 This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise. 
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
 
-An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
+An example setup of a Hspec test can be seen below in code snippet \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
 
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec Test.}, label={lst:HspecTestExample}]
@@ -50,6 +50,11 @@ Our reason for using Rust is twofold:
     \item Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself.
     \item Rust features safe implementations of threading and concurrency which is useful for web applications where scalability is a priority.
 \end{enumerate}
+
+Rust features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}.
+For this project, the most prominently used crate is Tokio\cite{Tokio} for asynchronous programming.
+Furthermore, we initially used the Rocket\cite{Rocket} crate to create endpoints, however we eventually opted to use axum\cite{axum} instead.
+This is described in more detail in chapter \ref{chap:TestRunner}.
 
 \section*{Docker}
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
@@ -144,9 +149,9 @@ We use SUS in order to get an overall rating of our system.
 Availability is a quality measurement used to describe the probability of a system being available to a user when needed. Similarly, reliability is a measurement for determining the likelihood of correct system operation within a given time-frame. \cite{reliabilityAvailability}
 Stress testing is an approach that can help identify unintended behavior of a system that are only reached when the system performs under heavy workloads or finding an approximation to when the system stops functioning.
 Usually one performs stress testing by exposing the system under test to a number of computations that are beyond its expected capabilities such that it either stops or produces results too slow to consider the system usable\cite{Sommerville10}. 
-The expected capabilities is often described in an operational profile\cite{OperationalProfiles}. 
+The expected capabilities are often described in an operational profile\cite{OperationalProfiles}. 
 Such profile can, in combination with stress testing, be used to ensure that a system is both reliable and available even when pushed beyond its expected workload.
 
 BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in dotnet runtimes. 
 It allows for the parameterization of measured operations and provides ways to introduce warm-up operation and adjustments. 
-We use this framework to create a stress test environment that also measures the response times for the system under test. 
+We use this framework to create a stress test environment that simulates stressful client behavior, and measures the response times for the system under test. 

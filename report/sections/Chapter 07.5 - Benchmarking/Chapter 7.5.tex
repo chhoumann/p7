@@ -1,1 +1,29 @@
 \chapter{Benchmarking} \label{chap:Benchmarking}
+To ensure that the developed platform can handle an appropriate amount of users, the Test Runner has been stress tested and benchmarked.
+In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
+
+\section{Orchestration and Test Runner parameterization}
+The benchmark and test components are managed in their own docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
+Information necessary to establish such connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
+These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
+For instance, the environmental constants describing the network location of the Test Runner service is passed as arguments to the Dockerfiles describing the tests and the benchmark, as these must both be able to contact the Test Runner service.
+These environmental constants also allow easy adjustment of Test Runner settings without rebuilding the docker container.
+Settings can thus be easily changed.
+These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code.
+This makes it easy to experiment with different variables for the benchmarks.  
+The containers are orchestrated such that the benchmarks starts only if the test container exits successfully --- that is, all the tests pass successfully. 
+Thus, wrongly configured containers do not result in misleading benchmark results.
+
+\todo{Create a picture for the orchestration and end section with a ref to it}
+
+\section{Simulating client behavior}
+To simulate the platform being used by a variable number of users, we utilize BenchmarkDotNet's parameterization of methods used for benchmarks. 
+To simulate different behavior of platform clients, multiple classes representing such clients were implemented.
+Each class represents a user for a different version of the platform.
+One such class implements behavior varying in poll time and code submission content.
+During stress testing, the BenchmarkDotNet framework creates all possible combinations of these behavioral variables.
+This exposes the system to groups of varying size with a variety of different poll times and code submission contents.
+The idea with this is to give information about how the platform behaves when a classroom of students all work on the same exercises at the same time.
+The underlying implementation of the client classes use an HTTP client.
+The results of these stress tests are presented in section \ref{sec:TestEvaluation}.
