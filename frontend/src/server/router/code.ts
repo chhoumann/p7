@@ -151,38 +151,97 @@ export const codeRouter = createRouter()
             test: z.string(),
         }),
         async resolve({ input }) {
-            const timeStart = Date.now();
-
-            const ps = Array(input.count)
-                .fill(undefined)
-                .map(() => {
-                    try {
-                        return fetch(`${env.WEBSERVER_ADDRESS}/haskell`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                code: input.code,
-                                test: input.test,
-                            }),
-                        }).then((res) => res.json());
-                    } catch {
-                        return undefined;
-                    }
-                });
-
-            const responses = await Promise.all(ps);
-            const fulfilledCount = responses.filter(
-                (x) => x !== undefined
-            ).length;
-            const duration = Date.now() - timeStart;
-
-            return {
-                requestCount: input.count,
-                fulfilled: fulfilledCount,
-                responses,
-                duration,
-            };
+            return test("new", input);
         },
     });
+
+async function test(
+    type: "old" | "new",
+    input: { count: number; code: string; test: string }
+): Promise<Awaited<ReturnType<typeof testOld>>> {
+    return type === "new"
+        ? testNew(input.code, input.test, input.count)
+        : testOld(input.code, input.test, input.count);
+}
+
+async function testNew(
+    code: string,
+    test: string,
+    count: number
+): Promise<Awaited<ReturnType<typeof testOld>>> {
+    const timeStart = Date.now();
+    let i = 0;
+
+    const ps = Array(count)
+        .fill(undefined)
+        .map(async () => {
+            try {
+                console.log(i++)
+                const req = await fetch(`${env.WEBSERVER_ADDRESS}/haskell/submit`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        code,
+                        test,
+                    }),
+                    cache: "no-store",
+                });
+
+                const token = (await req.json() as {id: string}).id;
+                const MAX_ATTEMPTS = 200;
+                const ATTEMPT_DELAY = 50;
+
+                return tryGetJobResult(token, MAX_ATTEMPTS, ATTEMPT_DELAY);
+            } catch {
+                return undefined;
+            }
+        });
+
+    const responses = await Promise.all(ps);
+    const fulfilledCount = responses.filter((x) => x !== undefined).length;
+    const duration = Date.now() - timeStart;
+
+    return {
+        requestCount: count,
+        fulfilled: fulfilledCount,
+        responses,
+        duration,
+    };
+}
+
+async function testOld(code: string, test: string, count: number) {
+    const timeStart = Date.now();
+
+    const ps = Array(count)
+        .fill(undefined)
+        .map(() => {
+            try {
+                return fetch(`${env.WEBSERVER_ADDRESS}/haskell/submit`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        code,
+                        test,
+                    }),
+                    cache: "no-store",
+                }).then(async (res) => res.json());
+            } catch {
+                return undefined;
+            }
+        });
+
+    const responses = await Promise.all(ps);
+    const fulfilledCount = responses.filter((x) => x !== undefined).length;
+    const duration = Date.now() - timeStart;
+
+    return {
+        requestCount: count,
+        fulfilled: fulfilledCount,
+        responses,
+        duration,
+    };
+}
