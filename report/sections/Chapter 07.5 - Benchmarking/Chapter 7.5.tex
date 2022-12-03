@@ -1,5 +1,5 @@
 \chapter{Benchmarking} \label{chap:Benchmarking}
-To ensure that the developed platform can handle an appropriate amount of users, the Test Runner has been stress tested and benchmarked.
+To ensure that the developed platform can handle an appropriate amount of users as well as the pull-time for Test Runner clients, the Test Runner component has been stress tested and benchmarked.
 In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
 a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
 
@@ -27,3 +27,4 @@ This exposes the system to groups of varying size with a variety of different po
 The idea with this is to give information about how the platform behaves when a classroom of students all work on the same exercises at the same time.
 The underlying implementation of the client classes use an HTTP client.
 The results of these stress tests are presented in section \ref{sec:TestEvaluation}.
+
