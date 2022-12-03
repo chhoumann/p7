@@ -15,7 +15,7 @@ This makes the framework easier to work with as a DSL is a language targeted tow
 This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise. 
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
 
-An example setup of a Hspec test can be seen below in figure \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
+An example setup of a Hspec test can be seen below in code snippet \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
 
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec Test.}, label={lst:HspecTestExample}]
@@ -50,6 +50,11 @@ Our reason for using Rust is twofold:
     \item Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself.
     \item Rust features safe implementations of threading and concurrency which is useful for web applications where scalability is a priority.
 \end{enumerate}
+
+Rust features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}.
+For this project, the most prominently used crate is Tokio\cite{Tokio} for asynchronous programming.
+Furthermore, we initially used the Rocket\cite{Rocket} crate to create endpoints, however we eventually opted to use axum\cite{axum} instead.
+This is described in more detail in chapter \ref{chap:TestRunner}.
 
 \section*{Docker}
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
