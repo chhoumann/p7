@@ -4,7 +4,8 @@ To establish such baseline, we have stress tested and benchmarked a version of t
 \todo{insert figure showing the baseline stats}
 \todo{describe the baseline stats}
 
-The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing.
+The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing. 
+We suspect that when the Test Runner experience stress, in the form of large number code submissions, the threads handling the request will experience a form of cpu starvation where all responses will take a long time to complete.
 
 
 \subsection{Results}
