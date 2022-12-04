@@ -12,10 +12,9 @@ The benchmark and test components are managed in their own docker containers, an
 Information necessary to establish such connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
 These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
 For instance, the environmental constants describing the network location of the Test Runner service is passed as arguments to the Dockerfiles describing the tests and the benchmark, as these must both be able to contact the Test Runner service.
-These environmental constants also allow easy adjustment of Test Runner settings without rebuilding the docker container.
-Settings can thus be easily changed.
+These environmental constants also allow easy adjustment of Test Runner implementing the Queue System without rebuilding the docker container.
 These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code.
-This makes it easy to experiment with different variables for the benchmarks.  
+This makes it easy to experiment with different variables for the benchmarks and stress tests.  
 The containers are orchestrated such that the benchmarks starts only if the test container exits successfully --- that is, all the tests pass successfully. 
 Thus, wrongly configured containers do not result in misleading benchmark results.
 
@@ -119,5 +118,9 @@ Therefore, an additional parameter for the benchmark is introduced to examine ho
 Best case pull time needs to be established to compare it with the baseline component. 
 However, due to the nature of remote communication using the internet it may be necessary to establish which poll times to avoid rather than which gives the best average response times, since the benchmarks does not consider the physical distance between client and server.
 
+
+
 \subsection{Results}
 \todo{give characterization of the benchmarks, IterationCount=40	LaunchCount=1, WarmupCount=5, AMD EPYC Processor (with IBPB), 4 CPU, 4 logical and 4 physical cores, UBUNTU 20.04 LTS}
+
+\todo{Give characterization of the }
