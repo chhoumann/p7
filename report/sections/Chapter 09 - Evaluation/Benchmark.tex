@@ -1,12 +1,24 @@
 \section{Benchmark evaluation}
 To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline which we can compare the component to. 
 To establish such baseline, we have stress tested and benchmarked a version of the Test Runner utilize the Rocket create but does not implement the Queue System. 
-We examine whether these 
 
 \todo{establish baseline when we have the results ready}
 
 The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing. 
-We suspect that when the Test Runner experience stress in the form of large number code submissions, a single threaded approach to handling the request ,will experience a form of cpu starvation where all responses will take a long time to complete.
+We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request. Each request will have to compete for CPU usage with all other requests. 
+
+\subsection{Selecting benchmark parameters}
+To ensure a variety in complexity for the submission content several Haskell exercise solutions covering different concepts from course were selected, and Hspec tests based on the description of these problems were developed. \todo{create and ref to appendix containing the code and test} 
+
+Each of the files covers a single topic from the course, including recursive d
+
+After selecting exercises for stress tests and benchmarks an operational profile was created \todo{create operational profile (maybe do not and then present it for the exam)}, and from this a maximum number of expected clients were selected. 
+
+
+
+
+
+
 
 
 \subsection{Results}
