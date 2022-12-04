@@ -31,6 +31,38 @@ To evaluate stress test and benchmark results of the developed Test Runner compo
 The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing. 
 We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
+\subsubsection{Ensuring simultaneous client submissions}
+\begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:TaskBuilder}]
+public static class TaskBuilder
+{
+  public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
+      where T : CodeRunnerClient, new()
+  {
+    List<Action> clientActions = new(count);
+    List<Task> tasks = new(count);
+    
+    for (int i = 0; i < count; i++)
+    {
+        T client = new();
+        clientActions.Add(() => action.Invoke(client));
+    }
+
+    foreach (Action clientAction in clientActions)
+    {
+        tasks.Add(Task.Run(clientAction));
+    }
+    return tasks;
+  }
+}
+\end{lstlisting}
+
+When performing stress tests one must ensure that the behavior stresses the system in a manner that is realistic, but on the edge of what is probable.
+In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
+To ensure that all submissions to the component happens close to simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
+When the actions are invoked, an inputted action is invoked with a CodeRunnerClient as input. 
+We utilize this inputted action to send a code submissions requests and invoke start the clients in rapid succession.
+
+
 \subsubsection{Baseline benchmark implementation}
 \begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:baselineBench}]
 // Attributes excluded
@@ -54,6 +86,7 @@ public class RocketBenchmarks
 }
 \end{lstlisting}
     
+
     
 
 
