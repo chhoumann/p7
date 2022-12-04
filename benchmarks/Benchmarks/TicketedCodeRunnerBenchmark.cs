@@ -6,11 +6,11 @@ using CodeRunnerClients.DataTransfer;
 namespace Benchmarks;
 
 [StopOnFirstError]
-[SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 5, targetCount: 40)]
 [CsvMeasurementsExporter]
 [HtmlExporter]
 [CsvExporter]
 [MarkdownExporterAttribute.Default]
+[SimpleJob(RunStrategy.Monitoring, launchCount: 1, warmupCount: 5, targetCount: 40)]
 public class TicketedCodeRunnerBenchmark
 {
     [Params(0.5, 1.0, 2.0, 3.0)]
@@ -30,10 +30,8 @@ public class TicketedCodeRunnerBenchmark
         TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(PollTime);
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerQueueClient>(NumberOfConcurrentRequests, client =>
-        {
-            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPulls);
-        });
-        
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPulls));
+
         Task.WhenAll(clientActions).Wait();
     }
 }

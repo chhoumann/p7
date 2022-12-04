@@ -318,3 +318,50 @@
     stringstyle=\color{GreenString},
     string=[b]"
 }
+
+
+\definecolor{bluekeywords}{rgb}{0,0,1}
+\definecolor{greencomments}{rgb}{0,0.5,0}
+\definecolor{redstrings}{rgb}{0.64,0.08,0.08}
+\definecolor{xmlcomments}{rgb}{0.5,0.5,0.5}
+\definecolor{types}{rgb}{0.17,0.57,0.68}
+
+\lstset{language=cs,
+columns=fullflexible,
+keepspaces=true,
+frame=single,
+framesep=0pt,
+framerule=0pt,
+framexleftmargin=2pt,
+framexrightmargin=2pt,
+framextopmargin=5pt,
+framexbottommargin=3pt,
+xleftmargin=2pt,
+xrightmargin=2pt,
+backgroundcolor=\color{GrayCodeBlock},
+basicstyle=\footnotesize\ttfamily\color{BlackText},
+commentstyle=\color{greencomments},
+morekeywords={partial, var, value, get, set,nameof, IEnumerable, abstract, event, new, struct,
+as, explicit, null, switch,
+base, extern, object, this,
+bool, false, operator, throw,
+break, finally, out, true,
+byte, fixed, override, try,
+case, float, params, typeof,
+catch, for, private, uint,
+char, foreach, protected, ulong,
+checked, goto, public, unchecked,
+class, if, readonly, unsafe,
+const, implicit, ref, ushort,
+continue, in, return, using,
+decimal, int, sbyte, virtual,
+default, interface, sealed, volatile,
+delegate, internal, short, void,
+do, is, sizeof, while,
+double, lock, stackalloc,
+else, long, static, Params, ParamsSource, Task, CodeRunnerClient, CodeRunnerQueueClient, Benchmark,
+enum, namespace, string},
+keywordstyle=\color{bluekeywords},
+stringstyle=\color{redstrings},
+basicstyle=\ttfamily\small,
+}
