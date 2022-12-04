@@ -1,17 +1,47 @@
-\section{Benchmark evaluation}
-To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline which we can compare the component to. 
-To establish such baseline, we have stress tested and benchmarked a version of the Test Runner utilize the Rocket create but does not implement the Queue System. 
+\section{Benchmarking and stress testing} \label{chap:Benchmarking}
+In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. 
+The goal of the stress tests and benchmarks are threefold: 
+First, it helps us determine an upper limit of simultaneous users before response times renders a student unproductive.
+Secondly, it helps us determine pull times for clients using the Test Runner.
+Thirdly, it helps us establish different implementations of the backend regresses in terms of response times.
+
+To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
+
+\subsection{Orchestration and Test Runner parameterization}
+The benchmark and test components are managed in their own docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
+Information necessary to establish such connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
+These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
+For instance, the environmental constants describing the network location of the Test Runner service is passed as arguments to the Dockerfiles describing the tests and the benchmark, as these must both be able to contact the Test Runner service.
+These environmental constants also allow easy adjustment of Test Runner settings without rebuilding the docker container.
+Settings can thus be easily changed.
+These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code.
+This makes it easy to experiment with different variables for the benchmarks.  
+The containers are orchestrated such that the benchmarks starts only if the test container exits successfully --- that is, all the tests pass successfully. 
+Thus, wrongly configured containers do not result in misleading benchmark results.
+
+\subsection{Selecting benchmark parameters}
+To ensure a variety in complexity for the submission content several Haskell exercise solutions covering different concepts from course were selected, and Hspec tests based on the description of these problems were developed. \todo{create and ref to appendix containing the code and test} 
+Each of the files covers a single topic from the course, including recursive type definitions and operations on such types, list comprehension, filtering of lists, and one containing a syntactical error.
+
+After selecting a representative set of exercises for stress tests and benchmarks an operational profile was created \todo{create operational profile (maybe do not and then present it for the exam)}, and from this behavioral variables were established: an expected maximum number of clients and different poll times for these clients.
+To simulate different behavior of platform clients, classes representing clients were implemented, each representing a user for a different version of the platform.
+These clients implement representations of the necessary behavioral variables, which are annotated using BenchmarkDotNet.
+During stress testing, the BenchmarkDotNet framework creates all possible combinations of the implemented behavioral variables.
+The underlying implementation of the client classes use an HTTP client.
+
+To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline which we can compare the component to. To establish such baseline, we have stress tested and benchmarked a version of the Test Runner utilize the Rocket crate but does not implement the Queue System. 
 
 \todo{establish baseline when we have the results ready}
 
 The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing. 
 We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request. Each request will have to compete for CPU usage with all other requests. 
 
-\subsection{Selecting benchmark parameters}
-To ensure a variety in complexity for the submission content several Haskell exercise solutions covering different concepts from course were selected, and Hspec tests based on the description of these problems were developed. \todo{create and ref to appendix containing the code and test} 
-Each of the files covers a single topic from the course, including recursive type definitions and operations on such types, list comprehension, filtering of lists, and one containing a syntactical error.
+\subsection{Results}
 
-After selecting a representative set of exercises for stress tests and benchmarks an operational profile was created \todo{create operational profile (maybe do not and then present it for the exam)}, and from this a maximum number of expected clients were selected.
+
+
+
 
 
 
