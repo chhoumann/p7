@@ -154,4 +154,6 @@ Such profile can, in combination with stress testing, be used to ensure that a s
 
 BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in dotnet runtimes. 
 It allows for the parameterization of measured operations and provides ways to introduce warm-up operation and adjustments. 
-We use this framework to create a stress test environment that simulates stressful client behavior, and measures the response times for the system under test. 
+We use this framework to create a stress test environment that simulates stressful client behavior, and measures the response times for the system under test.
+
+We want to use results from the stress tests and benchmarks to determine whether the built-in capabilities of the HTTP server library Rocket suits the use case of the system or if the platform benefits from a multithreaded approach.
