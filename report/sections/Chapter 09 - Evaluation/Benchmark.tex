@@ -29,7 +29,17 @@ During stress testing, the BenchmarkDotNet framework creates all possible combin
 The underlying implementation of the client classes use an HTTP client.
 To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline which we can compare the component to. To establish such baseline, we have stress tested and benchmarked a version of the Test Runner utilize the Rocket crate but does not implement the Queue System. \todo{establish baseline when we have the results ready}
 The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing. 
-We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request. Each request will have to compete for CPU usage with all other requests.
-\todo{describe concrete implementationo --- focus on that we first create the tasks and then run them at the same time to ensure a stressful environment.} 
+We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
+
+\subsubsection{Baseline benchmark implementation}
+\begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:baselineBench}]
+    
+\end{lstlisting}
+
+
+
+
+\todo{Describe concrete implementationo --- focus on that we first create the tasks and then run them at the same time to ensure a stressful environment, and also on the parameterization of the benchmarks.} 
+\subsubsection{Queue system benchmark implementation}
 
 \subsection{Results}
