@@ -55,7 +55,6 @@ public static class TaskBuilder
   }
 }
 \end{lstlisting}
-
 When performing stress tests one must ensure that the behavior stresses the system in a manner that is realistic, but on the edge of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
 To ensure that all submissions to the component happens close to simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
@@ -85,10 +84,10 @@ public class RocketBenchmarks
     }
 }
 \end{lstlisting}
-
-The baseline benchmarks seen in Listing \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
+The baseline benchmarks seen in listing \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
 The benchmark itself measures the time it takes for all clients to post the code submission and receive an HTTP response with status code 200.
-If just one of the submissions cannot be processed an exception is thrown, and the benchmark stops. 
+If just one of the submissions cannot be processed an exception is thrown, and the benchmark stops.
+It utilizes the BuildClientTaskList method seen in listing \ref{lst:baselineBench}.
 
 \subsubsection{Queue system benchmark implementation}
 \begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:queueSystemBench}]
