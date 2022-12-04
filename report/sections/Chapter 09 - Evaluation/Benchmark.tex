@@ -85,10 +85,10 @@ public class RocketBenchmarks
     }
 }
 \end{lstlisting}
-    
-\todo{explain the parameterization and the benchmark itself}
-    
 
+The baseline benchmarks seen in Listing \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
+The benchmark itself measures the time it takes for all clients to post the code submission and receive an HTTP response with status code 200.
+If just one of the submissions cannot be processed an exception is thrown, and the benchmark stops. 
 
 \subsubsection{Queue system benchmark implementation}
 \begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:queueSystemBench}]
