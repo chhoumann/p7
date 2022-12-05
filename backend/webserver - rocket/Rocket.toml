@@ -1,0 +1,5 @@
+﻿[debug]
+workers = 1
+
+[release]
+workers = 1

@@ -1,4 +1,4 @@
-﻿/*using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
 using CodeRunnerClients;
 using CodeRunnerClients.DataTransfer;
@@ -23,11 +23,9 @@ public class RocketBenchmarks
     {
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, client =>
         {
-            client.Post(CodeSubmission);
+            client.Post(CodeSubmission).Result.EnsureSuccessStatusCode();
         });
         
         Task.WhenAll(clientActions).Wait();
     }
 }
-
-*/

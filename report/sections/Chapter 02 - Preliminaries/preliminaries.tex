@@ -6,13 +6,13 @@ Out of the currently available Haskell compilers we use the Glasgow Haskell Comp
 
 \section*{Hspec}
 To enable running Haskell tests we needed a test framework. Here a test framework allows us to define the tests that need to be automatically run on the coding exercises the students submit. This allows us to confirm if the students completed the exercise and if not provide them with feedback on which tests their code failed.
-Hspec was chosen instead of other test frameworks since it allows the professor to define the tests in an easy-to-understand domain-specific language (DSL). 
+Hspec was chosen instead of other test frameworks since it allows the professor to define the tests in an easy-to-understand domain-specific language (DSL).
 This makes the framework easier to work with. As a DSL is a language targeted towards a specific domain, it allows Hspec tests to be easily written and understandable without having an in-depth understanding of Hspec and Haskell.
-This provides the option to show some of the tests to the users in order to give them a more specific idea of what is expected from the exercise. 
+This provides the option to show some of the tests to the users in order to give them a more specific idea of what is expected from the exercise.
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users\cite{Hspec_landing}.
 
-This makes the framework easier to work with as a DSL is a language targeted towards a specific domain it allows Hspec to tests to be easily written and understandable without having an in-depth understanding of Hspec and Haskell. 
-This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise. 
+This makes the framework easier to work with as a DSL is a language targeted towards a specific domain it allows Hspec to tests to be easily written and understandable without having an in-depth understanding of Hspec and Haskell.
+This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise.
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
 
 An example setup of a Hspec test can be seen below in code snippet \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
@@ -24,7 +24,7 @@ An example setup of a Hspec test can be seen below in code snippet \ref{lst:Hspe
 
  import Test.Hspec
  import moduleName (functionName)
- 
+
  spec = Spec
  spec = do
  	describe "Function Name" do
@@ -34,18 +34,18 @@ An example setup of a Hspec test can be seen below in code snippet \ref{lst:Hspe
 \end{lstlisting}
 
 \section*{Rust}
-Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla. 
-The project was then sponsored by Mozilla from 2009 to 2021 where the project along with all trademarks was moved to the newly create Rust Foundation. 
+Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla.
+The project was then sponsored by Mozilla from 2009 to 2021 where the project along with all trademarks was moved to the newly create Rust Foundation.
 The idea behind Rust was to challenge the idea that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}.
 Most other programming languages today operate in a band where either safety or control is valued highest and the other diminished. An example of this is C that has high level control but lacks safety.\todo{source}
-Here Rust provides the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages like Python. 
+Here Rust provides the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages like Python.
 As such, the main overall goal of Rust is to provide as much safety as possible in a low-level programming language without sacrificing any speed\cite{Rust_in_Action}.
 
-In order to achieve this goal Rust provides a large number of safety features among these are its most distinguishing feature which prevents invalid data access at compile time. 
-Considering a research article by Microsoft Security Research Center stating that invalid data access is behind 70\% of serious security bugs in modern programs this is a large deal\cite{Safe_Systems_Languages}. 
+In order to achieve this goal Rust provides a large number of safety features among these are its most distinguishing feature which prevents invalid data access at compile time.
+Considering a research article by Microsoft Security Research Center stating that invalid data access is behind 70\% of serious security bugs in modern programs this is a large deal\cite{Safe_Systems_Languages}.
 Instead of relying on the developer to deal with it, Rust's compiler guarantees any compiled program is memory-safe\todo{source}.
 
-Our reason for using Rust is twofold: 
+Our reason for using Rust is twofold:
 \begin{enumerate}
     \item Rust is compiled to native machine code, which ensures that no additional overhead is introduced by the language itself.
     \item Rust features safe implementations of threading and concurrency which is useful for web applications where scalability is a priority.
@@ -59,47 +59,47 @@ This is described in more detail in chapter \ref{chap:TestRunner}.
 \section*{Docker}
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
 Containers are bundles of code and required dependencies. This allows developers to move around prepackaged applications ensuring that the developed software runs the same regardless of what system is used\cite{Docker_Container}.
-The containers themselves are created from an image. Here the image is the executable package that encapsulates everything required in order to run the application. On runtime, the image is then turned into a container. 
+The containers themselves are created from an image. Here the image is the executable package that encapsulates everything required in order to run the application. On runtime, the image is then turned into a container.
 This is possible due to the Linux kernel's build process isolation and virtualization capabilities. These also allow a single host system to share its resources with multiple application components\cite{Docker_Container}.
 
 We use Docker to set up local development environments for the APIs and Databases. This allows for an easier development process and a simplified delivery process to production.
 
 \section*{tRPC}
-tRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation. 
-It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code. 
-This in turn allows developers to not have the actual server code exposed in the \frontend{}. 
+tRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation.
+It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code.
+This in turn allows developers to not have the actual server code exposed in the \frontend{}.
 Furthermore, tRPC is created in a way to fully take advantage of the power of a full-stack TypeScript project\cite{tRPC}.
 In tRPC, a query is like a read operation, while a mutation is similar to create, update, or delete operations.
 
 \section*{Prisma}
-Prisma is a 2nd generation object-relational mapper(ORM) developed for usage in Node.js and \typescript{} back-ends. 
-The main goal is to increase developers' productivity by allowing them to develop using a type-safe API for database queries that return \javascript{} objects. 
+Prisma is a 2nd generation object-relational mapper(ORM) developed for usage in Node.js and \typescript{} backends.
+The main goal is to increase developers' productivity by allowing them to develop using a type-safe API for database queries that return \javascript{} objects.
 This goal is achieved by providing type-safe database queries allowing for validation at compile time as well as constraints preventing common pitfalls\cite{Prisma_Why}.
-	
-The goal for the 2nd generation ORMs is to move closer to raw SQL in terms of high control while improving on the 1st generation ORMs productivity improvements. 
+
+The goal for the 2nd generation ORMs is to move closer to raw SQL in terms of high control while improving on the 1st generation ORMs productivity improvements.
 Prisma enables this productivity improvement by allowing developers to define their applications models through a data modeling language allowing an easier way of configuring their applications' data sources and models\cite{Prisma_Doc}.
 
 \section*{TypeScript}
 As the server-side use of \javascript{} keeps growing in popularity its inability to provide developers with access to strong type checking and compile time error checking continues to prevent it from being the go-to language.
 As a way to address these problems, \typescript{} was designed to try and bridge this gap without requiring developers to learn a new language.
-Instead, \typescript{} was developed as a syntactic superset to \javascript{} allowing developers to keep building into their already existing knowledge but with additional features. 
-This means that all \javascript{} projects are syntactically valid in \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably.\cite{TypeScript}. 
-\typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling all the written instructions to its \javascript{} equivalents during the compilation process. 
-This is possible because \typescript{} itself is compiled into \javascript{}, which is an interpreted language. 
+Instead, \typescript{} was developed as a syntactic superset to \javascript{} allowing developers to keep building into their already existing knowledge but with additional features.
+This means that all \javascript{} projects are syntactically valid in \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably.\cite{TypeScript}.
+\typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling all the written instructions to its \javascript{} equivalents during the compilation process.
+This is possible because \typescript{} itself is compiled into \javascript{}, which is an interpreted language.
 
 \section*{Next.js}
-Next.js (Next) is an open-source React framework created by Vercel that enables react web applications to use server-side rendering as well as generate static websites. The Next framework was created in order to counter the potential security issues of React, which relies on client-side rendering. Next provides a solution to this by enabling websites to be fully or partially server-side rendered\cite {Nextjs_Docks}. 
+Next.js (Next) is an open-source React framework created by Vercel that enables react web applications to use server-side rendering as well as generate static websites. The Next framework was created in order to counter the potential security issues of React, which relies on client-side rendering. Next provides a solution to this by enabling websites to be fully or partially server-side rendered\cite {Nextjs_Docks}.
 
-Next as a framework also tries to fix another issue of React, namely that creating a website from the ground up still requires a lot of effort, such as spending time on configuring tools as well as rebuilding solutions. 
+Next as a framework also tries to fix another issue of React, namely that creating a website from the ground up still requires a lot of effort, such as spending time on configuring tools as well as rebuilding solutions.
 Next tries to combat this by providing the developers with the building blocks needed to build a website.
 This is done by handling the tooling and configuration needed while providing additional structure and optimization on top\cite{Nextjs_Docks}.
 
 
 \section*{PostgreSQL}
 PostgreSQL (Postgres) is an open-source object-relational database management system that was originally developed at the University of California, Berkley with the goal of supporting multiple data types with the fewest features needed. Originally only designed for UNIX-like platforms Postgres today runs on all major operating systems like Windows and MacOS\cite{Postgres_Docs}.
-As a rule, the Postgres development team tries to conform to the SQL Standards whenever these standards do not contradict Postgres features or when the standards could lead to a deterioration of the architecture or performance\cite{Postgres_Docs}. 
+As a rule, the Postgres development team tries to conform to the SQL Standards whenever these standards do not contradict Postgres features or when the standards could lead to a deterioration of the architecture or performance\cite{Postgres_Docs}.
 
-Today Postgres features transactions with supports Atomicity, Consistency, Isolation, and Durability (ACID) properties, as well as automatic update of views, foreign keys, and procedures. 
+Today Postgres features transactions with supports Atomicity, Consistency, Isolation, and Durability (ACID) properties, as well as automatic update of views, foreign keys, and procedures.
 Furthermore, modern Postgres supports a wide variety of deployment options from single machine usage to data warehouses and web services\cite{Postgres_Docs}.
 
 \section*{Usability testing}
@@ -111,11 +111,11 @@ To evaluate a user interface, it can be useful to test its usability. ISO 9421 d
 Where effectiveness regards how well the users accomplished their goal, efficiency regards the resources expended in relation to the completeness of the goals, and lastly, satisfaction regards the comfort of the system to the users.
 To test usability, one may perform a usability test. This is a study of the interaction that users have with a product. It is done to identify usability problems in a system, and results in a list of usability problems and knowledge of what works well.
 Before the test, the interviewers have to ensure a test plan, tasks, and questions are ready, and that the equipment works.
-During the test, representative users should interact with the design while solving tasks and thinking out loud. The interviewer collects data during this process. It is important that the interviewer interferes as little as possible, without giving clues unless the user is completely stuck. 
+During the test, representative users should interact with the design while solving tasks and thinking out loud. The interviewer collects data during this process. It is important that the interviewer interferes as little as possible, without giving clues unless the user is completely stuck.
 Afterwards, the interviewers analyze the data and create a list of problems from it.
 \cite{deb7}
 
-\subsection*{System Usability Scale}
+\subsection*{System Usability Scale} \label{SUSScore}
 The System Usability Scale (SUS) is a standardized set of usability questions, that can be used to compare a UI to UI's from other systems. It is important to note that the System Usability Scale does not provide insight into specific problems, it instead it provides an overall rating of the system from the users point of view. Other questions can be added about specific issues that the tester want addressed, but it will not be accounted for in the SUS score.\cite{adobeSUS}
 
 The 10 questions in the System Usability Scale used to determine the score can be seen below.
@@ -148,10 +148,10 @@ We use SUS in order to get an overall rating of our system.
 \section*{BenchmarkDotnet}
 Availability is a quality measurement used to describe the probability of a system being available to a user when needed. Similarly, reliability is a measurement for determining the likelihood of correct system operation within a given time-frame. \cite{reliabilityAvailability}
 Stress testing is an approach that can help identify unintended behavior of a system that are only reached when the system performs under heavy workloads or finding an approximation to when the system stops functioning.
-Usually one performs stress testing by exposing the system under test to a number of computations that are beyond its expected capabilities such that it either stops or produces results too slow to consider the system usable\cite{Sommerville10}. 
-The expected capabilities are often described in an operational profile\cite{OperationalProfiles}. 
+Usually one performs stress testing by exposing the system under test to a number of computations that are beyond its expected capabilities such that it either stops or produces results too slow to consider the system usable\cite{Sommerville10}.
+The expected capabilities are often described in an operational profile\cite{OperationalProfiles}.
 Such profile can, in combination with stress testing, be used to ensure that a system is both reliable and available even when pushed beyond its expected workload.
 
-BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in dotnet runtimes. 
-It allows for the parameterization of measured operations and provides ways to introduce warm-up operation and adjustments. 
-We use this framework to create a stress test environment that simulates stressful client behavior, and measures the response times for the system under test. 
+BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in dotnet runtimes.
+It allows for the parameterization of measured operations and provides ways to introduce warm-up operation and adjustments.
+We use this framework to create a stress test environment that simulates stressful client behavior, and measures the response times for the system under test.
