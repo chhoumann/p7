@@ -1,5 +1,5 @@
-In this chapter we will describe the architecture of the entire system by first showing the overall structure followed by a short description of the individual components. 
-The platform allows lecturers to create a syllabus that includes problem sets, exercises and test cases for the exercises. Additionally, students can do the exercises that the lecturer has provided. 
+In this chapter we will describe the architecture of the entire system by first showing the overall structure followed by a short description of the individual components.
+The platform allows lecturers to create a syllabus that includes problem sets, exercises and test cases for the exercises. Additionally, students can do the exercises that the lecturer has provided.
 The platform is a web application designed using a client-server architecture. Using this architecture the client communicates with a server using HTTP to send \textit{request} messages. The server waits for client requests and processes the requests when they arrive and replies to the requests with a \textit{response} message.
 
 The platform has a user-interface as well as business logic to handle user requests. The platform supports role-based authentication with roles, meaning that users of varying roles have access to different functionality. The platform can run tests, to check whether a piece of code solves an exercise. Account data, test runs, and syllabus data is persisted in a database.
@@ -12,25 +12,25 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 	\label{fig:Architecture}
 \end{figure}
 
-Note that the platform has an API running on a separate server instance to handle code execution and test, called \textit{Test runner}. As components are introduced in the following sections, we elaborate on the choices made for each component, in relation to this structure.
+Note that the platform has an API running on a separate server instance to handle code execution and test, called \textit{Test Runner}. As components are introduced in the following sections, we elaborate on the choices made for each component, in relation to this structure.
 
 \section{Back-end system}
-The back-end system has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture. 
+The back-end system has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture.
 
 \section{Frontend}
-The frontend is the user facing component of our web application. The frontend is designed such that its user-interface and functionality is dependent on the role of the user. 
+The frontend is the user facing component of our web application. The frontend is designed such that its user-interface and functionality is dependent on the role of the user.
 For example if a student has signed in, the student is able to see and complete exercises. In turn if a lecturer signs in, they will have access to more functionality such as creating a syllabus or exercise.
 
 Regardless of the roles of the user the frontend has the ability to send data to the backend for storage, and show the output of executed code, by sending it to the backend and showing the response.
 
 \section{Database}
-In order persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations. 
-The backend then queries the database and returns the relevant data. 
+In order persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations.
+The backend then queries the database and returns the relevant data.
 
 The database component is implemented as a Postgres database. The entities and their relationships contained within the database is shown in figure \ref{fig:Database}. In the figure each box represents an entity-set and attributes for the entities. A diamond represent a relationship between two or more entity-sets.
 
 A dotted line connecting an entity-set to a relationship represent a partial participation of the connected entities and the other participants in the relationship. This means that an entity can exist in the database without participating in the relationship.
-A full line connecting an entity-set to a relationship represents total participation of the entity-set symbolizing that an entity must participate in the relationship. 
+A full line connecting an entity-set to a relationship represents total participation of the entity-set symbolizing that an entity must participate in the relationship.
 This means that an entity cannot exist in the database without participating in the relationship.
 The numbers and letters at the beginning of each relationship line represents the cardinality. A \textit{number} between a relationship and an entity-set represents the number of times an entity can participate in the relationship. Similarly, an \textit{N} represents that entities can participate $0$ or more times.
 
@@ -58,8 +58,8 @@ The \textit{Submission} entity is in a many-to-one relationship with the \textit
 
 The remaining entities \textit{Account}, \textit{Session} and \textit{VerificationToken} are entities which are required by authentication services and are not developed by us.
 
-\section{Test runner}
+\section{Test Runner}
 As previously mentioned, the platform is able execute code by sending the submitted code to the Test Runner API which verifies whether the code is syntactically correct and satisfies the tests defined by the lecturer.
-Since the Test runner is running on its own server instance, we created endpoints that allow the backend to communicate with the Test runner API. When the submitted code has been processed the output will be returned to the caller.
+Since the Test Runner is running on its own server instance, we created endpoints that allow the backend to communicate with the Test Runner API. When the submitted code has been processed the output will be returned to the caller.
 
 In the following chapters we will elaborate on the most important components of our system. In these chapters we will give a detailed description of how the components work and their structure.
