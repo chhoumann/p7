@@ -1,10 +1,16 @@
 In this chapter we will discuss how we fulfilled the learning goals for the semester as well as our own requirements for the project as stated in the MoSCoW analysis of table \ref{tab:MOSCOW}. We will also compare our system to current state of the art solutions. Finally we will discuss how we approached testing and benchmarking.
 
 \section{Learning goals}
-This semester required us to fulfill several learning goals related to building a web application or service. During this project we have designed and implemented a multilayer architecture for a web application. This architecture was based on a client-server structure with an additional API responsible for testing the code submissions as well as a database to persist data. This design was chosen because we just needed a standard approach to serving a website to users and be able to handle traffic in a regular way. The difference being that we also wanted to be able to compile Haskell code submissions and return the result to the users. This left us with the choice of either building this capability into the backend web server or provide a separate service. The issues that we had to consider were that the service had to be scalable, both in terms of speed, but also in terms of having the ability to compile other programming languages in the future. 
-To address the speed aspect, meaning how quickly we can serve users as the user count and subsequent requests grows, we decided on the Rust programming language. In addition, we also decided to try using the Rust web framework \textit{Rocket}, but due to issues related to concurrency and asynchronous behavior, we later decided to switch to the web framework \textit{axum}. Having then built the API as a separate web server also gave us the the ability to potentially just add or remove new APIs in the future. Essentially, giving us the building blocks to transition into other architectures, such as micro services, if required.
+This semester required us to fulfill several learning goals related to building a web application or service. During this project we have designed and implemented a multilayer architecture for a web application. 
+This architecture was based on a client-server structure with an additional API responsible for testing the code submissions as well as a database to persist data. 
+This design was chosen because we just needed a standard approach to serving a website to users and be able to handle traffic in a regular way. 
+The difference being that we also wanted to be able to compile Haskell code submissions and return the result to the users. This left us with the choice of either building this capability into the backend web server or provide a separate service. 
+The issues that we had to consider were that the service had to be scalable, both in terms of speed, but also in terms of having the ability to compile other programming languages in the future. 
+To address the speed aspect, meaning how quickly we can serve users as the user count and subsequent requests grows, we implemented several strategies including a queue and a sweeping system.
+In addition, having built the API as a separate web server also gave us the the ability to potentially just add or remove new APIs in the future. Essentially, giving us the building blocks to add support for other languages through separate APIs.
 
-In order to determine whether the system was able to scale, in terms of the user count, we constructed a benchmarking suite. This benchmarking suite was designed to stress test the API. This was done by simulating different amounts of requests, at the same time, with different environment settings and versions of the system. The benchmarking was based on testing for realistic scenarios, that the system would encounter during normal usage, for example in a class room environment. 
+In order to determine whether the system was able to scale, in terms of the user count, we constructed a benchmarking suite. This benchmarking suite was designed to stress test the API. 
+This was done by simulating different amounts of requests, at the same time, with different configurations and versions of the system. The benchmarking was based on testing for the upper limit of realistic scenarios, that the system would encounter during normal usage, for example in a class room environment.
 In addition to benchmarking, we also conducted a usability test with students from the \textit{Programming Paradigms} course, to evaulate the user interface. \todo{Write when we have conducted the usability test}
 
 
@@ -33,8 +39,7 @@ In addition to benchmarking, we also conducted a usability test with students fr
 %How do we compare with PP as it is now?
 
 \section{Test/benchmarking}
-%How did we do test?
-%How did we do benchmarking?
+%Was the solution scalable
 
 % State of system -> Discussion -> Future Works
 % Bring up what has and hans't been completed from the MoSCoW analysis
