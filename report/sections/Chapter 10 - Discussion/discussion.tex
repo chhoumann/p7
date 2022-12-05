@@ -4,51 +4,21 @@ In this discussion, we will explore the features and functionality of the platfo
 One of the key features of the platform is its ability to support the creation of exercises, allowing students to solve them and receive feedback quickly.
 The platform's user-friendly interface makes it easy for lecturers to create and organize exercises, and to specify the tests that evaluate student answers. This not only allows lecturers to tailor exercises to the specific needs and abilities of their students, but also to provide detailed feedback on student performance, which can help students to improve their understanding and skills.
 
-The platform was designed and implemented as a multilayer architecture based on a client-server structure with an additional API responsible for testing the code submissions and a database to persist data. One of the central goals for the platform was to ensure that it was able to handle a relatively large number of concurrent users and exercise submissions. To achieve this, we implemented several versions of the system in order to gauge the efficiency of each approach. The initial version of the system did not have any behavior that contributed to scalability. This version was built to establish a baseline to compare against future improvements and as a proof of concept. With this version it was clear that the synchronous behavior was slow and incompatible with being able to serve even a small group of students. To address this issue, we implemented a queueing and sweeping system in subsequent versions of the system. These approaches greatly improved the request time for the system, ensured more efficient memory usage and consequently made the system more scalable, allowing it to handle a larger number of users. 
+The platform was designed and implemented as a multilayer architecture based on a client-server structure with an additional API responsible for testing the code submissions and a database to persist data. 
+One of the central goals for the platform was to ensure that it was able to handle a relatively large number of concurrent users and exercise submissions. 
+To achieve this, we implemented several versions of the system in order to gauge the efficiency of each approach. The initial version of the system did not have any behavior that contributed to scalability. 
+This version was built to establish a baseline to compare against future improvements and as a proof of concept. With this version it was clear that the synchronous behavior was slow and incompatible with being able to serve even a small group of students.
+To address this issue, we implemented a queueing and sweeping system in subsequent versions of the system. These approaches greatly improved the request time for the system, ensured more efficient memory usage and consequently made the system more scalable, allowing it to handle a larger number of users. 
 
 In order to determine the performance and therefore scalability of the different versions of the system, we constructed a benchmarking suite. 
 This benchmarking suite was designed to stress test the system. 
-This was done by simulating different amounts of requests, at the same time, with different configurations the given system version. The benchmarking was based on testing for the upper limit of realistic scenarios that the system would encounter during normal usage, for example in a class room environment. This way of benchmarking gave us critical insight into how to optimally configure the system based on the load that it was subject to and therefore unlock further benefits along with the improvements seen with the introduction of the queue and sweeping system.  
+This was done by simulating different amounts of requests, at the same time, with different configurations the given system version. The benchmarking was based on testing for the upper limit of realistic scenarios that the system would encounter during normal usage, for example in a class room environment. 
+This way of benchmarking gave us critical insight into how to optimally configure the system based on the load that it was subject to and therefore unlock further benefits along with the improvements seen with the introduction of the queue and sweeping system. A limiting factor in the benchmarking was the fact that the increments, for example the amount threads, were too large. 
+A better approach would be to find the most optimal initial configuration, and testing different configurations that were only slightly different in order to gauge how that would affect the performance. 
 
-In addition to benchmarking, we also conducted a usability test with students from the \textit{Programming Paradigms} course, to evaulate the user interface. To conduct this usability test, we provided them with a questionnaire based on the \textit{System Usability Scale}. 
+In addition to benchmarking, we also conducted a usability test with students from the \textit{Programming Paradigms} course, to evaulate the user interface. To conduct this usability test, we provided them with a questionnaire based on the \textit{System Usability Scale} (SUS). 
+The participants of the usability test gave the platform a high SUS score, indicating that the platform is usable to such a degree that it could be deployed for use in the class room. The participants responses particularly indicated that the platforms ability to display useful error messages on code submissions, were very helpful. 
+They also indicated that the system would improve the \textit{Programming Paradigms} course. This result does have limitations as the pool of students participating in the questionnaire was small. 
+Similarly, no lecturers were given a questionnaire, which limits the credibility of the test. We do, however feel, that the initial results are promising and indicate that such a platform could be useful in the classroom.
  
-%Went well
-%high sus score
-%Missing buttons to find completed exercises
-%Not clear what was buttons
-%Can be used in practice - limitations are that we havent tested on that many.
 
-
-
-
-
-%Summarize key findings
-%Give your interpretations
-%Discuss implications
-%Acknowledge limitations - MVP etc.
-
-
-\section{State of the art}
-%How do we compare with other similar products?
-%How do we compare with PP as it is now?
-
-\section{Test/benchmarking}
-%Was the solution scalable
-
-% State of system -> Discussion -> Future Works
-% Bring up what has and hans't been completed from the MoSCoW analysis
-
-%decoupled - an advantage
-%strukturere en applikation i en flerlagsarkitektur ved hjælp af gængse programmønstre x
-
-%designe, realisere og afteste en internetapplikation eller - service
-
-%gennemføre systematisk aftestning af applikationen/servicen og påvise at applikationen/servicen svarer til intentioner og brugernes behov
-%demonstrere færdigheder i udvikling af en internetapplikation eller – service af høj, intern og ekstern kvalitet, hvor der fokuseres på en skalérbar arkitektur og ”quality of service”
-
-
-%gennemføre systematisk evaluering af den valgte brugergrænseflade 
-
-%udvikle en kørende internetapplikation eller – service som løser brugernes problem
-
-%did we accomplish all of the learning goals of the semester?
