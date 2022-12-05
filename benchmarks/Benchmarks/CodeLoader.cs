@@ -8,7 +8,7 @@ public static class CodeLoader
     private const string CodeFileName = "code.hs";
     private const string TestFileName = "test.hs";
     
-    public static IEnumerable<CodeSubmission> Load() 
+    public static IEnumerable<CodeSubmission> Load()
     {
         List<CodeSubmission> codeSubmissions = new();
         
