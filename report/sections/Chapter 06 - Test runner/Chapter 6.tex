@@ -9,6 +9,13 @@ This data is sent to the database where it is stored.
 When a student opens an exercise, the data is then fetched from the database.
 This is done by the client sending a request to the Next.js backend, which queries the database and returns both exercise and test data.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.1]{create_exercise.png}
+    \caption{Creating a new exercise as a teacher.}
+    \label{fig:create_exercise}
+\end{figure}
+
 In the interest of reducing the number of database queries, the result of this request is cached on the client.
 The client will eagerly request new data to stay up to date with instructions or test code updates.
 We deemed that this short cache storage time is useful for when teachers update test code during an exercise session.
@@ -25,7 +32,21 @@ The response of this request to the Test Runner is validated and stored as a sub
 This allows users and teachers to access previous submissions, which includes code and a value indicating whether the submission satisfied the exercise tests.
 
 Lastly, the result is sent to the client and displayed on the page.
-\todo{Lots of screenshots! Show problem create modal, success code output and unsuccessful code output}.
+
+\begin{figure}[H]
+	\includegraphics[scale=0.1]{exercise_success.png}
+	\centering
+	\caption{An example of a successful exercise submission.}
+	\label{fig:exercise_success}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[scale=0.1]{exercise_fail.png}
+	\centering
+	\caption{An example of an unsuccessful exercise submission.}
+	\label{fig:exercise_fail}
+\end{figure}
+
 
 \section{Test Runner process} \label{sec:test_runner_process}
 The Test Runner exposes an endpoint \texttt{/haskell/submit/}, which is used to post code submissions.
