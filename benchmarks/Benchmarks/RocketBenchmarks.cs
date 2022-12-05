@@ -23,7 +23,7 @@ public class RocketBenchmarks
     {
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests, client =>
         {
-            client.Post(CodeSubmission);
+            client.Post(CodeSubmission).Result.EnsureSuccessStatusCode();
         });
         
         Task.WhenAll(clientActions).Wait();
