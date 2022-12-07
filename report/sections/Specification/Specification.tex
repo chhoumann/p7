@@ -1,17 +1,17 @@
 This chapter presents an overview of our system using a system specification containing the purpose and the scope of our system, the target users, the constraints of the project, the use cases, and the prioritization using a MoSCoW analysis.
 
-\section*{Purpose and scope of the system }
+\section*{Purpose and Scope of the System}
 The purpose of the system is to provide a better approach to learning functional programming in Haskell using a software application.
-We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution compiles, and whether it fulfills the requirements of the exercise. 
+We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution compiles, and whether it fulfills the requirements of the exercise.
 In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
 
-To reduce the scope of the project, we choose to focus on creating a platform for the Programming Paradigms course, while ensuring the system abstractions support other languages, that could be supported in the future.
-Currently \todo{find number} students attend the course, thus we do not expect many of the following usecases to be performed at the same time. 
+To reduce the scope of the project, we choose to focus on creating a platform for the \textit{Programming Paradigms} course, while ensuring the system abstractions support other languages, that could be supported in the future.
+Currently 172 students attend the course, thus we do not expect many of the following use cases to be performed at the same time.
 We will use the number of course attendees to create an estimation of an operational profile which will be used to stress test the solution, as described in \ref{chap:Benchmarking}
 
-\section*{Target users}
+\section*{Target Users}
 The system will have two main users, the lecturer that will conduct the course, and the university students who will take the course.
-Therefore the responsibility of the frontend can be split into two categories: 
+Therefore the responsibility of the frontend can be split into two categories:
 \begin{itemize}
     \item \textbf{Lecturer}-based responsibilities.
     \item \textbf{Student}-based responsibilities.
@@ -21,29 +21,29 @@ Therefore the responsibility of the frontend can be split into two categories:
 If the signed in user is a lecturer the frontend provides the lecturer the ability to create syllabi, sessions, exercises and test cases for the exercises, as well as they ability to solve and submit exercises. The ability for the lecturer to solve and submit exercises was included to allow lecturers to try out the exercises and ensure that the test cases behave as expected before releasing the exercises to the students. Additionally, the lecturer will also have access to a dashboard that shows which students have completed which exercises for a given session, in order to track progress and .
 
 \subsubsection*{Student-based responsibilities}
-Conversely to the Lecturer-based responsibilities, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed. 
+Conversely to the Lecturer-based responsibilities, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed.
 
 
-\section*{Constraints of the project}
-Given this project is developed as a semester project at \aau{} there will be some constraints that we must adhere to. 
-One of the constraints is the time constraint: we have a single semester, or approximately 3 months, to develop the system. 
-In addition, we should design an internet based system that is scalable. 
- 
+\section*{Constraints of the Project}
+Given this project is developed as a semester project at \aau{} there will be some constraints that we must adhere to.
+One of the constraints is the time constraint: we have a single semester, or approximately 3 months, to develop the system.
+In addition, we should design an internet based system that is scalable.
+
 \section*{Use Cases} \label{sec:use_cases}
-The goal of the project is to improve the teaching methods applied to the programming paradigms course. 
+The goal of the project is to improve the teaching methods applied to the \textit{Programming Paradigms} course.
 To best assess whether the project solves the current issues related to the course, and therefore improves it, we will describe use cases in an application which satisfies this goal.
 Use cases also allows us to prioritize the features needed later on.
-The following sections contain the use cases we have outlined that fall under our scope in no particular order.  
+The following sections contain the use cases we have outlined that fall under our scope in no particular order.
 
 \subsection*{Use case: Accounts}
 To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
 
 \subsection*{Use case: Solve exercises}
 A Student should be able to choose an exercise session and a specific exercise. The exercise description is then retrieved and shown to the user.
-As the user completes the exercise, they should also be able to submit the exercise, and verify that their submitted solutions can compile and fulfills the requirements of the exercise. If it does not compile or fails the tests, it should provide the user with an error describing the problem. 
+As the user completes the exercise, they should also be able to submit the exercise, and verify that their submitted solutions can compile and fulfills the requirements of the exercise. If it does not compile or fails the tests, it should provide the user with an error describing the problem.
 
 \subsection*{Use case: Create exercises}
-A Lecturer should be able to create and edit syllabi as well as the belonging exercise sessions and their included exercises. 
+A Lecturer should be able to create and edit syllabi as well as the belonging exercise sessions and their included exercises.
 For each given exercise the user should be able to specify an exercise description and tests that must be passed, the tests should be performed on the submitted code. Furthermore the Lecturer should be able to specify template code that will already be entered when the students opens the exercise.
 
 \subsection*{Use case: Show statistics over exercises}
@@ -52,23 +52,23 @@ A Lecturer should be able to view statistics about exercises, for example how ma
 \subsection*{Use case: View solutions}
 The Lecturer can view all submitted solutions, to see if the students use the correct approach.
 The Students should be able to view their own solutions and attempts for the exercises.
-To do this a database keeping a track of the code used for each attempt submitted is needed. 
+To do this a database keeping a track of the code used for each attempt submitted is needed.
 
-\subsection*{Use case: Best solutions} 
+\subsection*{Use case: Best solutions}
 The Lecturer should be able to select code solutions submitted by the Students to publish to all other Students allowing them to view exercises discussed during class.
 
-With the use cases that are contained in our scope described, we need a way to prioritize them. This then allows us to make a prioritized list of the features that are needed in-order to fulfill our use cases. 
+With the use cases that are contained in our scope described, we need a way to prioritize them. This then allows us to make a prioritized list of the features that are needed in-order to fulfill our use cases.
 
-\section{MoSCoW}
+\section{MoSCoW} \label{sec:MoSCoW}
 To gain an overview of which features the solution must, should, could and won't contain we perform a MoSCoW analysis.
-A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system. 
+A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system.
 
-Table \ref{tab:MOSCOW} shows the feature prioritizations for a working solution. 
+Table \ref{tab:MoSCoW} shows the feature prioritizations for a working solution.
 
-The must have section includes the features required for students to solve exercises. These are seen as must-have features as all use cases other than the Account one require these.  
-The should-have category includes the additional features that are needed to fulfill the Solve Exercises use case as well as the Create Exercise one. 
-These are prioritized as should have as they are needed in order to provide the users with the main expected features of an exercise platform for coding. 
-Account Handling, as well as exercise attempt logging features, are placed in the could have category as they are both nice to have but indeed needed in order to provide a usable solution. 
+The must have section includes the features required for students to solve exercises. These are seen as must-have features as all use cases other than the Account one require these.
+The should-have category includes the additional features that are needed to fulfill the Solve Exercises use case as well as the Create Exercise one.
+These are prioritized as should have as they are needed in order to provide the users with the main expected features of an exercise platform for coding.
+Account Handling, as well as exercise attempt logging features, are placed in the could have category as they are both nice to have but indeed needed in order to provide a usable solution.
 Lastly, statistics and solution highlighting are placed in the wont have category as they have been deemed out of scope according to the constraints of the problem.
 
 
@@ -90,14 +90,12 @@ Lastly, statistics and solution highlighting are placed in the wont have categor
     \cellcolor[HTML]{C0C0C0}\textbf{Could have}                                   &  &  &  &  \\ \cline{1-1}
     Students can access old exercise attempts                                     &  &  &  &  \\ \cline{1-1}
     Lecturer can view all exercise attempts submitted by students                 &  &  &  &  \\ \cline{1-1}
-    \cellcolor[HTML]{C0C0C0}\textbf{Wont have}                                    &  &  &  &  \\ \cline{1-1}
+    \cellcolor[HTML]{C0C0C0}\textbf{Won't have}                                    &  &  &  &  \\ \cline{1-1}
     Lecturer can share submitted solutions so they are viewable by other students &  &  &  &  \\ \cline{1-1}
     Lecturer can access statistics over the exercise attempts                     &  &  &  &  \\ \cline{1-1}
     \end{tabular}
-    \caption{\label{tab:MOSCOW}MoSCoW Analysis}
+    \caption{\label{tab:MoSCoW}MoSCoW Analysis}
 \end{table}
 
 The \textit{Must have} category from the MoSCoW analysis represents the minimal amount of features that we want to include to satisfy the goals of the project. Throughout the report we will refer to this as the Minimal Viable Product (MVP).
-In the following chapter we will describe the design of the system which is based on the MVP. 
-    
-
+In the following chapter we will describe the design of the system which is based on the MVP.
