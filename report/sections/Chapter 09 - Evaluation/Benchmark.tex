@@ -2,10 +2,10 @@
 In this chapter, we present how these tests and benchmarks have been conducted, and describe the implementation. 
 The goal with the stress tests and benchmarks is threefold: 
 \begin{enumerate}
-\item it helps us determine an upper limit of simultaneous users before response times renders a student unproductive.
-\item it helps us determine the average pull time for clients using the Test Runner under different levels of stress.
-\item it helps us finding good configurations for the Test Runner system
-\item it helps us establish different implementations of the backend regresses in terms of response times.
+\item It helps us determine an upper limit of simultaneous users before response times renders a student unproductive.
+\item It helps us determine the average pull time for clients using the Test Runner under different levels of stress.
+\item It helps us helps good configurations for the Test Runner system
+\item It helps us establish different implementations of the backend regresses in terms of response times.
 \end{enumerate}
 To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
 a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
@@ -136,7 +136,7 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
 
 \subsection{Baseline}
 The baseline for all other benchmarks is a Test Runner implemented using Rocket. 
-The baseline application uses only a single thread to handle all code submissions, giving us an estimation of \todo{}.
+The baseline application uses only a single thread to handle all code submissions, giving us estimation on to what degree an implementation using Axum and the Queue System improves the overall response time of the platform. 
 
 
 \subsection{Queue system}
@@ -171,5 +171,5 @@ Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean respons
 All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and Test Runner results older than 90 seconds. 
 We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
 Compared to the baseline, it is vastly superior, requiring only a third of the time responding to 100 simultaneous requests. 
+Since a configuration of a Test Runner with five threads and with a channel capacity of ten yields such good results, we examine similar configurations to find a closer estimate to optimal configuration. 
 
-Since a configuration five threads and with a channel capacity of ten yields such good results, we examine similar configurations. 
