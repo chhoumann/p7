@@ -8,7 +8,7 @@ To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{ch
 a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
 
 \subsection{Orchestration and Test Runner parameterization}
-The benchmark and test components are managed in their own docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
+The benchmark and test components are managed in their own Docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
 Information necessary to establish the connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
 These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
 For instance, the environmental constants describing the network location of the Test Runner service is passed as arguments to the Dockerfiles describing the tests and the benchmark, as these must both be able to contact the Test Runner service.
@@ -31,7 +31,7 @@ The benchmark for the baseline utilize the same parameterization as the benchmar
 We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
 \subsubsection{Ensuring simultaneous client submissions}
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:TaskBuilder}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the BuildClientTaskList method, which is used to build a number of actions which are executed simultaneously in a Task. }, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
   public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
@@ -62,7 +62,7 @@ We utilize this inputted action to send a code submissions requests and invoke s
 
 
 \subsubsection{Baseline benchmark implementation}
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:baselineBench}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the baseline.}, label={lst:baselineBench}]
 // Attributes excluded
 public class RocketBenchmarks
 {
@@ -89,7 +89,7 @@ If just one of the submissions cannot be processed an exception is thrown, and t
 It utilizes the BuildClientTaskList method seen in listing \ref{lst:baselineBench}.
 
 \subsubsection{Queue system benchmark implementation}
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:queueSystemBench}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the backend with the Queue System. }, label={lst:queueSystemBench}]
 // Attributes excluded
 public class TicketedCodeRunnerBenchmark
 {
