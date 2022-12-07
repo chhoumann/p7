@@ -5,7 +5,7 @@ One of the key features of the platform is its ability to support the creation o
 The platform's user-friendly interface makes it easy for lecturers to create and organize exercises, and to specify the tests that evaluate student answers. This not only allows lecturers to tailor exercises to the specific needs and abilities of their students, but also to provide detailed feedback on student performance, which can help students to improve their understanding and skills.
 
 The platform was designed and implemented as a multi layered architecture based on a client-server structure with an additional API responsible for testing the code submissions and a database for persisting data. 
-One of the central goals for the platform was to ensure that it was able to handle a relatively large number of concurrent users and exercise submissions. 
+One of the primary goals of the platform was to ensure its ability to handle a relatively large number of concurrent users and exercise submissions. 
 To achieve this, we implemented several versions of the system in order to gauge the efficiency of each approach. The initial version of the system did not have any behavior that contributed to scalability. 
 This version was built to establish a baseline to compare against future improvements and as a proof of concept. With this version it was clear that the synchronous behavior was slow and incompatible with being able to serve even a small group of students.
 To address this issue, we implemented a queueing and sweeping system in subsequent versions of the system. These approaches greatly improved the request time for the system, ensured more efficient memory usage and consequently made the system more scalable, allowing it to handle a larger number of users. 
