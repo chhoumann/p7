@@ -152,7 +152,7 @@ Usually one performs stress testing by exposing the system under test to a numbe
 The expected capabilities are often described in an operational profile\cite{OperationalProfiles}. 
 Such profile can, in combination with stress testing, be used to ensure that a system is both reliable and available even when pushed beyond its expected workload.
 
-BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in dotnet runtimes. 
+BenchmarkDotNet\cite{Benchmarkdotnet} is a benchmarking framework for measuring the speed of operations performed in .NET runtimes. 
 It allows for the parameterization of measured operations and provides ways to introduce warm-up operation and adjustments. 
 We use this framework to create a stress test environment that simulates stressful client behavior, and measures the response times for the system under test.
 
