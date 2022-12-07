@@ -115,7 +115,7 @@ public class TicketedCodeRunnerBenchmark
 }
 \end{lstlisting}
 
-The benchmark for the queue system seen on listing \ref{lst:CodeRunnerQueueClient} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing xxx and the parameterization attributes from BenchmarkDotNet. However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request. 
+The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing xxx and the parameterization attributes from BenchmarkDotNet. However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request. 
 Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to pull for a result.
 Best case pull time needs to be established to compare it with the baseline component. 
 However, due to the nature of remote communication using the internet it may be necessary to establish which poll times to avoid rather than which gives the best average response times, since the benchmarks does not consider the physical distance between client and server.
@@ -138,6 +138,7 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
     \includegraphics[scale=0.65]{images/10.png}
     \caption{Mean response time for handling 10 simultaneous client requests for different poll times and Test Runner configurations}
   \end{minipage}
+  \label{fig:resultstart}
   \hfill
   \begin{minipage}[t]{0.4\textwidth}
     \centering
@@ -152,15 +153,15 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
   \hfill
   \begin{minipage}[t]{0.4\textwidth}
     \centering
-    \includegraphics[scale=0.65]{images/20.png}
+    \includegraphics[scale=0.65]{images/100.png}
     \caption{Mean response time for handling 100 simultaneous client requests for different poll times and Test Runner configurations}
+    \label{fig:resultEnd}
+
   \end{minipage}
-  \label{fig:results}
-  \caption{Results of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions, size of the queue}
 \end{figure}
 
-Figure \ref{fig:results} shows the results of the benchmarks in terms of average response time, disregarding the code submission. 
-We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
-This is likely due to the capacity being xxxxx and the thread..... \todo{What should I expect of high thread? high capacity?}
+Figure \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels.
+We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
+This is likely due to \todo{How do we expect these things to behave?}
 
 
