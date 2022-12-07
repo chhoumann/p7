@@ -11,7 +11,7 @@ The initial version of the Test Runner system did not contribute sufficiently to
 It was built to establish a baseline to compare against future improvements and as a proof of concept. With this first version, it was clear that the synchronous behavior was too slow and unable to serve even a small group of students.
 To address this, we implemented a queueing and sweeping system in subsequent asynchronous versions of the system. Doing so greatly improved the efficiency of the system, ensured less memory usage, and consequently made the system more scalable, allowing it to handle a larger number of users. 
 
-In order to determine the performance and therefore scalability of the different versions of the system, we constructed a benchmarking suite. 
+In order to determine the performance and scalability of the different versions of the system, we constructed a benchmarking suite. 
 This benchmarking suite was designed to stress test the system. 
 This was done by simulating different amounts of requests, at the same time, with different configurations the given system version. The benchmarking was based on testing for the upper limit of realistic scenarios that the system would encounter during normal usage, for example in a class room environment. 
 This way of benchmarking gave us critical insight into how to optimally configure the system based on the load that it was subject to and therefore unlock further benefits along with the improvements seen with the introduction of the queue and sweeping system. A limiting factor in the benchmarking was the fact that the increments, for example the amount threads, were too large. 
