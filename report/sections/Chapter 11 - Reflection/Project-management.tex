@@ -1,9 +1,9 @@
 In the following section we will describe how the project was managed, which techniques were used, as well as which issues we encountered. Throughout we will reflect on the decisions that were made in this context.
 
-\section{Task management}
+\section{Task Management}
 One of the primary objectives in any project is to manage the tasks that are generated throughout the project. The goal is to maintain an overview of what has been done, what needs to be done and how the tasks are distributed between developers. Additionally, project managers also often want to be able to estimate how long tasks may take to complete and their difficulty. To accomplish this, projects may utilize several project management tools and techniques. In this section we will focus on the tools that we utilized, while in section \ref{sec:agile-dev} we will focus on the techniques that were utilized to manage the project.
 
-\subsection{Github projects}
+\subsection{Github Projects}
 GitHub Projects seemed promising, as it integrates with existing developer workflows. You track issues, and as you work on them, they flow from the backlog to \textit{in progress}, to \textit{in review}, and then is at last categorized as \textit{completed}. When you submit a pull request, it goes to the review section, so other members are aware that it is pending. And when that pull request is merged, it goes to completed automatically.
 Intuitively, it makes sense to track issues like this, as it is so closely aligned with the modern Git workflow on GitHub. To start contributing to a codebase, you create a branch. Then you reference issues when you make a pull request, which will then become linked to your changes, making issues closely tied to actual code changes.
 However, we found that some members were not accustomed to this way of working, and as such, did not take the extra steps to facilitate the automation, such as marking issues as related to the project.
@@ -24,7 +24,7 @@ Notion is a platform that allows users to organize resources and manage projects
 While Notion provides fewer features in terms of integration with Github, the tool was familiar to us and provided the functionality that we needed to manage the project.
 Once we switched to Notion, planning and updating the tasks became a more active part of our daily work. This led to better productivity as we were now able to better maintain an overview of what each member of the group was doing and and how far they were with each task.
 
-\section{Agile development approach} \label{sec:agile-dev}
+\section{Agile Development Approach} \label{sec:agile-dev}
 Irrespective of which tools we used, the goal from the beginning of the project was to use a Scrum-like approach to project management.
 The decision to this approach was based on previous experience working with a more rigid Scrum methodology in a school project setting which we had found to be less productive.
 Generally, Scrum is a framework that helps teams and organizations generate value through flexible solutions to complex problems. Scrum is an iterative and incremental approach to project work where the project is broken up into sprints. A sprint being a time frame, usually 1-4 weeks in length, in which the the teams tries to complete the work that has been selected from a product backlog\cite{sutherlandScrumArtDoing2014}.
@@ -33,7 +33,7 @@ We only adopted the specific things from Scrum that we felt were necessary. For 
 In traditional Scrum, you would have product owners that talk to customers about which features are important to them. Since all group members are both stakeholders and developers, we found that acting as a council is more effective than delegating the role to a single member.
 
 Additionally, instead of traditional sprints, we designed the specifications for a minimum viable product, consisting of only the core features that we deemed necessary for the success of this type of project. 
-This is akin to filling the project backlog with all features that could be in the project. Then we went on to prioritize the features again, focusing on features that fulfilled the use-cases we imagined for the platform, grouping them as seen in the MOSCOW analysis in chapter \ref{chap:Specification}.
+This is akin to filling the project backlog with all features that could be in the project. Then we went on to prioritize the features again, focusing on features that fulfilled the use cases we imagined for the platform, grouping them as seen in the MOSCOW analysis in chapter \ref{chap:Specification}.
 We found that sprints do not fit the nature of semester projects, as you have varying time to work, and it is usually less than half of the work week. We have found, based on previous experience, that smaller tasks and less analytical overhead, which Scrum brings, fits these projects well.
 
 When developing the features we adopted a pair programming approach. This was done having only one member doing the actual programming while the other would be ready to assist by finding information and spotting errors in the code. This technique was adopted as we knew from previous projects that this type of partnership was productive. Besides pair programming, we also had a strict rule regarding code review. Anyone working on a specific feature would not be able to merge their code into production. This would only be allowed, and done, by other members after a review of the code. If the code reviewers did not understand the implementation, the designers of the code were obliged to showcase and explain the code in group meetings. This meant that all features, that were implemented, had been checked by at least two sources and therefore ensuring fewer bugs and a collective understanding.
