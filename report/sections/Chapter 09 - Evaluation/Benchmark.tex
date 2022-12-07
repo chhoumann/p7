@@ -31,7 +31,7 @@ The benchmark for the baseline utilize the same parameterization as the benchmar
 We suspect that when the Test Runner experience stress the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
 \subsubsection{Ensuring simultaneous client submissions}
-\begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:TaskBuilder}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
   public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
@@ -62,7 +62,7 @@ We utilize this inputted action to send a code submissions requests and invoke s
 
 
 \subsubsection{Baseline benchmark implementation}
-\begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:baselineBench}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:baselineBench}]
 // Attributes excluded
 public class RocketBenchmarks
 {
@@ -89,7 +89,7 @@ If just one of the submissions cannot be processed an exception is thrown, and t
 It utilizes the BuildClientTaskList method seen in listing \ref{lst:baselineBench}.
 
 \subsubsection{Queue system benchmark implementation}
-\begin{lstlisting}[language=cs, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:queueSystemBench}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing xxxxxx}, label={lst:queueSystemBench}]
 // Attributes excluded
 public class TicketedCodeRunnerBenchmark
 {
