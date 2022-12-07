@@ -37,6 +37,12 @@ The benchmark for the baseline utilize the same parameterization as the benchmar
 We suspect that when the Test Runner experience stress, the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
 \subsubsection{Ensuring simultaneous client submissions}
+When performing stress tests one must ensure that the behavior stresses the system in a manner that is realistic, but on the edge of what is probable.
+In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
+To ensure that all submissions to the component happens close to simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
+When the actions are invoked, an inputted action is invoked with a CodeRunnerClient as input. 
+We utilize this inputted action to send a code submissions requests and invoke start the clients in rapid succession.
+
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the BuildClientTaskList method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
@@ -60,14 +66,12 @@ public static class TaskBuilder
   }
 }
 \end{lstlisting}
-When performing stress tests one must ensure that the behavior stresses the system in a manner that is realistic, but on the edge of what is probable.
-In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
-To ensure that all submissions to the component happens close to simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
-When the actions are invoked, an inputted action is invoked with a CodeRunnerClient as input. 
-We utilize this inputted action to send a code submissions requests and invoke start the clients in rapid succession.
-
 
 \subsubsection{Baseline benchmark implementation}
+The baseline benchmarks seen in listing \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
+The benchmark itself measures the time it takes for all clients to post the code submission and receive an HTTP response with status code 200.
+If just one of the submissions cannot be processed an exception is thrown, and the benchmark stops.
+It utilizes the BuildClientTaskList method seen in listing \ref{lst:baselineBench}.
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the baseline}, label={lst:baselineBench}]
 // Attributes excluded
 public class RocketBenchmarks
@@ -89,12 +93,13 @@ public class RocketBenchmarks
     }
 }
 \end{lstlisting}
-The baseline benchmarks seen in listing \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
-The benchmark itself measures the time it takes for all clients to post the code submission and receive an HTTP response with status code 200.
-If just one of the submissions cannot be processed an exception is thrown, and the benchmark stops.
-It utilizes the BuildClientTaskList method seen in listing \ref{lst:baselineBench}.
 
 \subsubsection{Queue system benchmark implementation}
+The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
+However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request.
+Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to pull for a result.
+Best case pull time needs to be established to compare it with the baseline component. 
+However, due to the nature of remote communication using the internet it may be necessary to establish which poll times to avoid rather than which gives the best average response times, since the benchmarks does not consider the physical distance between client and server.
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the backend with the Queue System }, label={lst:queueSystemBench}]
 // Attributes excluded
 public class TicketedCodeRunnerBenchmark
@@ -119,11 +124,7 @@ public class TicketedCodeRunnerBenchmark
 }
 \end{lstlisting}
 
-The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
-However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request.
-Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to pull for a result.
-Best case pull time needs to be established to compare it with the baseline component. 
-However, due to the nature of remote communication using the internet it may be necessary to establish which poll times to avoid rather than which gives the best average response times, since the benchmarks does not consider the physical distance between client and server.
+
 
 \subsection{Results}
 In this section, results of the combined stress tests and benchmarks are presented.
@@ -137,6 +138,7 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
 \subsection{Baseline}
 The baseline for all other benchmarks is a Test Runner implemented using Rocket. 
 The baseline application uses only a single thread to handle all code submissions, giving us estimation on to what degree an implementation using Axum and the Queue System improves the overall response time of the platform. 
+
 
 
 \subsection{Queue system}
@@ -169,7 +171,7 @@ The baseline application uses only a single thread to handle all code submission
 
 Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner implementing the Queue System with different queue size, number of threads, and with clients having varying poll times. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels. 
 All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and Test Runner results older than 90 seconds. 
-We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
+We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
 Compared to the baseline, it is vastly superior, requiring only a third of the time responding to 100 simultaneous requests. 
-Since a configuration of a Test Runner with five threads and with a channel capacity of ten yields such good results, we examine similar configurations to find a closer estimate to optimal configuration. 
+Since a configuration of a Test Runner with five threads and with a channel capacity of ten yields such good results, we examine similar configurations to find a closer estimate to optimal configuration for this particular computer. 
 
