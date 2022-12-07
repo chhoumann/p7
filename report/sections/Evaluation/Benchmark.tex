@@ -170,7 +170,7 @@ The baseline application uses only a single thread to handle all code submission
 \end{figure}
 
 Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows mean response time of benchmarking the Test Runner implementing the Queue System with different queue size, number of threads, and with clients having varying poll times. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels. 
-All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and Test Runner results older than 90 seconds. 
+All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and remove Test Runner results older than 90 seconds. 
 We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
 Compared to the baseline, it is vastly superior, requiring only a third of the time responding to 100 simultaneous requests. 
 Since a configuration of a Test Runner with five threads and with a channel capacity of ten yields such good results, we examine similar configurations to find a closer estimate to optimal configuration for this particular computer. 
