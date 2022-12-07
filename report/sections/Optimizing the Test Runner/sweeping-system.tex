@@ -1,0 +1,61 @@
+\section{Sweeping System}
+Data is added to the job results hashmap every time a client posts a code submission.
+As a reminder, this is simply a key-value pair consisting of a UUID and a Rust \texttt{Option} of type \texttt{TestRunnerResult}.
+To solve the problem of the continuously growing size of the hashmap, our first idea was to remove data from the hashmap when the client polls for it.
+In other words, the data is kept in memory \textit{until} the client requests it, at which point it is returned to the client through an HTTP response and subsequently removed from the job results hashmap.
+While this worked fine under ideal circumstances, two potential issues with this approach may arise in practice:
+\begin{itemize}
+    \item The result being removed immediately upon being requested means that if some client-side error occurs, the client is unable to request the data again.
+    \item If the client posts a code submission but never polls for the result (say, as a result of losing connection), the data still continues to remain in memory.
+\end{itemize}
+
+Since this idea would only work under ideal circumstances, we opted for a safer solution inspired by the garbage collectors and the concept of sweeping.
+The idea is to sweep old data from the hashmap when new data is added, but only if long enough time has passed since the last time sweeping was performed.
+This ensures that sweeping will not happen several times every second if multiple clients were to post a code submission at the same time.
+To achieve this, we introduced a new \texttt{timestamp} field to the \texttt{TestRunnerResult} data structure, which is set when a thread finishes processing a code submission.
+This timestamp simply denotes the point in time at it was added to the job results hashmap.
+Then, outdated data are removed from the hashmap if the difference between its timestamp and the current time is greater than some lifetime set through an environment variable.
+Code snippet \ref{lst:sweeping} shows the same function as code snippet \ref{lst:worker-thread}, however lines \ref{line:last-sweep-time} --- \ref{line:sweep-config} and lines \ref{line:sweep-start} --- \ref{line:sweep-end} have been introduced to implement the sweeping system.
+
+\begin{lstlisting}[language=rust, escapechar=~, caption={The function introduced in section \ref{sec:queue-system} updated with sweeping}, label={lst:sweeping}]
+async fn worker_thread(
+    rx: Receiver<TestRunnerWork>,
+    job_results: Arc<Mutex<Box<HashMap<Uuid, Option<TestRunnerResult>>>>>,
+    limit: usize
+) {
+    let stream = tokio_stream::wrappers::ReceiverStream::new(rx);
+    let last_sweep_time = Arc::new(Mutex::new(SystemTime::now())); ~\label{line:last-sweep-time}~
+    let config = sweep_configuration::from_dot_env(); ~\label{line:sweep-config}~
+
+    stream.for_each_concurrent(limit, |work| async {
+        let res = schedule_test(work.submission).await;
+        let mut map = job_results.lock().unwrap();
+        map.insert(work.id, Some(res));
+
+        if last_sweep_time.lock().unwrap().elapsed().unwrap() > ~\label{line:sweep-start}~
+            config.duration_between_sweeps {
+            map.retain(|&_, res| {
+                if res.is_none() {
+                    return true
+                }
+
+                res.as_ref().unwrap().timestamp.elapsed().unwrap() <=
+                    config.lifetime
+            });
+
+            *last_sweep_time.lock().unwrap() = SystemTime::now();
+        } ~\label{line:sweep-end}~
+    }).await;
+}
+\end{lstlisting}
+
+Line \ref{line:last-sweep-time} initializes the last sweeping time variable as the current time, and wraps it in a mutex to prevent race conditions from arising.
+Line \ref{line:sweep-config} loads the sweeping configuration data structure by reading defined values from a \texttt{.env} file using the helper function \texttt{from\_dot\_env()}.
+The configurable variables include the duration between sweeps as well as the lifetime of data inside the hashmap.
+Lines \ref{line:sweep-start} --- \ref{line:sweep-end} is the sweeping algorithm itself.
+For each element in the hashmap where the \texttt{Option} type has a value, job results are removed if their elapsed time exceeds the configured lifetime.
+This is achieved using the \texttt{retain()} function, a function that retains elements in the hashmap if and only if they fulfill some predicate.
+
+This sweeping system achieves the desired result of removing job result data from the hashmap to prevent it from continuously growing while still retaining the data for some time, allowing clients to request the same data multiple times should an error occur.
+Furthermore, one can adjust the aforementioned environment variables to best suit the circumstances under which the system is used.
+For example, lowering the duration between sweeps would result in the sweeping algorithm running more frequently, decreasing the system's memory usage but increasing the CPU usage.
