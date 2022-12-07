@@ -165,7 +165,7 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
 \end{figure}
 
 Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels. 
-All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every 10 seconds, and Test Runner results older than 90 seconds.
-We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
+All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every 10 seconds, and Test Runner results older than 90 seconds. We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
+Compared to the baseline, it is vastly superior, requiring only a third of the time responding to 100 simultaneous requests. 
 
 
