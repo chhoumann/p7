@@ -135,6 +135,9 @@ Benchmarks for the Test Runner implementing the Queue System is configured such 
 All stress tests and benchmarks are run on a computer with an AMD EPYC Processor (with IBPB), 4 CPUs, 4 logical cores, and 4 physical cores. The computer used for the benchmarks use UBUNTU 20.04 as the operating system.
 
 \subsection{Baseline}
+The baseline for all other benchmarks is a Test Runner implemented using Rocket. 
+The baseline application uses only a single thread to handle all code submissions, giving us an estimation of \todo{}.
+
 
 \subsection{Queue system}
 \begin{figure}[!tbp]
@@ -164,8 +167,9 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
   \end{minipage}
 \end{figure}
 
-Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels. 
-All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every 10 seconds, and Test Runner results older than 90 seconds. We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
+Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner implementing the Queue System with different queue size, number of threads, and with clients having varying poll times. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels. 
+All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and Test Runner results older than 90 seconds. 
+We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
 Compared to the baseline, it is vastly superior, requiring only a third of the time responding to 100 simultaneous requests. 
 
-
+Since a configuration five threads and with a channel capacity of ten yields such good results, we examine similar configurations. 
