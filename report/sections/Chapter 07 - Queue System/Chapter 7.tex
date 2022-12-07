@@ -1,4 +1,4 @@
-\chapter{Queue System} \label{chap:QueueSystem}
+\chapter{Optimizing the Test Runner} \label{chap:OptimizingTestRunner}
 In chapter \ref{chap:TestRunner}, we described how running multiple GHC interpreter processes asynchronously eventually crashes the Test Runner web server given sufficiently many simultaneous requests.
 As mentioned, we needed a way to limit the number of running GHC interpreter processes in order to prevent crashes.
 In the following sections, we first give a general overview of how this was implemented.
@@ -27,7 +27,7 @@ This UUID is also used by the web server as a key to look up the given code subm
 The second endpoint expects a GET request with a UUID as a parameter that is then used to look up the result of processing the code submission with the matching UUID.
 It then responds to the client with the result of processing that submission if it was found.
 
-\section{The Queue} \label{sec:queue-system}
+\section{Queue System} \label{sec:queue-system}
 We have two endpoints that need to share data, and the Rust programming language does not allow global variables.
 Therefore, we opted to create a shared state data structure using the \texttt{layer} feature in the axum framework.
 The \texttt{layer} feature is axum's default implementation of middleware for processing data across a group of endpoints.
