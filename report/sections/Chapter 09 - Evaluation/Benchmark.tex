@@ -4,6 +4,7 @@ The goal with the stress tests and benchmarks is threefold:
 \begin{enumerate}
 \item it helps us determine an upper limit of simultaneous users before response times renders a student unproductive.
 \item it helps us determine the average pull time for clients using the Test Runner under different levels of stress.
+\item it helps us finding good configurations for the Test Runner system
 \item it helps us establish different implementations of the backend regresses in terms of response times.
 \end{enumerate}
 To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
@@ -15,7 +16,8 @@ Information necessary to establish the connection between Test Runner and other 
 These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
 For instance, the environmental constants describing the network location of the Test Runner service is passed as arguments to the Dockerfiles describing the tests and the benchmark, as these must both be able to contact the Test Runner service.
 These environmental constants also allow easy adjustment of Test Runner implementing the Queue System without rebuilding the docker container.
-These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code.
+These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code. 
+It is also possible to adjust the time between sweeps and how long each Test Runner result should be stored. 
 This makes it easy to experiment with different variables for the benchmarks and stress tests.  
 The containers are orchestrated such that the benchmarks starts only if the test container exits successfully --- that is, all the tests pass successfully. 
 Thus, wrongly configured containers do not result in misleading benchmark results.
@@ -117,7 +119,8 @@ public class TicketedCodeRunnerBenchmark
 }
 \end{lstlisting}
 
-The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet. However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request.
+The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
+However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request.
 Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to pull for a result.
 Best case pull time needs to be established to compare it with the baseline component. 
 However, due to the nature of remote communication using the internet it may be necessary to establish which poll times to avoid rather than which gives the best average response times, since the benchmarks does not consider the physical distance between client and server.
@@ -139,8 +142,8 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
   \begin{minipage}[t]{0.4\textwidth}
     \includegraphics[scale=0.65]{images/10.png}
     \caption{Mean response time for handling 10 simultaneous client requests for different poll times and Test Runner configurations}
+    \label{fig:resultstart}
   \end{minipage}
-  \label{fig:resultstart}
   \hfill
   \begin{minipage}[t]{0.4\textwidth}
     \centering
@@ -158,12 +161,11 @@ All stress tests and benchmarks are run on a computer with an AMD EPYC Processor
     \includegraphics[scale=0.65]{images/100.png}
     \caption{Mean response time for handling 100 simultaneous client requests for different poll times and Test Runner configurations}
     \label{fig:resultEnd}
-
   \end{minipage}
 \end{figure}
 
-Figure \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels.
+Figure \ref{fig:resultstart} --- \ref{fig:resultEnd} shows average mean response time of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions and C the maximum capacity of the channels. 
+All benchmarks have 
 We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five (gray) threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
-This is likely due to \todo{How do we expect these things to behave?}
 
 
