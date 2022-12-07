@@ -17,7 +17,7 @@ Thus, wrongly configured containers do not result in misleading benchmark result
 
 \todo{Create a picture for the orchestration and end section with a ref to it}
 
-\section{Simulating client behavior}
+\section{Simulating Client Behavior}
 To simulate the platform being used by a variable number of users, we utilize BenchmarkDotNet's parameterization of methods used for benchmarks. 
 To simulate different behavior of platform clients, multiple classes representing such clients were implemented.
 Each class represents a user for a different version of the platform.
@@ -26,4 +26,4 @@ During stress testing, the BenchmarkDotNet framework creates all possible combin
 This exposes the system to groups of varying size with a variety of different poll times and code submission contents.
 The idea with this is to give information about how the platform behaves when a classroom of students all work on the same exercises at the same time.
 The underlying implementation of the client classes use an HTTP client.
-The results of these stress tests are presented in section \ref{sec:TestEvaluation}.
+The results of these stress tests are presented in section \ref{sec:TestEvaluation}. \todo{fix ref}
