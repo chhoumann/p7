@@ -3,7 +3,7 @@ To ensure that the developed platform can handle an appropriate amount of users,
 In this chapter we present how these tests and benchmarks have been conducted, and describe the implementation. To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
 a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
 
-\section{Orchestration and Test Runner parameterization}
+\section{Orchestration and Test Runner Parameterization}
 The benchmark and test components are managed in their own docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
 Information necessary to establish such connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
 These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
@@ -26,4 +26,4 @@ During stress testing, the BenchmarkDotNet framework creates all possible combin
 This exposes the system to groups of varying size with a variety of different poll times and code submission contents.
 The idea with this is to give information about how the platform behaves when a classroom of students all work on the same exercises at the same time.
 The underlying implementation of the client classes use an HTTP client.
-The results of these stress tests are presented in section \ref{sec:TestEvaluation}. \todo{fix ref}
+The results of these stress tests are presented in section \ref{sec:TestEvaluation}.

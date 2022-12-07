@@ -1,9 +1,9 @@
 \chapter{Test Runner} \label{chap:TestRunner}
-One of the primary goals of this application to give the professor a way to specify what constitutes a correct problem solution.
+One of the primary goals of this application to give the lecturer a way to specify what constitutes a correct problem solution.
 As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
 
 \section{Client-Server Interaction}
-When a teacher creates a new exercise, a modal prompts them to enter details about the exercise.
+When a lecturer creates a new exercise, a modal prompts them to enter details about the exercise.
 These details include the name of the exercise, instructions for the student, an optional code template to help the student get started, as well as test code.
 This data is sent to the database where it is stored.
 When a student opens an exercise, the data is then fetched from the database.
@@ -12,13 +12,13 @@ This is done by the client sending a request to the Next.js backend, which queri
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.1]{create_exercise.png}
-    \caption{Creating a new exercise as a teacher.}
+    \caption{Creating a new exercise as a lecturer.}
     \label{fig:create_exercise}
 \end{figure}
 
 In the interest of reducing the number of database queries, the result of this request is cached on the client.
 The client will eagerly request new data to stay up to date with instructions or test code updates.
-We deemed that this short cache storage time is useful for when teachers update test code during an exercise session.
+We deemed that this short cache storage time is useful for when lecturers update test code during an exercise session.
 This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
 
 When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
@@ -29,7 +29,7 @@ However, we want to eventually display the test code to the user so they may gai
 To handle this mutation, the Next.js server requests the Test Runner to process the given solution and test code.
 This process is described in section \ref{sec:test_runner_process} below.
 The response of this request to the Test Runner is validated and stored as a submission in the database.
-This allows users and teachers to access previous submissions, which includes code and a value indicating whether the submission satisfied the exercise tests.
+This allows users and lecturers to access previous submissions, which includes code and a value indicating whether the submission satisfied the exercise tests.
 
 Lastly, the result is sent to the client and displayed on the page.
 
@@ -50,7 +50,7 @@ Lastly, the result is sent to the client and displayed on the page.
 More images of the platform user interface can be seen in chapter \ref{chap:images} in the appendix.
 
 
-\section{Test Runner process} \label{sec:test_runner_process}
+\section{Test Runner Process} \label{sec:test_runner_process}
 The Test Runner exposes an endpoint \texttt{/haskell/submit/}, which is used to post code submissions.
 Originally, we used the Rust crate Rocket to implement this endpoint.
 However, we eventually switched to using the axum crate instead, as it is developed and maintained by the same developers behind the Tokio package we make heavy use of for asynchronous programming and multithreading.
@@ -70,7 +70,7 @@ Once the tests have been run, the directory and its contents are deleted again.
 The \texttt{stdout} of the process is then read to determine whether the tests succeeded or not.
 Finally, the interpreter output and the test success flag is packaged into a JSON object and sent back to the client.
 
-Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, which will be described in detail in chapter \ref{chap:Benchmarks}.
+Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, which will be described in detail in chapter \ref{chap:Benchmarking}.
 In order to address this, we started by refactoring the code base to allow running several instances of the GHC interpreter process at the same time.
 However, despite this running faster for a small number of clients, this approach in itself is not sufficiently stable:
 If multiple clients were to post a code submission at the same time, the Test Runner will start a new process for each request.
