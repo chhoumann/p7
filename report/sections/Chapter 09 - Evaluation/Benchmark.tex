@@ -117,7 +117,7 @@ public class TicketedCodeRunnerBenchmark
 }
 \end{lstlisting}
 
-The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing xxx and the parameterization attributes from BenchmarkDotNet. However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request. 
+The benchmark for the queue system seen on listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilize the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet. However, the internal implementation of the client varies, as it needs to pull the results of the Test Runner after making an initial request.
 Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to pull for a result.
 Best case pull time needs to be established to compare it with the baseline component. 
 However, due to the nature of remote communication using the internet it may be necessary to establish which poll times to avoid rather than which gives the best average response times, since the benchmarks does not consider the physical distance between client and server.
