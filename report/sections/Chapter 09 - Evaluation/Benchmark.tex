@@ -33,7 +33,7 @@ The benchmark for the baseline utilize the same parameterization as the benchmar
 We suspect that when the Test Runner experience stress, the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
 \subsubsection{Ensuring simultaneous client submissions}
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the BuildClientTaskList method, which is used to build a number of actions which are executed simultaneously in a Task. }, label={lst:TaskBuilder}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the BuildClientTaskList method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
   public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
@@ -64,7 +64,7 @@ We utilize this inputted action to send a code submissions requests and invoke s
 
 
 \subsubsection{Baseline benchmark implementation}
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the baseline.}, label={lst:baselineBench}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the baseline}, label={lst:baselineBench}]
 // Attributes excluded
 public class RocketBenchmarks
 {
@@ -91,7 +91,7 @@ If just one of the submissions cannot be processed an exception is thrown, and t
 It utilizes the BuildClientTaskList method seen in listing \ref{lst:baselineBench}.
 
 \subsubsection{Queue system benchmark implementation}
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the backend with the Queue System. }, label={lst:queueSystemBench}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the implementation of the benchmark for the backend with the Queue System }, label={lst:queueSystemBench}]
 // Attributes excluded
 public class TicketedCodeRunnerBenchmark
 {
@@ -125,41 +125,42 @@ In this section, results of the combined stress tests and benchmarks are present
 First, the configuration of the stress tests are described followed by a presentation of the results of the initial Test Runner benchmark results. These results will be used to compare the Test Runner using the Queue System with the baseline.  
 
 \subsection{Configuration}
-All stress tests and benchmarks are run on a computer with an AMD EPYC Processor (with IBPB), 4 CPUs, 4 logical cores, and 4 physical cores. The computer used for the benchmarks use UBUNTU 20.04 as the operating system.
 The baseline uses a single thread to test the submitted Haskell code, thus no parameterization for this version of the Test Runner is necessary.
 Benchmarks for the Test Runner implementing the Queue System is configured such that the number of threads and the queue size varies by five. 
 All stress tests and benchmarks are run on a computer with an AMD EPYC Processor (with IBPB), 4 CPUs, 4 logical cores, and 4 physical cores. The computer used for the benchmarks use UBUNTU 20.04 as the operating system.
 
-\subsubsection{Baseline}
+\subsection{Baseline}
 
+\subsection{Queue system}
 \begin{figure}[!tbp]
   \centering
   \begin{minipage}[t]{0.4\textwidth}
     \includegraphics[scale=0.65]{images/10.png}
-    \caption{Mean response time for handling 10 simultaneous client requests for different poll times and Test Runner configurations.}
+    \caption{Mean response time for handling 10 simultaneous client requests for different poll times and Test Runner configurations}
   \end{minipage}
   \hfill
   \begin{minipage}[t]{0.4\textwidth}
     \centering
     \includegraphics[scale=0.65]{images/20.png}
-    \caption{Mean response time for handling 20 simultaneous client requests for different poll times and Test Runner configurations.}
+    \caption{Mean response time for handling 20 simultaneous client requests for different poll times and Test Runner configurations}
   \end{minipage}
-  \vfill
   \begin{minipage}[t]{0.4\textwidth}
     \centering
     \includegraphics[scale=0.65]{images/50.png}
-    \caption{Mean response time for handling 50 simultaneous client requests for different poll times and Test Runner configurations.}
+    \caption{Mean response time for handling 50 simultaneous client requests for different poll times and Test Runner configurations}
   \end{minipage}
   \hfill
   \begin{minipage}[t]{0.4\textwidth}
     \centering
     \includegraphics[scale=0.65]{images/20.png}
-    \caption{Mean response time for handling 100 simultaneous client requests for different poll times and Test Runner configurations.}
+    \caption{Mean response time for handling 100 simultaneous client requests for different poll times and Test Runner configurations}
   \end{minipage}
   \label{fig:results}
-  \caption{Results of benchmarking the Test Runner with different queue size, number of threads, and client poll time.}
-
+  \caption{Results of benchmarking the Test Runner with different queue size, number of threads, and client poll time. For each plot line T denotes the maximum number of threads allowed for testing client submissions, size of the queue}
 \end{figure}
 
+Figure \ref{fig:results} shows the results of the benchmarks in terms of average response time, disregarding the code submission. 
+We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
+This is likely due to the capacity being xxxxx and the thread..... \todo{What should I expect of high thread? high capacity?}
 
 
