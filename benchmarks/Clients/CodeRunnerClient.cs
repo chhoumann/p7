@@ -21,8 +21,8 @@ public class CodeRunnerClient
         UriBuilder v = new()
         {
             Scheme = "http",
-            Port = 8000,
-            Host = "127.0.0.1",
+            Port = int.Parse(Environment.GetEnvironmentVariable("PORT") ?? throw new EnvironmentNotSetException("PORT")),
+            Host = Environment.GetEnvironmentVariable("HOST") ?? throw new EnvironmentNotSetException("HOST"),
             Path = endpointPath
         };
         
