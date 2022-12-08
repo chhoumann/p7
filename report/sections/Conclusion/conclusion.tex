@@ -6,7 +6,6 @@ To enable persistance of users and their interactions with the system, a login s
 Information regarding the users, their submitted exercise solutions, and exercises and accompagnying tests was persisted on a Postgres database.
 The user interface was developed with user-friendliness in mind, providing minimal hindrance in accessing and solving exercises.
 A backend was developed in order to process and serve frontend requests.
-Supplementing this, a database was also implemented to store information regarding users and exercises.
 The backend features a component that uses the GHC interpreter to run tests on exercise submissions to provide users with feedback on their submission.
 After these tests have been run, the results are accessible by polling the Test Runner.
 We implemented a queue system to avoid too many running instances of the GHC interpreter process --- it stores requests for future processing if all worker threads are occupied.
