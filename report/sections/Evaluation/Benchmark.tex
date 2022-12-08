@@ -197,6 +197,6 @@ This submission was faster to process, likely due to the exercise solution never
 Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times. 
 For each plot, line T denotes the maximum number of threads allowed for testing client submissions, and C denotes the maximum capacity of the channels. 
 All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and remove Test Runner results older than 90 seconds. 
-We see that a Test Runner with Queue System configured to have a maximum capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed, regardless of the client pull time. 
-Compared to the baseline shown on figure \ref{fig:baseline}, it is vastly superior, requiring only a third of the time responding to 100 simultaneous requests. 
-Since a configuration of a Test Runner with five threads and with a channel capacity of ten yields such good results, we examine similar configurations to find a closer estimate to optimal configuration for this particular computer. 
+Regardless of client polling time, we see that the asynchronous Test Runner with a maximum channel capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed.
+Compared to the baseline shown on figure \ref{fig:baseline}, it is vastly superior, requiring only a third of the time to respond to 100 simultaneous requests. 
+Since the configuration of the asynchronous Test Runner with five threads and with a channel capacity of ten yields such good results, we examined similar configurations to find a closer estimate to optimal configuration for this particular computer. 
