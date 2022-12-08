@@ -27,10 +27,10 @@ public class TicketedCodeRunnerBenchmark
     [Benchmark]
     public void PostAndWaitForAllResultsFetched()
     {
-        TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(PollTime);
+        TimeSpan timeBetweenPolls = TimeSpan.FromSeconds(PollTime);
         
         IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerQueueClient>(NumberOfConcurrentRequests, client =>
-            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPulls));
+            client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPolls));
 
         Task.WhenAll(clientActions).Wait();
     }

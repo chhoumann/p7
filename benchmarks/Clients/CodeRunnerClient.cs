@@ -34,10 +34,10 @@ public class CodeRunnerClient
         return _client.PostAsJsonAsync(_postProblemUrl, toSend);
     }
     
-    public async Task<PullIdResponse?> PostCodeRequest(string code, string test)
+    public async Task<PollIdResponse?> PostCodeRequest(string code, string test)
     {
         CodeSubmission toSend = new(code, test);
-        return await JsonSerializer.DeserializeAsync<PullIdResponse>(await Post(toSend).Result.Content.ReadAsStreamAsync());
+        return await JsonSerializer.DeserializeAsync<PollIdResponse>(await Post(toSend).Result.Content.ReadAsStreamAsync());
     }
 
 }
