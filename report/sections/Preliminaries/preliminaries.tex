@@ -1,21 +1,19 @@
 The following chapter contains short introductions to the most important technologies used in the project.
 
-\section*{Glasgow Haskell Compiler}
-Out of the currently available Haskell compilers we use the Glasgow Haskell Compiler (GHC) for interpreting the Haskell exercises and running tests for the submissions. The GHC compiler is recommended by the Haskell Organisation and it is recommended as the go-to compiler/interpreter by the \textit{Programming Paradigms} lecturer\cite{Haskell_GHC}.
+\section*{Glasgow Haskell Compiler} \todo{Move down to first mention of GHC (by request of carlos)}
+From the currently available Haskell compilers we use the Glasgow Haskell Compiler (GHC) for interpreting the Haskell exercises and running tests for the submissions. GHC is recommended by the Haskell Organisation and it is recommended as the go-to compiler/interpreter by the \textit{Programming Paradigms} lecturer\cite{Haskell_GHC}.
 
 
 \section*{Hspec}
-To enable running Haskell tests we needed a test framework. Here a test framework allows us to define the tests that need to be automatically run on the coding exercises the students submit. This allows us to confirm if the students completed the exercise and if not provide them with feedback on which tests their code failed.
-Hspec was chosen instead of other test frameworks since it allows the lecturer to define the tests in an easy-to-understand domain-specific language (DSL).
+To enable running Haskell tests we needed a test framework. A test framework is a framework that allows a developer to set up specifications that a piece of code must satisfy to pass a test. 
+A test is an assertion that a piece of code with a given an input can confirm the correct output. 
+We can use this to automatically run the tests on the coding exercises the students submit. This allows us to confirm if the students completed the exercise and if not, provide them with feedback on which tests their code failed.
+Among the available options, Hspec was chosen since it allows the lecturer to define the tests in an easy-to-understand domain-specific language (DSL).
 This makes the framework easier to work with. As a DSL is a language targeted towards a specific domain, it allows Hspec tests to be easily written and understandable without having an in-depth understanding of Hspec and Haskell.
-This provides the option to show some of the tests to the users in order to give them a more specific idea of what is expected from the exercise.
+Since Hspec tests are easy to understand, it is possible to show some of the tests to the users in order to give them a more specific idea of what is expected to complete the test.
 Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users\cite{Hspec_landing}.
 
-This makes the framework easier to work with as a DSL is a language targeted towards a specific domain it allows Hspec to tests to be easily written and understandable without having an in-depth understanding of Hspec and Haskell.
-This provides the option to show some of the tests to the users to give them a more specific idea of what is expected from the exercise.
-Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users.
-
-An example setup of a Hspec test can be seen below in code snippet \ref{lst:HspecTestExample}. First, the test frame Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the variable \texttt{x} and the expected output is \texttt{y}.
+An example setup of an Hspec test can be seen below in code snippet \ref{lst:HspecTestExample}. First, Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the input variable \texttt{x} and the expected output is \texttt{y}, which can be a value of any type.
 
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec test}, label={lst:HspecTestExample}]
@@ -37,7 +35,7 @@ An example setup of a Hspec test can be seen below in code snippet \ref{lst:Hspe
 Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla.
 The project was then sponsored by Mozilla from 2009 to 2021 where the project along with all trademarks was moved to the newly create Rust Foundation.
 The idea behind Rust was to challenge the idea that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}.
-Most other programming languages today operate in a band where either safety or control is valued highest and the other diminished. An example of this is C that has high level control but lacks safety.
+Most programming languages today operate in a band where either safety or control is valued highest and the other diminished. An example of this is C that has high level control but lacks safety.
 Here Rust provides the low-level power of C along with the solid safety features programmers have gotten used to in high-level languages like Python.
 As such, the main overall goal of Rust is to provide as much safety as possible in a low-level programming language without sacrificing any speed. \cite{Rust_in_Action}
 
@@ -76,14 +74,14 @@ Prisma is a 2nd generation object-relational mapper(ORM) developed for usage in 
 The main goal is to increase developers' productivity by allowing them to develop using a type-safe API for database queries that return \javascript{} objects.
 This goal is achieved by providing type-safe database queries allowing for validation at compile time as well as constraints preventing common pitfalls\cite{Prisma_Why}.
 
-The goal for the 2nd generation ORMs is to move closer to raw SQL in terms of high control while improving on the 1st generation ORMs productivity improvements.
-Prisma enables this productivity improvement by allowing developers to define their applications models through a data modeling language allowing an easier way of configuring their applications' data sources and models\cite{Prisma_Doc}.
+The 2nd generation ORMs moves closer to raw SQL in terms of high control while advancing the 1st generation ORMs productivity improvements.
+Prisma enables this productivity improvement by allowing developers to define their applications models through a data modeling language granting an easier way of configuring their applications' data sources and models\cite{Prisma_Doc}.
 
 \section*{TypeScript}
 As the server-side use of \javascript{} keeps growing in popularity its inability to provide developers with access to strong type checking and compile time error checking continues to prevent it from being the go-to language.
 As a way to address these problems, \typescript{} was designed to try and bridge this gap without requiring developers to learn a new language.
 Instead, \typescript{} was developed as a syntactic superset to \javascript{} allowing developers to keep building into their already existing knowledge but with additional features.
-This means that all \javascript{} projects are syntactically valid in \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably.\cite{TypeScript}.
+This means that all \javascript{} projects are syntactically valid in \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably\cite{TypeScript}.
 \typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling all the written instructions to its \javascript{} equivalents during the compilation process.
 This is possible because \typescript{} itself is compiled into \javascript{}, which is an interpreted language.
 
