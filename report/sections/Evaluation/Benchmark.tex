@@ -19,36 +19,39 @@ To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{ch
 The benchmark and test components are managed in their own Docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
 Information necessary to establish the connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
 These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
-For instance, the environmental constants describing the network location of the Test Runner service is passed as arguments to the Dockerfiles describing the tests and the benchmark, as these must both be able to contact the Test Runner service.
-These environmental constants also allow easy adjustment of Test Runner implementing the Queue System without rebuilding the docker container.
-These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code. 
-It is also possible to adjust the time between sweeps and how long each Test Runner result should be stored. 
-This makes it easy to experiment with different variables for the benchmarks and stress tests.  
-The containers are orchestrated such that the benchmarks starts only if the test container exits successfully --- that is, all the tests pass successfully. 
+For instance, the environmental constants defining the network location of the Test Runner service is passed as arguments to the Dockerfiles for the tests and the benchmark, as these must both be able to contact the Test Runner service.
+These environmental constants also allow easy adjustment of the Test Runner without rebuilding the Docker container.
+These include settings such as the size of the queue system and the maximum number of threads the Test Runner can use to process code submissions. 
+It is also possible to adjust the time between sweeps and how long each Test Runner result should be stored in memory.
+This makes it easy to experiment with different values for the environment variables when performing benchmarks and stress tests.  
+The containers are orchestrated such that the benchmarks run only if the test container exits successfully --- that is, all the tests pass successfully. 
 Thus, wrongly configured containers do not result in misleading benchmark results.
 
 \subsection{Selecting test parameters}
 To achieve a varying degree of complexity for the submission content, several Haskell exercise solutions covering different concepts from course were selected, and Hspec tests based on the description of these problems were developed. 
-The content of the code and test submitted to the backend can be seen in Appendix \ref{chap:TestCode}.
-Each of the files covers a single topic from the course, including recursive type definitions and operations on such types, list comprehension, filtering of lists, and one containing a syntactical error.
+The code and accompanying tests used in benchmarking and stress testing can be seen in Appendix \ref{chap:TestCode}.
+Each file covers a single topic from the course, including recursive type definitions and operations on such types, list comprehension, and filtering of lists. 
+One file also contains a syntactical error.
 After selecting a representative set of exercises for stress tests and benchmarks a simple operational profile was created, and from this behavioral variables were established: an expected maximum number of clients and different polling times for these clients.
-To simulate different behavior of platform clients, classes representing clients were implemented, each representing a user for a different version of the platform.
+To simulate different platform client behavior, classes representing these were implemented where each class corresponds to a user for a different version of the platform.
 These clients implement representations of the necessary behavioral variables, which are annotated using BenchmarkDotNet.
 During stress testing, the BenchmarkDotNet framework creates all possible combinations of the implemented behavioral variables.
 The underlying implementation of the client classes use an HTTP client.
-To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline which we can compare the component to. 
-To establish such baseline, we have stress tested and benchmarked a version of the Test Runner that utilize the Rocket crate but does not implement the Queue System. 
-The benchmark for the baseline utilize the same parameterization as the benchmark for the queue system, but does not rely on polling the result after processing. 
-We suspect that when the Test Runner experience stress, the single threaded approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
+To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline to compare against.
+To establish such baseline, we have stress tested and benchmarked a version of the Test Runner based on the Rocket crate.
+This version represents our initial MVP, meaning it runs synchronously and processes only one code submission at a time.
+The benchmark for the baseline utilizes the same parameterization as the benchmark for the queue system.
+However, it does not poll for the Test Runner result since this version does not respond with a token; instead, it directly responds to the request with the result of processing the code submission.
+We suspect that when the Test Runner experiences stress, the synchronous approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
 \subsubsection{Ensuring simultaneous client submissions}
-When performing stress tests one must ensure that the behavior stresses the system in a manner that is realistic, but on the edge of what is probable.
+When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
-To ensure that all submissions to the component happens close to simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
+To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
 When the actions are invoked, an inputted action is invoked with a CodeRunnerClient as input. 
 We utilize this inputted action to send a code submissions requests and invoke start the clients in rapid succession.
 
-\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the BuildClientTaskList method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
+\begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
   public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
