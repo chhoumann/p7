@@ -48,8 +48,7 @@ We suspect that when the Test Runner experiences stress, the synchronous approac
 When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
 To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
-When the actions are invoked, an inputted action is invoked with a CodeRunnerClient as input. 
-We utilize this inputted action to send a code submissions requests and invoke start the clients in rapid succession.
+The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop. 
 
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
