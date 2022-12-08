@@ -11,7 +11,6 @@ main = hspec $ do
                 let st = Node (Leaf 1) 2 (Leaf 3)
                 let ft = Node (Node (Leaf 1) 2 Empty) 2 (Leaf 3)
 
-                -- Just making sure
                 flatten st `shouldBe` [1,2,3]
                 flatten ft `shouldBe` [1,2,2,3]
 
