@@ -124,8 +124,6 @@ public class TicketedCodeRunnerBenchmark
 }
 \end{lstlisting}
 
-
-
 \subsection{Results}
 In this section, results of the combined stress tests and benchmarks are presented.
 First, the configuration of the stress tests are described followed by a presentation of the results of the initial Test Runner benchmark results. These results will be used to compare the Test Runner using the Queue System with the baseline.  
@@ -133,11 +131,24 @@ First, the configuration of the stress tests are described followed by a present
 \subsection{Configuration}
 The baseline uses a single thread to test the submitted Haskell code, thus no parameterization for this version of the Test Runner is necessary.
 Benchmarks for the Test Runner implementing the Queue System is configured such that the number of threads and the queue size varies by five. 
-All stress tests and benchmarks are run on a computer with an AMD EPYC Processor (with IBPB), 4 CPUs, 4 logical cores, and 4 physical cores. The computer used for the benchmarks use UBUNTU 20.04 as the operating system.
+All stress tests and benchmarks are run on computers with an AMD EPYC Processor (with IBPB), four CPUs, four logical cores, and four physical cores.
+The computers used for the benchmarks use UBUNTU 20.04 as the operating system and have 32GB of RAM.
+All stress tests begins with a warm-up phase, where BenchmarkDotNet sends ten consecutive submissions to the Test Runner. 
+Then, for each combination of parameters (number of requests, code submission, and poll time) the stress test is timed and repeated 40 times.
+This whole process is repeated five times to ensure outliers become noise.
 
 \subsection{Baseline}
 The baseline for all other benchmarks is a Test Runner implemented using Rocket. 
-The baseline application uses only a single thread to handle all code submissions, giving us estimation on to what degree an implementation using Axum and the Queue System improves the overall response time of the platform. 
+The baseline application uses only a single thread to handle all code submissions, giving us estimation on to what degree an implementation using Axum and the Queue System improves the overall response time of the platform.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.80]{images/baseline.png}
+  \caption{The average mean time per request for the baseline Test Runner, disregarding the code submission}
+  \label{fig:baseline}
+\end{figure}
+Figure \ref{fig:baseline} shows the average mean response time per number of requests for the baseline.
+We expect the response time to increase linearly with the number of requests due to one request being handled at a time, and see on Figure \ref{fig:baseline} that this is the case.
 
 
 
