@@ -8,7 +8,12 @@ The goal with the stress tests and benchmarks is threefold:
 \item It helps us establish different implementations of the Test Runner component regress in terms of response times.
 \end{enumerate}
 To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
-a client component simulating possible Test Runner client behavior, a Benchmark component responsible for orchestrating benchmarks for different Test Runner versions, and a test component ensuring that the client component can contact the Test Runner before running the benchmarks.
+\begin{enumerate}
+  \item A client component simulating possible Test Runner client behavior.
+  \item A Benchmark component responsible for orchestrating benchmarks for different Test Runner versions.
+  \item A test component ensuring that the client component can contact the Test Runner before running the benchmarks.
+\end{enumerate}
+
 
 \subsection{Orchestration and Test Runner parameterization}
 The benchmark and test components are managed in their own Docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
