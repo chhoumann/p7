@@ -3,14 +3,14 @@ In this chapter, we present how tests and benchmarks have been conducted, and de
 The goal with the stress tests and benchmarks is threefold: 
 \begin{enumerate}
 \item It helps us determine an upper limit of simultaneous users before response times renders a student unproductive.
-\item It helps us determine the average pull time for clients using the Test Runner under different levels of stress.
+\item It helps us determine the average poll time for clients using the Test Runner under different levels of stress.
 \item It helps us decide which configurations to use for the Test Runner system
 \item It helps us establish different implementations of the Test Runner component regress in terms of response times.
 \end{enumerate}
-To conduct the benchmarks, we have utilized BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+To conduct the benchmarks, we used BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
 \begin{enumerate}
   \item A client component simulating possible Test Runner client behavior.
-  \item A Benchmark component responsible for orchestrating benchmarks for different Test Runner versions.
+  \item A benchmark component responsible for orchestrating benchmarks for different Test Runner versions.
   \item A test component ensuring that the client component can contact the Test Runner before running the benchmarks.
 \end{enumerate}
 
