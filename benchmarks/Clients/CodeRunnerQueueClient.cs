@@ -18,9 +18,9 @@ public class CodeRunnerQueueClient : CodeRunnerClient
         return await JsonSerializer.DeserializeAsync<TestRunResult>(await GetByToken(id).Result.Content.ReadAsStreamAsync());
     }
 
-    private async Task<TestRunResult> PullUntilResponseReady(TimeSpan timeBetweenPulls, string id)
+    private async Task<TestRunResult> PollUntilResponseReady(TimeSpan timeBetweenPolls, string id)
     {
-        PeriodicTimer periodicTimer = new(timeBetweenPulls);
+        PeriodicTimer periodicTimer = new(timeBetweenPolls);
         
         while (await periodicTimer.WaitForNextTickAsync())
         {
@@ -35,16 +35,16 @@ public class CodeRunnerQueueClient : CodeRunnerClient
         throw new TimeoutException("Did not get a response from server.");
     }
 
-    public Task<TestRunResult> PostAndGetHaskellResultTask(string code, string test, TimeSpan timeBetweenPulls)
+    public Task<TestRunResult> PostAndGetHaskellResultTask(string code, string test, TimeSpan timeBetweenPolls)
     {
-        Task<PullIdResponse?> postCodeRequest = PostCodeRequest(code, test);
+        Task<PollIdResponse?> postCodeRequest = PostCodeRequest(code, test);
         
-        PullIdResponse? tokenResponse = postCodeRequest.Result;
+        PollIdResponse? tokenResponse = postCodeRequest.Result;
         string id = tokenResponse?.id is null
             ? throw new InvalidOperationException("Token string was null!")
             : tokenResponse.id;
 
-        return PullUntilResponseReady(timeBetweenPulls, id);
+        return PollUntilResponseReady(timeBetweenPolls, id);
     }
 }
 
