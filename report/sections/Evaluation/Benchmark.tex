@@ -17,7 +17,7 @@ These constants are then shared among the necessary components' Dockerfile, whic
 For instance, the environmental constants defining the network location of the Test Runner service is passed as arguments to the Dockerfiles for the tests and the benchmark, as these must both be able to contact the Test Runner service.
 These environmental constants also allow easy adjustment of Test Runner implementing the Queue System without rebuilding the docker container.
 These settings include the size of the queue system and the maximum number of threads the Test Runner can use to test the submitted Haskell code. 
-It is also possible to adjust the time between sweeps and how long each Test Runner result should be stored. 
+It is also possible to adjust the time between sweeps and how long each Test Runner result should be stored in memory.
 This makes it easy to experiment with different variables for the benchmarks and stress tests.  
 The containers are orchestrated such that the benchmarks starts only if the test container exits successfully --- that is, all the tests pass successfully. 
 Thus, wrongly configured containers do not result in misleading benchmark results.
