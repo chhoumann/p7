@@ -145,7 +145,7 @@ Benchmarks for the asynchronous Test Runner is configured such that the number o
 All stress tests and benchmarks are run on computers with an AMD EPYC Processor (with IBPB), four CPUs, four logical cores, and four physical cores.
 The computers used for the benchmarks run UBUNTU 20.04 as the operating system and have 32 GB of RAM.
 All stress tests begin with a warm-up phase where BenchmarkDotNet sends ten consecutive submissions to the Test Runner. 
-Then, for each combination of parameters (number of requests, code submission, and polling times the stress test is timed and repeated 40 times.
+Then, for each combination of parameters (number of requests, code submission, and polling times) the stress test is timed and repeated 40 times.
 This whole process is repeated five times to ensure outliers become noise.
 
 \subsection{Baseline}
