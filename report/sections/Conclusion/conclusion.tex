@@ -1,22 +1,21 @@
 The main goal of this project was to create an internet-based application that would solve some problem.
 Furthermore, another requirement in the study regulation is that the developed system also needs to be tested for scalability. 
-In this project, we developed a system for lecturers of the \textit{Programming Paradigms} course that can provide fast and efficient feedback on student's exercise submissions.
+In this project, we developed a system for lecturers of the \textit{Programming Paradigms} course that can provide fast and efficient feedback on student exercise submissions.
 The system allows lecturers to create exercises for students and define accompanying tests for verifying correctness of student solutions.
 
-To create this application, we had to develop a working user interface that students and lecturers can use in order to interact with the system. 
+To create this application, we developed a working user interface that students and lecturers can use in order to interact with the system. 
 The user interface was developed with user-friendliness in mind, providing minimal hindrance in accessing and solving exercises. 
-In addition, the results of an exercise submission are displayed in a clear and understandable way with helpful error messages and fitting colors.
-In order to process and serve frontend requests, a backend was developed.
-The requests would then be rerouted to the relevant components of the system. 
-In order to store information regarding users and exercises, a database was implemented.
-To be able to give the users feedback on their submitted exercises, we had to implement a component that would run the accompanying tests for an exercise on the submitted program. 
-After the test runner has run the tests, it will send back the result to the user.
+A backend was developed in order to process and serve frontend requests. 
+Supplementing this, a database was also implemented to store information regarding users and exercises.
+The backend features a component that uses the GHC interpreter to run tests on exercise submissions to provide users with feedback on their submission.
+After these tests have been run, the results are available to the user through polling.
+We implemented a queue system to avoid too many running instances of the GHC interpreter process --- it stores requests for future processing if all worker threads are occupied.
 
-In order to ensure that the system is scalable, we performed a stress tests on different versions of the program.
-The stress tests showed that ... \todo{Insert stress test result}
-To ensure that the developed user interface was intuitive for users, we performed a usability test.
-The test was performed on students who at the time were taking the \textit{Programming Paradigms} course.
-The result of this test showed that the system usability was satisfying and usable in practice by students participating in the course.
+In order to ensure that the system is scalable, we performed stress tests on different versions of the program with varying configurations.
+Based on these tests, the application will be able to deliver results within an acceptable time for at least up to 100 concurrent requests; good enough for a classroom setting. 
+To ensure that the developed user interface is intuitive for users, we performed a usability test.
+The test was performed on students who, at the time, were taking the \textit{Programming Paradigms} course.
+According to the users from our evaluation, the developed application has a close to excellent UI. 
 
-In this project we set out to create a scalable system, that would be an improvement to the \textit{Programming Paradigms} course.
-Our application can deliver swift evaluation of students' exercise submissions. Based on our tests the application will be scalable up to a whole class of students.
+In summary, the application we have developed can deliver swift evaluation of students' exercise submissions through an intuitive and coherent user interface. 
+Finally, the users from the usability test remarked that they would have liked to use our system throughout the \textit{Programming Paradigms} course, further suggesting that our solution fulfills the requirements presented in the problem statement.
