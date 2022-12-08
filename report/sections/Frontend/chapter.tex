@@ -1,6 +1,13 @@
-\chapter{Frontend}
-\input{sections/Frontend/frontend.tex}
+\chapter{Frontend} \label{chap:Frontend}
+One of the primary goals of this application to give the lecturer a way to specify what constitutes a correct problem solution.
+As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
 
+\section{Authentication}
 
+% - Session extension så vi kan handle auth igennem session. Tilføjet rolle til session så vi kan håndtere permissions på forskellige sider.
+% - Sidernes indhold muteres baseret på brugerens rolle. Håndtere også hvis du ikke er logget ind.
+% - TRPC til at hendte data fra databasen. Sker via API kald, således at eksempelvis SQL kald ikke sker direkte fra frontenden.
+% - Solve problem siden. Henter templates når du loader siden. Henter template før UI bliver renderet. Når ui render henter vi problem, test og tidligere submissions.
+% - Code editor. Codemirror med custom extension.
 
-
+\input{sections/Frontend/client-server-interaction.tex}
