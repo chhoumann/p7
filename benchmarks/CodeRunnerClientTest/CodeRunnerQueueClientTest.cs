@@ -11,7 +11,7 @@ public class CodeRunnerQueueClientTest
     public async Task CanPostRequest()
     {
         CodeRunnerQueueClient _client = new();
-        PullIdResponse? response = await _client.PostCodeRequest("", "");
+        PollIdResponse? response = await _client.PostCodeRequest("", "");
         Assert.False(string.IsNullOrWhiteSpace(response?.id));
     }
 
@@ -30,12 +30,12 @@ public class CodeRunnerQueueClientTest
         const int numberOfRequests = 10;
         
         Task<TestRunResult>[] clientActions = new Task<TestRunResult>[numberOfRequests];
-        TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
+        TimeSpan timeBetweenPolls = TimeSpan.FromSeconds(3);
 
         for (int i = 0; i < numberOfRequests; i++)
         {
             CodeRunnerQueueClient codeRunnerQueueClient = new();
-            clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
+            clientActions[i] = codeRunnerQueueClient.PostAndGetHaskellResultTask("", "", timeBetweenPolls);
         }
 
         Task.WhenAll(clientActions).Wait();
@@ -46,11 +46,11 @@ public class CodeRunnerQueueClientTest
     [Fact]
     public Task CanTestMultipleResultsMoreAtATime()
     {
-        TimeSpan timeBetweenPulls = TimeSpan.FromSeconds(3);
+        TimeSpan timeBetweenPolls = TimeSpan.FromSeconds(3);
 
         IEnumerable<Task> tasks = TaskBuilder.BuildClientTaskList<CodeRunnerQueueClient>(10, client =>
         {
-            client.PostAndGetHaskellResultTask("", "", timeBetweenPulls);
+            client.PostAndGetHaskellResultTask("", "", timeBetweenPolls);
         });
 
         Task.WhenAll(tasks).Wait();
