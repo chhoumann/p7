@@ -9,7 +9,7 @@ Furthermore, it was deemed easier to implement a shared state among endpoints by
 We give an overview and a more technical explanation of how this was done in section \ref{sec:queue-system}.
 
 When the Test Runner receives the request from Next.js, its singular goal is to run the tests against the code and send the result of this back as fast as possible.
-In order to run the tests, we need to run the GHC interpeter on the test code, which, in turns, need access to the exercise submission code.
+In order to run the tests, we need to run the GHC interpreter on the test code, which, in turns, need access to the exercise submission code.
 The GHC interpreter can be run from the command line with arguments specifying the path Haskell file to run.
 In other words, the Test Runner needs to write the user submission and corresponding test code to a file.
 However, if more users were to make a submission at the same time, the content of the file could potentially be overwritten while the GHC interpreter is running the tests.
