@@ -24,7 +24,7 @@ The session also has a role associated with it, which determines what actions th
 On the website, each page that displays course data makes a request to a Next.js backend API endpoint to retrieve the data from the database.
 This request is made using tRPC, which allows for efficient communication between the frontend and the backend. tRPC wraps around React Query, which provides useful features such as caching and automatic refetching.
 
-The request input is validated using zod to ensure that it is in the correct format.
+The request input is validated  ensure that it is in the correct format.
 The user's authorization is also checked to ensure that they are allowed to access the data they have requested.
 Once the input has been validated, the database is queried using Prisma to retrieve the requested data.
 
