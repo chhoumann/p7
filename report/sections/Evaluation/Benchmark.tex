@@ -146,7 +146,7 @@ All stress tests and benchmarks are run on computers with an AMD EPYC Processor 
 The computers used for the benchmarks run UBUNTU 20.04 as the operating system and have 32 GB of RAM.
 All stress tests begin with a warm-up phase where BenchmarkDotNet sends ten consecutive submissions to the Test Runner. 
 Then, for each combination of parameters (number of requests, code submission, and polling times) the stress test is timed and repeated 40 times.
-This whole process is repeated five times to ensure outliers become noise.
+This whole process is repeated five times to ensure outliers does not significantly affect the results.
 
 \subsection{Baseline}
 The synchronous baseline version uses only a single thread to handle all code submissions.
