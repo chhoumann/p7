@@ -3,23 +3,15 @@ One of the primary goals of this application to give the lecturer a way to speci
 As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
 
 \section{Authentication and Roles}
-When a user initially browses the web page they will not be signed in and will will only have minimal privileges. This means that they will not have access to any of the course material or exercises. In order to access any of these features, the user has to sign in. Once the user presses the sign in button, the user is redirected to a sign in page that is specific to the authentication provider that we are using. In our case it is Google. Once the user sends the sign in request two
-%Google, as mentioned in section xx, handles the personal information on the user.
-
-... something about how the authentication process works...
-
-
-
-- User goes to page, not logged in
-- Presses login button
-- Redirected to login page for the authentication provider
-- User logs in
-- Redirected back to the page
-- User is now logged in
-- Database is updated with user information, token, if not present
-- User is now logged in and session is created
-- Session is used to authenticate user
-- Session has role, which is used to determine what the user can do
+When a user initially loads the frontend website, they will not be signed in, and will will only have minimal privileges.
+This means that they will not have access to any of the course material or exercises.
+In order to access any of these features, the user has to sign in.
+By pressing the sign in button, the user is redirected to a sign in page that is specific to the authentication provider used.
+In our case, it is Google.
+After logging in with the authentication provider, the user is redirected back to the website.
+At this point, the user is now logged in and our database will be updated with the user's information, as well as a token to keep track of the user's session.
+This token is used by NextAuth to create a session for the user, which will be used to authenticate the user for subsequent requests to the site.
+The session also has a role associated with it, which determines what actions the user is allowed to take on the site.
 
 \begin{figure}[H]
     \centering
@@ -29,12 +21,18 @@ When a user initially browses the web page they will not be signed in and will w
 \end{figure}
 
 \section{Syllabi, Problem sets and Exercises}
-- Each page uses fetches to next.js backend api that returns data from the database
-    - uses trpc. each call is input validated with zod and db calls are done using prisma.
-- Page permissions depend on the user's role
-- Supports CRUD actions for the lecturer, students can read only
-- Lecturer can create, edit and delete syllabi, problem sets and exercises
-- modal with form controls for creating new elements, prevents invalid input
+On the website, each page that displays course data makes a request to a Next.js backend API endpoint to retrieve the data from the database.
+This request is made using tRPC, which allows for efficient communication between the frontend and the backend. tRPC wraps around React Query, which provides useful features such as caching and automatic refetching.
+
+The request input is validated using zod to ensure that it is in the correct format.
+The user's authorization is also checked to ensure that they are allowed to access the data they have requested.
+Once the input has been validated, the database is queried using Prisma to retrieve the requested data.
+
+The actions that a user is allowed to take on a page depend on their role. For example, a lecturer may have the ability to create, edit, and delete syllabi, problem sets, and exercises, whereas a student may only be able to read the information on the page.
+
+There is a modal on the page that contains form controls for creating new elements, such as syllabi or problem sets.
+This modal helps to prevent invalid input by ensuring that the user enters the correct information before creating a new element.
+Overall, our website supports CRUD actions for lecturers and read-only access for students.
 
 \begin{figure}[H]
     \centering
@@ -65,10 +63,19 @@ When a user initially browses the web page they will not be signed in and will w
 \end{figure}
 
 \section{Problem View and Code Editor}
-- fetches template when page is loaded to prevent flashing in template after page is loaded (can lead to users with slow internet having written something and then having it overwritten, if not prevented by disabling the codebox---which is even worse)
-- fetches problem, test and previous submissions when UI is rendered
-- Code editor uses codemirror with extensions to support multiple languages (only haskell rn) and a custom extension to propagate state to the parent component, so we can get code out of the editor to send to the backend
-- user submissions are fetched from the backend, so users have a way to see their previous submissions and revisit them. also includes date and whether it solves the exercise.
+When a user visits a page on our website, we fetch the code template exercise on the server in order to prevent flashing in the template after the page has loaded.
+This is important because, without this, users with slow internet connections might see the template being overwritten after they have already started writing in it. That is, if you don't disable the input field entirely until the page has finished loading data. Both these approaches could lead to confusion and frustration for the user, so we decided to fetch the template before the page is rendered.
+
+Once the UI for the page is rendered, we fetch the problem, test, and previous submissions for the user.
+This allows them to see the information they need in order to solve the exercise and see their previous submissions.
+
+The code editor on the page uses CodeMirror with extensions to support multiple programming languages.
+Currently, only Haskell is supported, but it is easiy extensible to include other languages.
+We have also developed a custom extension to propagate state to the parent component, which allows us to retrieve the code from the editor and send it to the backend.
+
+In addition to allowing users to submit their code, we also fetch their previous submissions from the backend.
+This allows users to revisit their previous submissions and see the date they were submitted, as well as whether they solved the exercise.
+This can be useful for users who want to track their progress or review their previous work.
 
 % - Session extension så vi kan handle auth igennem session. Tilføjet rolle til session så vi kan håndtere permissions på forskellige sider.
 % - Sidernes indhold muteres baseret på brugerens rolle. Håndtere også hvis du ikke er logget ind.
