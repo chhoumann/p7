@@ -1,0 +1,79 @@
+\chapter{Frontend} \label{chap:Frontend}
+One of the primary goals of this application to give the lecturer a way to specify what constitutes a correct problem solution.
+As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
+
+\section{Authentication and Roles}
+When a user initially browses the web page they will not be signed in and will will only have minimal privileges. This means that they will not have access to any of the course material or exercises. In order to access any of these features, the user has to sign in. Once the user presses the sign in button, the user is redirected to a sign in page that is specific to the authentication provider that we are using. In our case it is Google. Once the user sends the sign in request two
+%Google, as mentioned in section xx, handles the personal information on the user.
+
+... something about how the authentication process works...
+
+
+
+- User goes to page, not logged in
+- Presses login button
+- Redirected to login page for the authentication provider
+- User logs in
+- Redirected back to the page
+- User is now logged in
+- Database is updated with user information, token, if not present
+- User is now logged in and session is created
+- Session is used to authenticate user
+- Session has role, which is used to determine what the user can do
+
+\begin{figure}[H]
+    \centering
+    \frame{\includegraphics[scale=0.1]{home.png}}
+    \caption{Home page as a logged-in user}
+    \label{fig:Home page}
+\end{figure}
+
+\section{Syllabi, Problem sets and Exercises}
+- Each page uses fetches to next.js backend api that returns data from the database
+    - uses trpc. each call is input validated with zod and db calls are done using prisma.
+- Page permissions depend on the user's role
+- Supports CRUD actions for the lecturer, students can read only
+- Lecturer can create, edit and delete syllabi, problem sets and exercises
+- modal with form controls for creating new elements, prevents invalid input
+
+\begin{figure}[H]
+    \centering
+    \frame{\includegraphics[scale=0.1]{syllabi.png}}
+    \caption{Syllabi overview as a logged-in student}
+    \label{fig:syllabi}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \frame{\includegraphics[scale=0.1]{problemsets.png}}
+    \caption{Problem sets overview as a logged-in student}
+    \label{fig:problemsets}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \frame{\includegraphics[scale=0.1]{exercises.png}}
+    \caption{Exercise overview}
+    \label{fig:exercise_overview}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \frame{\includegraphics[scale=0.1]{problemsets_teacher_view.png}}
+    \caption{Problem sets overview as a logged-in lecturer}
+    \label{fig:problemsets_teacher_view}
+\end{figure}
+
+\section{Problem View and Code Editor}
+- fetches template when page is loaded to prevent flashing in template after page is loaded (can lead to users with slow internet having written something and then having it overwritten, if not prevented by disabling the codebox---which is even worse)
+- fetches problem, test and previous submissions when UI is rendered
+- Code editor uses codemirror with extensions to support multiple languages (only haskell rn) and a custom extension to propagate state to the parent component, so we can get code out of the editor to send to the backend
+- user submissions are fetched from the backend, so users have a way to see their previous submissions and revisit them. also includes date and whether it solves the exercise.
+
+% - Session extension så vi kan handle auth igennem session. Tilføjet rolle til session så vi kan håndtere permissions på forskellige sider.
+% - Sidernes indhold muteres baseret på brugerens rolle. Håndtere også hvis du ikke er logget ind.
+% - TRPC til at hendte data fra databasen. Sker via API kald, således at eksempelvis SQL kald ikke sker direkte fra frontenden.
+% - Solve problem siden. Henter templates når du loader siden. Henter template før UI bliver renderet. Når ui render henter vi problem, test og tidligere submissions.
+% - Code editor. Codemirror med custom extension.
+
+\input{sections/Frontend/client-server-interaction.tex}
