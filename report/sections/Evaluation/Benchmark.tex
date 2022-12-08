@@ -165,32 +165,36 @@ We found that only one code submission could be considered a direct outlier, nam
 This submission was faster to process, likely due to the exercise solution never being executed.
 
 
-\subsection{Queue system}
-\begin{figure}[!tbp]
-  \begin{minipage}[t]{0.4\textwidth}
-    \centering
-    \includegraphics[scale=0.65]{images/10.png}
-    \caption{Mean response time for handling 10 simultaneous client requests for different polling times and Test Runner configurations}
-    \label{fig:resultstart}
-  \end{minipage}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+      \centering
+      \includegraphics[scale=0.65]{images/10.png}
+      \caption{Mean response time for handling 10 simultaneous client requests for different polling times and Test Runner configurations}
+      \label{fig:resultstart}
+  \end{subfigure}
   \hfill
-  \begin{minipage}[t]{0.4\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[scale=0.65]{images/20.png}
     \caption{Mean response time for handling 20 simultaneous client requests for different polling times and Test Runner configurations}
-  \end{minipage}
-  \begin{minipage}[t]{0.4\textwidth}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[scale=0.65]{images/50.png}
     \caption{Mean response time for handling 50 simultaneous client requests for different polling times and Test Runner configurations}
-  \end{minipage}
+  \end{subfigure}
   \hfill
-  \begin{minipage}[t]{0.4\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[scale=0.65]{images/100.png}
     \caption{Mean response time for handling 100 simultaneous client requests for different polling times and Test Runner configurations}
     \label{fig:resultEnd}
-  \end{minipage}
+  \end{subfigure}
+\caption{Mean response time for different asynchronous Test Runner configurations}
+\label{fig:configResults}
 \end{figure}
 
 Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times. 
@@ -199,3 +203,38 @@ All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd
 Regardless of client polling time, we see that the asynchronous Test Runner with a maximum channel capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed.
 Compared to the baseline shown on figure \ref{fig:baseline}, it is vastly superior, requiring only a third of the time to respond to 100 simultaneous requests. 
 Since the configuration of the asynchronous Test Runner with five threads and with a channel capacity of ten yields such good results, we examined similar configurations to find a closer estimate to optimal configuration for this particular computer. 
+The benchmark results of these configurations can be seen on figure \ref{fig:improvedConfig}.
+We see that when the Test Runner is configured correctly, the system can respond to 100 code submissions in under seven seconds.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/10v3.png}
+        \caption{Response times for ten simultaneous requests given improved configurations}
+        \label{fig:10v3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/20v3.png}
+        \caption{Response times for 20 simultaneous requests given improved configurations}
+        \label{fig:20v3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/50v3.png}
+        \caption{Response times for 50 simultaneous requests given improved configurations}
+        \label{fig:50v3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{images/100v3.png}
+      \caption{Response times for 100 simultaneous requests given improved configurations}
+      \label{fig:100v3}
+    \end{subfigure}
+  \caption{Response times for Test Runner with configurations similar to the best configuration from figure \ref{fig:configResults}. Note that this configuration is also shown on figures \ref{fig:10v3} --- \ref{fig:100v3}}
+  \label{fig:improvedConfig}
+\end{figure}
