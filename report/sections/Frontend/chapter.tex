@@ -28,7 +28,6 @@ The user's authorization is also checked to ensure that they are allowed to acce
 Once the input has been validated, the database is queried using Prisma to retrieve the requested data.
 
 The actions that a user is allowed to take on a page depend on their role. For example, a lecturer may have the ability to create, edit, and delete syllabi, problem sets, and exercises, whereas a student may only be able to view the information on the page.
-
 There is a modal on the page that contains form controls for creating new elements, such as syllabi or problem sets.
 This modal helps to prevent invalid input by ensuring that the user enters the correct information before creating a new element.
 Overall, our website supports create, read, update, and delete actions for lecturers and read-only access for students.
