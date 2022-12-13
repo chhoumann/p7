@@ -40,7 +40,7 @@ In practice, implementations of the \texttt{Stream} trait simply provide a strea
 \todo{remove whitespace}
 
 Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} crate to run a number of tasks asynchronously but with the aforementioned limit.
-The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
+The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.\todo{ref the figure not only lines}
 \todo{remove whitespace}
 
 The \texttt{schedule\_test} function calls the Test Runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code from the client, as described earlier.
