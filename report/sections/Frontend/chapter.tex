@@ -1,7 +1,7 @@
 \chapter{Frontend} \label{chap:Frontend}
-One of the primary goals of this application to give the lecturer a way to specify what constitutes a correct problem solution.
-As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
-
+One of the primary goals of this application to give the lecturer a way to specify what constitutes a correct problem solution. \todo{suggestion: As mentioned in section xx, a lecturer can define test in Hspec, to establish whether a function produces certain outputs given some inputs. }
+As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases. \todo{specification does not mention this at all}
+\todo{write what this chapter describes}
 \section{Authentication and Roles}
 When a user initially loads the frontend website, they will not be signed in, and will will only have minimal privileges.
 This means that they will not have access to any of the course material or exercises.
@@ -69,7 +69,7 @@ This is important because, without this, users with slow internet connections mi
 Once the UI for the page is rendered, we fetch the problem, test, and previous submissions for the user.
 This allows them to see the information they need in order to solve the exercise, and also view any previous submissions.
 The code editor on the page uses CodeMirror with extensions to support multiple programming languages.
-Currently, only Haskell is supported, but it is easiy extensible to include other languages.
+Currently, only Haskell is supported, but it is easiy extensible to include other languages. \todo{this is not important. Erase that only haskell is supported. According to all we have written we do not need more languages.}
 We have also developed a custom extension to propagate state to the parent component, which allows us to retrieve the code from the editor and send it to the backend.
 In addition to allowing users to submit their code, we also fetch their previous submissions from the backend.
 This allows users to revisit their previous submissions and see the date they were submitted, as well as whether they solved the exercise.

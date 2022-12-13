@@ -46,7 +46,7 @@ We suspect that when the Test Runner experiences stress, the synchronous approac
 \subsubsection{Ensuring simultaneous client submissions}
 When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
-To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
+To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). \todo{ref to the code snippet} 
 The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop. 
 
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
@@ -101,7 +101,7 @@ public class RocketBenchmarks
 \end{lstlisting}
 
 \subsubsection{Queue system benchmark implementation}
-The benchmark for the queue system seen in listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilizes the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
+The benchmark for the queue system seen in listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilizes the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet. \todo{replace listing with code snippet}
 However, the internal implementation of the client varies, as it needs to poll for the results of the Test Runner after making an initial request.
 Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to poll for a result.
 Best case poll time needs to be established to compare it with the baseline component. 
