@@ -8,6 +8,7 @@ While this worked fine under ideal circumstances, two potential issues with this
     \item The result being removed immediately upon being requested means that if some client-side error occurs, the client is unable to request the data again.
     \item If the client posts a code submission but never polls for the result (say, as a result of losing connection), the data still continues to remain in memory.
 \end{itemize}
+\todo{remove whitespace}
 
 Since this idea would only work under ideal circumstances, we opted for a safer solution inspired by the garbage collectors and the concept of sweeping.
 The idea is to sweep old data from the hashmap when new data is added, but only if long enough time has passed since the last time sweeping was performed.

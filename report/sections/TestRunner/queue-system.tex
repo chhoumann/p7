@@ -7,6 +7,7 @@ In our case, there are two key variables inside the shared state structure that 
     \item \textbf{A sender channel:} In practice, this channel is used as a worker queue in which code submission requests are enqueued for processing. It has a corresponding \textbf{receiver channel}, which is to dequeue and schedule work. Importantly, requests sent via the sender channel are received in a first-in-first-out order.
     \item \textbf{The job results hashmap:} Upon first receiving a code submission request, a UUID is generated. This is used as a key inside the job results hashmap, where the value is initially set to the Rust \texttt{Option} value of type \texttt{TestRunnerResult} --- in other words, a key-value pair with the UUID referencing an empty job result, indicating that the work has not yet been completed. An \texttt{Option} type is simply a nullable data structure in Rust; an optional value. When the Test Runner has processed the code submission, the result is inserted as the value of the \texttt{Option} type. This value can then be looked up when the client requests the result processing their code submission, since the client is provided with the UUID upon sending a code submission, as previously mentioned.
 \end{enumerate}
+\todo{remove whitespace}
 
 In order to limit the number of GHC interpreter processes, a thread pool with a specified size is created whose responsibility is to process code submissions.
 These threads have access to the aforementioned receiver channel containing work to be processed.
@@ -29,15 +30,18 @@ async fn worker_thread(
     }).await;
 }
 \end{lstlisting}
+\todo{remove whitespace}
 
 We use the \texttt{futures} crate in Rust to allocate some number of threads dictated by the variable \texttt{limit} of type \texttt{usize}.
 The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility crate.
 A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} crate.
 This allows us to combine functionality from the two crates.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
+\todo{remove whitespace}
 
 Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} crate to run a number of tasks asynchronously but with the aforementioned limit.
 The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
+\todo{remove whitespace}
 
 The \texttt{schedule\_test} function calls the Test Runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code from the client, as described earlier.
 Once the result is computed, the thread acquires the mutex lock to the hashmap or blocks until it can acquire the lock.
@@ -46,7 +50,7 @@ Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other
 
 In summary, a specified number of concurrent threads in a thread pool continuously receive code submissions from the \texttt{ReceiverStream} channel.
 Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into the hashmap where the UUID serves as a key to look up the result.
-
+\todo{remove whitespace}
 While this approach solved the initial problem of only being able to process one code submission at a time, a new problem is the fact that the hashmap continuously grows over time --- data is only ever added to the hashmap and never removed.
 Consequently, the memory use of the Test Runner would eventually exceed its capacity, resulting in a crash.
 In the following section, we introduce a sweeping system as a solution to this problem.

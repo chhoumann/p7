@@ -1,11 +1,11 @@
-This chapter presents an overview of our system using a system specification containing the purpose and the scope of our system, the target users, the constraints of the project, the use cases, and the prioritization using a MoSCoW analysis.
+This chapter presents an overview of our system using a system specification containing the purpose and the scope of our system, the target users, the constraints of the project, the use cases, and the prioritization using a MoSCoW analysis. \todo{replace our system with the developed system}
 
 \section*{Purpose and Scope of the System}
 The purpose of the system is to provide a better approach to learning functional programming in Haskell using a software application.
 We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution compiles, and whether it fulfills the requirements of the exercise.
 In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
 
-To reduce the scope of the project, we choose to focus on creating a platform for the \textit{Programming Paradigms} course, while ensuring the system abstractions support other languages, that could be supported in the future.
+To reduce the scope of the project, we choose to focus on creating a platform for the \textit{Programming Paradigms} course, while ensuring the system abstractions support other languages, that could be supported in the future. \todo{scopet er defineret ud fra prob. stat. saa slet det her. }
 Currently 172 students attend the course, thus we do not expect many of the following use cases to be performed at the same time.
 We will use the number of course attendees to create an estimation of an operational profile which will be used to stress test the solution, as described in \ref{chap:Benchmarking}
 
@@ -18,7 +18,7 @@ Therefore the responsibility of the frontend can be split into two categories:
 \end{itemize}
 
 \subsubsection*{Lecturer-based responsibilities}
-If the signed in user is a lecturer the frontend provides the lecturer the ability to create syllabi, sessions, exercises and test cases for the exercises, as well as they ability to solve and submit exercises. The ability for the lecturer to solve and submit exercises was included to allow lecturers to try out the exercises and ensure that the test cases behave as expected before releasing the exercises to the students. Additionally, the lecturer will also have access to a dashboard that shows which students have completed which exercises for a given session, in order to track progress and .
+If the signed in user is a lecturer the frontend provides the lecturer the ability to create syllabi, sessions, exercises and test cases for the exercises, as well as they ability to solve and submit exercises. The ability for the lecturer to solve and submit exercises was included to allow lecturers to try out the exercises and ensure that the test cases behave as expected before releasing the exercises to the students. Additionally, the lecturer will also have access to a dashboard that shows which students have completed which exercises for a given session, in order to track progress and .\todo{wtf}
 
 \subsubsection*{Student-based responsibilities}
 Conversely to the Lecturer-based responsibilities, if the signed in user is a student, the fronted provides the user the ability to view syllabi, sessions and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available to the student and which exercises have been completed.
@@ -27,7 +27,7 @@ Conversely to the Lecturer-based responsibilities, if the signed in user is a st
 \section*{Constraints of the Project}
 Given this project is developed as a semester project at \aau{} there will be some constraints that we must adhere to.
 One of the constraints is the time constraint: we have a single semester, or approximately 3 months, to develop the system.
-In addition, we should design an internet based system that is scalable.
+In addition, we should design an internet based system that is scalable. \todo{I ved hvordan jeg har det}
 
 \section*{Use Cases} \label{sec:use_cases}
 The goal of the project is to improve the teaching methods applied to the \textit{Programming Paradigms} course.
@@ -64,7 +64,7 @@ To gain an overview of which features the solution must, should, could and won't
 A MoSCoW analysis is split into four categories, Must have, Should have, Could have and Would have. Each feature will then be put into a category based on how important it is for the system.
 
 Table \ref{tab:MoSCoW} shows the feature prioritizations for a working solution.
-
+\todo{remove whitespace}
 The must have section includes the features required for students to solve exercises. These are seen as must-have features as all use cases other than the Account one require these.
 The should-have category includes the additional features that are needed to fulfill the Solve Exercises use case as well as the Create Exercise one.
 These are prioritized as should have as they are needed in order to provide the users with the main expected features of an exercise platform for coding.
@@ -96,6 +96,6 @@ Lastly, statistics and solution highlighting are placed in the wont have categor
     \end{tabular}
     \caption{\label{tab:MoSCoW}MoSCoW Analysis}
 \end{table}
-
+\todo{remove whitespace}
 The \textit{Must have} category from the MoSCoW analysis represents the minimal amount of features that we want to include to satisfy the goals of the project. Throughout the report we will refer to this as the Minimal Viable Product (MVP).
 In the following chapter we will describe the design of the system which is based on the MVP.

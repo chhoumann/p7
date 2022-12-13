@@ -6,6 +6,8 @@ The Test Runner exposes an endpoint \texttt{/haskell/submit/}, which is used to 
 Originally, we used the Rust crate Rocket to implement this endpoint.
 However, we eventually switched to using the axum crate instead, as it is developed and maintained by the same developers behind the Tokio package we make heavy use of for asynchronous programming and multithreading.
 Furthermore, it was deemed easier to implement a shared state among endpoints by leveraging axum's \texttt{layer} feature.
+
+\todo{I cannot see that the above is relevant if we do not want to write about that implementation. Just write that the test runner exposes an endpoint available through http. The http server hosting the test runner is developed using the axum crate, which enables easily utilization of asynchronous programming and multithreading.}
 We give an overview and a more technical explanation of how this was done in section \ref{sec:queue-system}.
 
 When the Test Runner receives the request from Next.js, its singular goal is to run the tests against the code and send the result of this back as fast as possible.
@@ -14,6 +16,7 @@ The GHC interpreter can be run from the command line with arguments specifying t
 In other words, the Test Runner needs to write the user submission and corresponding test code to a file.
 However, if more users were to make a submission at the same time, the content of the file could potentially be overwritten while the GHC interpreter is running the tests.
 
+\todo{remove whitespace}
 To address this, we generate a new directory with a unique name for each submission.
 Then, the user submission is written to two  \texttt{.hs} files inside this directory - a \texttt{code.hs} file containing the exercise submission, and a \texttt{test.hs} file containing the corresponding tests.
 This way, we can pass the path to this isolated directory to the GHC interpreter process as an argument.
@@ -21,6 +24,7 @@ Once the tests have been run, the directory and its contents are deleted again.
 The \texttt{stdout} of the process is then read to determine whether the tests succeeded or not.
 Finally, the interpreter output and the test success flag is packaged into a JSON object and sent back to the client.
 
+\todo{remove whitespace}
 Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, which will be described in detail in chapter \ref{chap:Benchmarking}.
 In order to address this, we started by refactoring the code base to allow running several instances of the GHC interpreter process at the same time.
 However, despite this running faster for a small number of clients, this approach in itself is not sufficiently stable:
