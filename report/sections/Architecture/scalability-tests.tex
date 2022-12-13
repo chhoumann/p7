@@ -1,0 +1,21 @@
+\section{Endpoints Testing/Scalability}
+Initially, we had a synchronous approach to writing the HTTP endpoints for the web server.
+The reason is twofold: Firstly, writing synchronous is easier than writing asynchronous code, allowing us more quickly develop a working application. 
+Secondly, and more importantly, we wanted to test how well the synchronous approach would scale if we were to send many requests at the same time.
+We did by sending between 10 and 100 POST requests at the same time.
+These POST requests consisted of a body with a JSON object containing some simple Haskell code and a corresponding hspec test.
+The web server would then run the test on the given Haskell code, and return the result to the client.
+
+
+Our initial tests showed that Rocket, the framework we use for HTTP requests, handles each POST request one after the other in a queue-like fashion.
+While the server is already processing a request, further requests are automatically enqueued for later processing.
+Consequently, each request is processed one after the other.
+
+
+In our case, this meant that the server would run and return the result of each test sequentially until the internal queue of requests was empty.
+This is in line with what we expected, however this is not the most scalable and efficient approach.
+Ideally, we should run several tests at the same time in parallel instead of one at a time.
+In other words, we need to run multiple instances of the GHC interpreter process at once and refactor our code to allow parallelism.
+In regard to the former, the OS task scheduler would be responsible for achieving concurrency through context switching between each GHC interpreter process.
+As for the latter, our code is currently synchronous, which means that even if we were to make the functions themselves asynchronous, each synchronous aspect of the function would block the Rust scheduler from swapping between tasks.
+In other words, synchronous functions such as waiting for the \texttt{runhaskell} process to finish, or the way we currently write to files, blocks cooperative scheduling, the scheduling mechanism implemented in Rust.
