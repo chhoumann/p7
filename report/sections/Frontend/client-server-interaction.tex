@@ -20,7 +20,7 @@ This way, all students have the latest test code shortly after the update while 
 When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
 In this request, the code and test is included.
 
-To handle this HTTP POST request, the Next.js server requests the Test Runner to process the given solution and test code.
+To handle this mutation, the Next.js server requests the Test Runner to process the given solution and test code.
 This process is described in chapter \ref{chap:TestRunner}.
 The response of this request to the Test Runner is validated and stored as a submission in the database.
 This allows users and lecturers to access previous submissions, which includes code and a value indicating whether the submission satisfied the exercise tests.
