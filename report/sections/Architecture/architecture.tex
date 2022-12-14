@@ -2,7 +2,12 @@ In this chapter we will describe the architecture of the entire system by first 
 The platform allows lecturers to create a syllabus that includes problem sets, exercises and test cases for the exercises. Additionally, students can do the exercises that the lecturer has provided.
 The platform is a web application designed using a client-server architecture. Using this architecture the client communicates with a server using HTTP to send \textit{request} messages. The server waits for client requests and processes the requests when they arrive and replies to the requests with a \textit{response} message.
 
-The platform has a user interface as well as business logic to handle user requests. The platform supports role-based authentication with roles, meaning that users of varying roles have access to different functionality. The platform can run tests, to check whether a piece of code solves an exercise. Account data, test runs, and syllabus data is persisted in a database.
+The platform has a frontend component containing a user interface and logic to communicate to the backend component. 
+The backend component contains business logic to handle user requests. 
+It supports role-based authentication, meaning that users have access to different functionality, depending on their role. 
+The platform has a test runner component that can check whether a student's submission is a satisfying solution to an exercise. 
+This is done by executing tests. The database component is used to persist account information, test runs, and syllabus data.
+In the following sections we elaborate on the choices made for each component, in relation to this structure.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
 
 \begin{figure}[H]
@@ -12,19 +17,17 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 	\label{fig:Architecture}
 \end{figure}
 
-Note that the platform has an API running on a separate server instance to handle code execution and test, called \textit{Test Runner}. As components are introduced in the following sections, we elaborate on the choices made for each component, in relation to this structure.
-
 \section{Backend System}
-The backend system has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture.
+The backend system has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. 
+The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture.
 
 \section{Frontend} \label{sec:architecture-frontend}
 The frontend is the user facing component of our web application. The frontend is designed such that its user interface and functionality is dependent on the role of the user.
 For example if a student has signed in, the student is able to see and complete exercises. In turn if a lecturer signs in, they will have access to more functionality such as creating a syllabus or exercise.
-
-Regardless of the roles of the user the frontend has the ability to send data to the backend for storage, and show the output of executed code, by sending it to the backend and showing the response.
+Regardless of the user's role, the frontend has the ability to send data to the backend for storage, and show the output of executed code.
 
 \section{Database}
-In order persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations.
+In order to persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations.
 The backend then queries the database and returns the relevant data.
 
 The database component is implemented as a Postgres database. The entities and their relationships contained within the database is shown in figure \ref{fig:Database}. In the figure each box represents an entity-set and attributes for the entities. A diamond represent a relationship between two or more entity-sets.
