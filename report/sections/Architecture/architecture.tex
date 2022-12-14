@@ -9,7 +9,7 @@ The platform has a test runner component that can check whether a student's subm
 This is done by executing tests. The database component is used to persist account information, test runs, and syllabus data.
 In the following sections we elaborate on the choices made for each component, in relation to this structure.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
-The database and test runner run as processes contained in different Docker containers. The frontend and backend components run in the same container.
+The database and test runner run as processes contained in separate Docker containers. The frontend and backend components run in the same container, as Next.js encapsulates both.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{Architecture.PNG}
@@ -56,22 +56,21 @@ The remaining entities \textit{Account}, \textit{Session} and \textit{Verificati
 
 \section{Backend System}
 The backend component has several responsibilities including routing, page rendering, authentication, role based data access and modification, as well as communication between other components. 
-The component enables the creation of accounts for the system by using an access provider.
-For this project, Google is used as this provider. 
-Once a user account is created, it is assigned the role either of lecturer or student.  
-Depending on the account role, the user has access to different functionality.
-A lecturer is able to create and modify syllabi, problem sets, submissions, problems, and tests. 
-A student is able to fetch syllabi, problem sets, problems, and tests, but is not able to create or modify them. 
-A student is able to create submissions through tRPC.
-Once the component receives a query or mutation, the input is validated to ensure that it is of correct structure.
+The component enables the creation of accounts for the system by using an authentication provider.
+For this project, Google is used as the provider. 
+Once a user account is created, it is assigned the default \texttt{Student} role.  
+Depending on the account role, the user has different permissions.
+A lecturer can create and modify syllabi, problemsets, submissions, problems and tests, while students are only able to view these. Both roles can create submissions.
+Data fetching and mutation is facilitated on the Next backend through tRPC and Prisma. In the API routes, user permissions are authorized by getting the requesting user's information and validating it.
+Once the backend receives a query or mutation, the given input is validated to ensure that it is of correct structure and type.
 If the query or mutation is formatted correctly, and the user has the correct authorization, the Prisma ORM transforms it to database queries, and maps the result to \javascript{} objects.
-The backend then renders a response page or object and sends it to the user.
-The component is implemented in TypeScript and Next.
+The backend then sends a response to the user with the requested data.
+This system component is implemented using TypeScript and Next.js.
 
 \section{Frontend} \label{sec:architecture-frontend}
 The frontend component is the user facing component of our platform.  It contains the user interface for the platform and is the main interface of the system.
-The component is designed such that its user interface and functionality depends on the role of the user. 
-A user's role is stored in the form of an encrypted cookie, which is sent to the backend whenever mutations or queries are made. 
+The component is designed such that its user interface and functionality depends on the role of the user.
+Whenever users make requests to the backend component, the frontend component is responsible for displaying the results of these requests to the user. The data sent is limited to the data the user is authorized for.
 The component is also responsible for only providing users with user interface elements they are authorized to view. 
 For instance, some edit and delete buttons are available only to lecturers.
 The component contains functionality providing users with syntax highlighting using the CodeMirror library. 
