@@ -1,66 +1,66 @@
 This chapter presents an overview of our system using a system specification containing the purpose and the scope of our system, the target users, the constraints of the project, the use cases, and the feature prioritization using a MoSCoW analysis.
 
-\section*{Purpose and Scope of the System}
-The purpose of the system is to provide a better approach to learning functional programming in Haskell using a software application.
+\section{Purpose and Scope of the System}
+The purpose of our system is to provide a better approach to learning functional programming in Haskell using a software application.
 We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution compiles, and whether it fulfills the requirements of the given exercise.
-In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
-
-To reduce the scope of the project, we choose to focus on creating a platform for the \textit{Programming Paradigms} course while ensuring that the system can support other languages in the future.
+In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.  
 Currently, 172 students attend the course.
 We will use the number of course attendees to create an estimation of an operational profile which will be used to stress test the solution, as described in \ref{chap:Benchmarking}
 
-\section*{Target Users}
+\section{Target Users}
 The system will have two main users: The lecturer that will conduct the course, and the university students enrolled in the course.
 Therefore, the responsibility of the frontend can be split into two categories: \textbf{Lecturer}-based responsibilities and \textbf{student}-based responsibilities.
 
+
 \subsubsection*{Lecturer-based responsibilities}
-If the signed in user is a lecturer, the frontend provides the lecturer the ability to create syllabi, sessions, exercises, and test cases for the exercises, as well as the ability to solve and submit exercises. Additionally, lecturers can also solve exercises and submit solutions to ensure that the test cases behave as expected before releasing them to students.
+The frontend provides the lecturer the ability to create syllabi, sessions, exercises, and test cases for the exercises, as well as the ability to solve and submit exercises. Additionally, lecturers can also solve exercises and submit solutions to ensure that the test cases behave as expected before releasing them to students.
 The lecturer also has access to a dashboard, allowing them to track student progress on exercises.
 
 \subsubsection*{Student-based responsibilities}
-In contrast to the lecturer-based responsibilities, if the signed in user is a student, the \frontend{} gives the user the ability to view syllabi, sessions, and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available and which exercises have been completed.
+The \frontend{} gives the student the ability to view syllabi, sessions, and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available and which exercises have been completed.
 
-\section*{Constraints of the Project}
+\section{Constraints of the Project}
 Since this project is developed as a semester project at \aau{}, there will be some constraints that we must adhere to.
 One of the constraints is the time constraint: we have a single semester, or approximately three months, to develop the system.
 In addition, the study regulation requires that the system be internet based system and scalable.
 
-\section*{Use Cases} \label{sec:use_cases}
+\section{Use Cases} \label{sec:use_cases}
 The goal of the project is to improve the teaching methods in the \textit{Programming Paradigms} course.
 In the following, we describe use cases that we deem necessary to fulfill in order for the system to improve the course.
 These use cases are presented in no particular order.
 
-\subsection*{Use case: Accounts}
-To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
+\begin{enumerate}
+    \item \textbf{Use case: Accounts}\newline
+    To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
+    \item \textbf{Use case: Solve exercises}\newline
+    A Student should be able to choose an exercise session and a specific exercise. The exercise description is then retrieved and shown to the user.
+    As the user completes the exercise, they should also be able to submit their solution, and verify that it fulfills the requirements of the exercise. If this is not the case, an error message should be displayed to the user describing the problem.
+    
+    \item \textbf{Use case: Create exercises}\newline
+    A lecturer should be able to create and edit syllabi.
+    Within a syllabus, the lecturer should also be able to create and edit exercise sessions and included exercises.
+    For each exercise, the user should be able to specify an exercise description and tests that must pass, the tests should be performed on the submitted code. Furthermore, the lecturer should be able to specify template code present within an exercise immediately upon opening it.
+    
+    \item \textbf{Use case: Show statistics over exercises} \newline
+    A lecturer should be able to view statistics about exercises.
+    This includes how many attempts were used by the students to complete it or the time taken.
+    Using this, the lecturer can determine if the difficulty is reasonable.
 
-\subsection*{Use case: Solve exercises}
-A Student should be able to choose an exercise session and a specific exercise. The exercise description is then retrieved and shown to the user.
-As the user completes the exercise, they should also be able to submit their solution, and verify that it fulfills the requirements of the exercise. If this is not the case, an error message should be displayed to the user describing the problem.
+    \item \textbf{Use case: View solutions}\newline
+    The lecturer can view all submitted solutions to see if students use the correct approach.
+    Students should be able to view their own solutions and previous attempts for each exercise.
 
-\subsection*{Use case: Create exercises}
-A lecturer should be able to create and edit syllabi.
-Within a syllabus, the lecturer should also be able to create and edit exercise sessions and included exercises.
-For each exercise, the user should be able to specify an exercise description and tests that must pass, the tests should be performed on the submitted code. Furthermore, the lecturer should be able to specify template code present within an exercise immediately upon opening it.
+    \item \textbf{Use case: Best solutions}\newline
+    The lecturer should be able to select code solutions submitted by students and publish them to all other students, allowing them to access solutions discussed during sessions.
 
-\subsection*{Use case: Show statistics over exercises}
-A lecturer should be able to view statistics about exercises.
-This includes how many attempts were used by the students to complete it or the time taken.
-Using this, the lecturer can determine if the difficulty is reasonable.
-
-\subsection*{Use case: View solutions}
-The lecturer can view all submitted solutions to see if students use the correct approach.
-Students should be able to view their own solutions and previous attempts for each exercise.
-
-\subsection*{Use case: Best solutions}
-The lecturer should be able to select code solutions submitted by students and publish them to all other students, allowing them to access solutions discussed during sessions.
+\end{enumerate}
+ 
 
 \section{MoSCoW} \label{sec:MoSCoW}
 We need a way to prioritize the previously described use cases to gain an overview of which features the solution must, should, could and will not have.
 To do this, we perform a MoSCoW analysis.
-Each feature will be put into a category based on how important it is for the system.
-
+Each feature will be put into a category based on how important it is for the system
 Table \ref{tab:MoSCoW} shows the feature prioritizations for a working solution.
-
 The \textit{Must have} category includes features required for students to solve exercises.
 The \textit{Should have} category includes additional features needed to fulfill the \textbf{Solve exercises} use case as well as the \textbf{Create exercise} use case.
 They are categorized as \textit{Should have} since they constitute the primary features of a functional teaching platform.
