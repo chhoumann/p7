@@ -19,7 +19,18 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 
 
 \section{Backend System}
-The backend component has several responsibilities including routing, data retrieval and updates and orchestration of execution of code tests. 
+authentication -> role based access -> business logic -> database access
+
+
+
+
+
+The backend component has several responsibilities including routing, authentication, role based data access and modification, as well as communication between other components. 
+Authentication is implemented by, xxx.
+By granting different users a role of either lecturer or student we are able to delegate different functionality across roles. ... describe different functionality
+this component can access the database to persist changes made by different roles.
+
+
 The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture.
 
 \section{Frontend} \label{sec:architecture-frontend}
