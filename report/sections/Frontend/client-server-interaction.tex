@@ -13,12 +13,12 @@ This is done by the client sending a request to the Next.js backend, which queri
 \end{figure}
 
 In the interest of reducing the number of database queries, the result of this request is cached on the client.
-The client will eagerly request new data to stay up to date with instructions or test code updates.
-We deemed that this short cache storage time is useful for when lecturers update test code during an exercise session.
-This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
+The client will eagerly request new data to stay up to date with instructions or test code updates. \todo{what does eagerly mean in this case? Do we just fetch regularly? Do we just fetch related data whenever we fetch something? How does that work? If we fetch problem what do we also fetch.}
+We deemed that this short cache storage time is useful for when lecturers update test code during an exercise session \todo {in case correctiont need to be made}.
+This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries. \todo{database or http quiries. We need to differentiate}
 
 When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend. \todo{mutation is not a term every programmer knows. Maybe if you are into frontend, but not if you are not. Either we explain what it means or we should write in common terms what it does.}
-In this request, the necessary code and test code is included.
+In this request, the necessary code and test code is included. \todo{haskell code and hspec test is included.}
 However, we want to eventually display the test code to the user so they may gain a better understanding of the solution requirements, although this will not be done in this iteration of the project.
 \todo{foler ikke vi skal includere det hvis vi ikke gor det. Saa er det future works, ikke i dette afsnit}
 To handle this mutation, the Next.js server requests the Test Runner to process the given solution and test code.
@@ -41,4 +41,4 @@ Lastly, the result is sent to the client and displayed on the page.
 	\label{fig:exercise_fail}
 \end{figure}
 
-More images of the platform user interface can be seen in chapter \ref{chap:images} in the appendix.
+More images of the platform user interface can be seen in chapter \ref{chap:images} in the appendix. \todo{can be seen in appendix \ref{chap:images} }

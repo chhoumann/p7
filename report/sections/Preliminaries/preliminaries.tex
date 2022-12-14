@@ -52,7 +52,7 @@ Our reason for using Rust is twofold:
 Rust features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}.
 For this project, the most prominently used crate is Tokio\cite{Tokio} for asynchronous programming.
 Furthermore, we initially used the Rocket\cite{Rocket} crate to create endpoints, however we eventually opted to use axum\cite{axum} instead.
-This is described in more detail in chapter \ref{chap:TestRunner}.
+This is described in more detail in chapter \ref{chap:TestRunner}. \todo{we dont care that we use something first and then change. We use axum.}
 
 \section*{Docker}
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
@@ -118,7 +118,7 @@ Afterwards, the interviewers analyze the data and create a list of problems from
 
 \subsection*{System Usability Scale} \label{SUSScore}
 The System Usability Scale (SUS) is a standardized set of usability questions, that can be used to compare a UI to UI's from other systems. It is important to note that the System Usability Scale does not provide insight into specific problems, it instead it provides an overall rating of the system from the users point of view. Other questions can be added about specific issues that the tester want addressed, but it will not be accounted for in the SUS score.\cite{adobeSUS}
-\todo{remove whitespace}
+\todo{remove whitespace, we do not say what we use it for or that it is scored on a scale}
 The 10 questions in the System Usability Scale used to determine the score can be seen below.
 \begin{enumerate}
 	\item I think that I would like to use this system frequently.
