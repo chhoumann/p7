@@ -5,8 +5,8 @@ The server can no longer directly respond to a POST request with the Test Runner
 This means that if the request were enqueued for long enough, it would eventually time out.
 In order to solve this, the Test Runner web server sends back a unique token to the client immediately upon receiving a POST request.
 This token serves as a ticket for the client.
-Using it, the client can continuously poll the server for the result of processing the request.
-To achieve this, we implemented a new endpoint which expects the token as a parameter.
+Using the token, the client can continuously poll the server for result of processing the code submission.
+We implemented a new endpoint which expects the token as a parameter.
 There are three possible responses from this endpoint:
 \begin{enumerate}
     \item If the given token is not present within the queue, the response body contains a special "not found" message.
