@@ -17,7 +17,7 @@ The client will eagerly request new data to stay up to date with instructions or
 This short cache storage time is useful for when lecturers update test code during an exercise session.
 This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
 
-When a user submits an exercise solution, a HTTP POST request is sent to the Next.js backend.
+When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
 In this request, the code and test is included.
 
 To handle this HTTP POST request, the Next.js server requests the Test Runner to process the given solution and test code.
