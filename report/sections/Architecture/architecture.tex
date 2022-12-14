@@ -24,7 +24,7 @@ The backend is the link between all the components in the system. It operates as
 \section{Frontend} \label{sec:architecture-frontend}
 The frontend is the user facing component of our web application. The frontend is designed such that its user interface and functionality is dependent on the role of the user.
 For example if a student has signed in, the student is able to see and complete exercises. In turn if a lecturer signs in, they will have access to more functionality such as creating a syllabus or exercise.
-Regardless of the roles of the user the frontend has the ability to send data to the backend for storage, and show the output of executed code.
+Regardless of the user's role, the frontend has the ability to send data to the backend for storage, and show the output of executed code.
 
 \section{Database}
 In order to persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations.
