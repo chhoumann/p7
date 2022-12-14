@@ -9,6 +9,7 @@ The platform has a test runner component that can check whether a student's subm
 This is done by executing tests. The database component is used to persist account information, test runs, and syllabus data.
 In the following sections we elaborate on the choices made for each component, in relation to this structure.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
+The database and test runner runs as processes contained in different docker containers. The frontend and backend components run in the same container.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{Architecture.PNG}
@@ -17,26 +18,6 @@ The overall architecture for the system can be seen in figure \ref{fig:Architect
 	\label{fig:Architecture}
 \end{figure}
 
-
-\section{Backend System}
-authentication -> role based access -> business logic -> database access
-
-
-
-
-
-The backend component has several responsibilities including routing, authentication, role based data access and modification, as well as communication between other components. 
-Authentication is implemented by, xxx.
-By granting different users a role of either lecturer or student we are able to delegate different functionality across roles. ... describe different functionality
-this component can access the database to persist changes made by different roles.
-
-
-The backend is the link between all the components in the system. It operates as a traditional server in a client-server architecture.
-
-\section{Frontend} \label{sec:architecture-frontend}
-The frontend is the user facing component of our web application. The frontend is designed such that its user interface and functionality is dependent on the role of the user.
-For example if a student has signed in, the student is able to see and complete exercises. In turn if a lecturer signs in, they will have access to more functionality such as creating a syllabus or exercise.
-Regardless of the user's role, the frontend has the ability to send data to the backend for storage, and show the output of executed code.
 
 \section{Database}
 In order to persist data, the backend retrieves and updates data in the database component depicted in figure \ref{fig:Architecture}. This is done through create, read, update and delete operations.
@@ -73,8 +54,35 @@ The \textit{Submission} entity is in a many-to-one relationship with the \textit
 
 The remaining entities \textit{Account}, \textit{Session} and \textit{VerificationToken} are entities which are required by authentication services and are not developed by us.
 
+\section{Backend System}
+The backend component has several responsibilities including routing, page rendering, authentication, role based data access and modification, as well as communication between other components. 
+The component enables the creation of accounts for the system by using an access provider.
+For this project Google is used as this provider. 
+Once a user account is created they are assigned the role either of lecturer or student.  
+Depending on the account role, the user has access to different functionality.
+A lecturer is able to create and modify syllabi, problemsets, submissions, problems and tests. 
+A student is able to fetch syllabi, problemsets, problems and tests, but is not able to create or modify them. 
+A student is able to create submissions.
+This is done using tRPC. 
+Once the component receives a query or mutation the input is validated to ensure that it is of correct structure.
+If the query or mutation is formatted correctly, and the user has the correct authorization, the Prisma ORM transforms it to database queries, and maps the result to \javascript{} objects.
+The backend then renders a response page or object and sends it to the user.
+The component is implemented in TypeScript and Next.js.
+
+\section{Frontend} \label{sec:architecture-frontend}
+The frontend component is the user facing component of our platform.  It contains the UI for the platform and is the main interface for the system.
+The component is designed such that its user interface and functionality is dependent on the role of the user. 
+A user's role is stored in the form of an encrypted cookie which sent to the backend whenever mutations or queries are made. 
+The component is also responsible for providing users only with UI elements they are authorized to view. 
+For instance, some edit and delete buttons are available only to lecturers.
+The component contains functionality providing users with syntax highlight using the CodeMirror library. 
+It is implemented using TypeScript and React. 
+
 \section{Test Runner}
-As previously mentioned, the platform is able execute code by sending the submitted code to the Test Runner API which verifies whether the code is syntactically correct and satisfies the tests defined by the lecturer.
-Since the Test Runner is running on its own server instance, we created endpoints that allow the backend to communicate with the Test Runner API. When the submitted code has been processed the output will be returned to the caller.
+The test runner component is responsible for determining whether a student's submission solves a problem. 
+It receives HTTP requests containing Haskell code and an Hspec test, and use this to stage and perform test execution. 
+This is done using the GHC interpreter.
+The result of the test is then serialized to JSON format and sent to the backend component.
+The test runner component is implemented as an HTTP server using the Axum crate in the Rust programming language.
 
 In the following chapters we will elaborate on the most important components of our system. In these chapters we will give a detailed description of how the components work and their structure.
