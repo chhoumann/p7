@@ -28,7 +28,7 @@ These platforms offer an alternative way of learning programming languages and p
 However, the feedback loop for each platform is not necessarily conducive for learning course material.
 
 
-For example, CodeWars focuses on competitive programming where users compete to solve problems in the fastest and most efficient way.
+For example, CodeWars focuses on competitive programming where users compete to solve assorted problems.
 When a user submits a problem solution, one or more tests are used to verify whether or not the submission solves the given problem.
 However, the problems do not constrain the user to use specific programming language constructs in their solution.
 Therefore, the solutions with the highest ratings can include language constructs that are foreign to a new programmer.
@@ -40,7 +40,7 @@ However on Coursera, there is no way to ask other people for help if a student g
 Furthermore, feedback on exercises is given in written form by other course participants, meaning there is no way to get feedback from a lecturer or teaching assistant.
 
 
-Finally, while Codecademy offers instant feedback on problem solutions through tests, Codecademy has its own curriculums and thus would not be usable by a university lecturer.
+Finally, while Codecademy offers instant feedback on problem solutions through tests, Codecademy has its own curriculums. This means that external lecturers have little influence on the curriculum.
 While Codecademy does inform the user of problems in their code, this is only limited to compiler errors and test failures.
 There is no way to get in-depth feedback on a solution from an expert such as a lecturer.
 
@@ -49,28 +49,22 @@ Despite offering unique approaches to teaching, none of these platforms are suit
 \section{Problem Statement}
 Existing platforms for learning to program are mainly split into three types: Coding exercises, video guides, and online curricula.
 AAU could benefit from an application that has been designed specifically of teaching in a university setting.
-To address the shortcomings of the current approach used during exercise sessions, an application enabling fast, concrete feedback on exercise submissions for both students and the lecturer could be created.
+To address the shortcomings of the current approach used during exercise sessions, an application could be created that enables fast, concrete feedback on exercise submissions for students. Additionally, the application could monitor students' progress and present it to lecturers.
 By summarizing the main problems following the switch to the new teaching approach, and the limitations of currently available solutions, an initial problem statement is written.
 \begin{displayquote}
-    How can a web application ensure swift evaluation of students' exercise solutions?
+    How can a web application ensure fast evaluation of students' exercise solutions?
 \end{displayquote}
 
 \section{Solution}
-To alleviate the problem defined in the problem statement, a platform supporting evaluation of Haskell code is developed. It is necessary for this platform to evaluate whether a student's Haskell program solves a given problem defined in an exercise. The platform supports the definition of these exercises and accompanying software tests defining solution criteria for a particular exercise. These software tests are executed using a Haskell interpreter, and the results are presented to the user of the platform on a web based user interface.
-Information about submitted solutions are persisted in a relational database so they can be accessed by users again in the future.
-To examine the scalability of the solution, essential parts of the platform have been stress-tested to ensure availability and reliability when under heavy use by many concurrent users \cite{Sommerville10}.
+To alleviate the problem defined in the problem statement, a platform supporting evaluation of Haskell code has been developed. This platform evaluates whether a student's Haskell program solves a given problem defined in an exercise. It supports the definition of these exercises and accompanying software tests defining solution criteria for a particular exercise. These software tests are executed using a Haskell interpreter, and the results are presented to the user of the platform on a web based user interface.
+Information about submitted solutions are persisted in a database so they can be accessed by users again in the future.
+To examine the scalability of the solution, essential parts of the platform have been stress-tested to ensure availability and reliability.
 
 In the following chapters, we describe this platform and how it aims to solve the problem of quickly verifying whether a submitted Haskell program satisfies certain solution criteria defined in test code.
 In chapter \ref{chap:preliminaries}, we present the theory and technology necessary to understand the developed solution.
 Chapter \ref{chap:Specification} introduces specifications and use cases that the developed solution must satisfy.
 Chapter \ref{chap:Design} and \ref{chap:Architecture} detail the design and architecture of the solution in terms of components and user interface.
 Chapter \ref{chap:Frontend} and \ref{chap:TestRunner} present a detailed description of key functionality and concepts of the solution.
-Finally, chapters \ref{chap:Evaluation} to \ref{chap:Conclusion} describe results and reflections regarding the project, where section \ref{chap:Benchmarking} outlines our approach to benchmarking and stress-testing the solution.
+Chapter \ref{chap:Evaluation} describes the evaluation of the platform in terms of usability and response time. 
+Finally, chapters \ref{chap:Discussion} to \ref{chap:Conclusion} discusses the developed platform and the development process.
 
-% persist information about xxxxx
-% execute haskell code and establish whether it satisfies criteria
-% provides a user interface for students and lecturers
-%The platform enables a lecturer to define problems that students can be solved students later. \todo{this sentence}
-%Whenever a student submits a solution to a problem, tests predefined by the lecturer will be run and notify the student whether their code is a valid solution.
-% it should describe the platform a bit more.
-%The platform consists of a web application providing a UI, and a backend system responsible for testing exercise solution submissions.

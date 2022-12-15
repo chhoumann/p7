@@ -5,7 +5,7 @@ The purpose of our system is to provide a better approach to learning functional
 We aim to make a system where students can solve exercises. The system should be able to provide feedback on whether the user's solution fulfills the requirements of the given exercise.
 In addition, the lecturer should be able to add exercises and write specifications for exercise solutions.
 Currently, 172 students attend the course.
-We will use the number of course attendees to create an estimation of an operational profile which will be used to stress test the solution, as described in \ref{chap:Benchmarking}
+We will use the number of course attendees to create an estimation of an operational profile which will be used to stress test the solution, as described in section \ref{chap:Benchmarking}
 
 \section{Target Users} \label{sec:target-users}
 The system will have two main users: The lecturer that will conduct the course, and the university students enrolled in the course.
@@ -19,11 +19,6 @@ The lecturer also has access to a dashboard, allowing them to track student prog
 \subsubsection{Student-based responsibilities}
 The \frontend{} gives the student the ability to view syllabi, sessions, and exercises as well as the ability to attempt exercises. A student will also have access to an overview showing which courses are available and which exercises have been completed.
 
-\section{Constraints of the Project}
-Since this project is developed as a semester project at \aau{}, there will be some constraints that we must adhere to.
-One of the constraints is the time constraint: we have a single semester, or approximately three months, to develop the system.
-In addition, the study regulation requires that the system be internet based system and scalable.
-
 \section{Use Cases} \label{sec:use_cases}
 The goal of the project is to improve the teaching methods in the \textit{Programming Paradigms} course.
 In the following, we describe use cases that we deem necessary to fulfill in order for the system to improve the course.
@@ -33,7 +28,7 @@ These use cases are presented in no particular order.
     \item \textbf{Use case: Accounts}\newline
     To keep track of what exercises each user has solved, and which permissions they have, a user should be able to log in to the platform, and be registered as a student or a lecturer.
     \item \textbf{Use case: Solve exercises}\newline
-    A Student should be able to choose an exercise session and a specific exercise. The exercise description is then retrieved and shown to the user.
+    A Student should be able to choose an exercise session and a specific exercise. The exercise description is then shown to the user.
     As the user completes the exercise, they should also be able to submit their solution, and verify that it fulfills the requirements of the exercise. If this is not the case, an error message should be displayed to the user describing the problem.
 
     \item \textbf{Use case: Create exercises}\newline
@@ -93,5 +88,5 @@ Lastly, statistics and solution highlighting are placed in the \textit{Won't hav
     \caption{\label{tab:MoSCoW}MoSCoW Analysis}
 \end{table}
 
-The \textit{Must have} category from the MoSCoW analysis represents the minimal amount of features to satisfy the project goals. Throughout the report, we will refer to this as the Minimal Viable Product (MVP).
-In the following chapter, we will describe the design of the system, which is based on the MVP.
+The \textit{Must have} category from the MoSCoW analysis represents the minimal amount of features to satisfy the project goals. Throughout the report, we will refer to this as the \textit{minimal viable product} (MVP).
+In the following chapter, we will describe the design of the system user interface, which is based on the MVP.
