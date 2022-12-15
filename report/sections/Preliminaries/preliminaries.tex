@@ -1,6 +1,6 @@
-The following chapter contains short introductions to the most important technologies used in the project.
+The following chapter contains a description of the most relevant technologies used in the project. For each technology, we describe the characteristics most relevant for this project.
 
-\section{Glasgow Haskell Compiler} \todo{Move down to first mention of GHC (by request of carlos)}
+\section{Glasgow Haskell Compiler}
 From the currently available Haskell compilers, we use the Glasgow Haskell Compiler (GHC) for interpreting the Haskell exercises and running tests for the submissions. GHC is recommended by the Haskell Organisation and it is recommended as the go-to compiler/interpreter by the \textit{Programming Paradigms} lecturer\cite{Haskell_GHC}.
 
 
@@ -10,10 +10,9 @@ A test asserts whether code behaves as expected given some input based on system
 We can use this to automatically run the tests on student exercise submissions.
 This allows us to confirm if the students solved the exercise and if not, inform them which tests did not pass.
 Among the available options, Hspec was chosen as it allows the lecturer to define tests in an easy-to-understand domain-specific language (DSL).
-This makes the framework easier to work with, which, in turn, also makes it easier for the lecturer to define exercises using our system.
-Furthermore, Hspec also allows for parallel test execution which is preferable when trying to optimize for larger numbers of users\cite{Hspec_landing}.
+This makes the framework easier to work with, which, in turn, also makes it easier for the lecturer to define exercises using our system.\cite{Hspec_landing}
 
-An example setup of an Hspec test can be seen in code snippet \ref{lst:HspecTestExample}. First, Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In the figure, the function is called on the input variable \texttt{x} and the expected output is \texttt{y}, which can be a value of any type.
+An example setup of an Hspec test can be seen in code snippet \ref{lst:HspecTestExample}. First, Hspec and the module defined in the student's code are imported. Then the specification describing the test Hspec should run in the code is defined. In code snippet \ref{lst:HspecTestExample}, the function \textit{Function Name} is called on the input variable \texttt{x} and the expected output is \texttt{y}, which can be a value of any type.
 
 
 \begin{lstlisting}[language=CSharp, caption={An example of a Hspec test}, label={lst:HspecTestExample}]
@@ -32,17 +31,10 @@ An example setup of an Hspec test can be seen in code snippet \ref{lst:HspecTest
 \end{lstlisting}
 
 \section{Rust}
-Rust is a multi-paradigm, general-purpose programming language originally developed by Graydon Hoare in 2006 as a personal project at Mozilla.
-The project was then sponsored by Mozilla from 2009 to 2021 where the project, along with all trademarks, was moved to the newly create Rust Foundation.
-The idea behind Rust was to challenge the notion that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}.
+The idea behind Rust programming language was to challenge the notion that high-level ergonomics and low-level control come at the cost of each other\cite{Rust_Book}.
 Most programming languages today operate in a band where either safety or control is valued highest and the other diminished. An example of this is C, which has high level control but lacks safety.
-Here, Rust provides the low-level power of C along with the safety features programmers have gotten used to in high-level languages like Python.
+Rust provides the low-level power of C along with the safety features programmers have gotten used to in high-level languages like Python.
 As such, the main overall goal of Rust is to provide as much safety as possible in a low-level programming language without sacrificing performance. \cite{Rust_in_Action}
-
-In order to achieve this, Rust provides a large number of safety features.
-Among these, the most distinguishing feature is the detection of invalid data access at compile time.
-This feature is important considering a research article by Microsoft Security Research Center stating that invalid data access constitutes 70\% of serious security bugs in modern programs \cite{Safe_Systems_Languages}.
-The Rust compiler guarantees that any compiled program is memory-safe, which eliminates the serious consequences of errors following poor memory management\cite{Rust_in_Action}.
 
 Our reason for using Rust is twofold:
 \begin{enumerate}
@@ -50,10 +42,7 @@ Our reason for using Rust is twofold:
     \item Rust features safe implementations of threading and concurrency, which is useful for web applications where scalability is a priority.
 \end{enumerate}
 
-Rust features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}.
-For this project, the most prominently used crate is Tokio\cite{Tokio} for asynchronous programming.
-Furthermore, we initially used the Rocket\cite{Rocket} crate to create endpoints, however we eventually opted to use axum\cite{axum} instead.
-This is described in more detail in chapter \ref{chap:TestRunner}.
+Rust also features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}. Several crates were used for the development of the platform. These will be introduced in chapter \ref{chap:TestRunner}.
 
 \section{Docker}
 The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
