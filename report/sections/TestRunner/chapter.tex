@@ -13,7 +13,6 @@ Finally, the interpreter output and the test success flag is packaged into a JSO
 
 Sequentially starting a new \texttt{runhaskell} process for each request is a major bottleneck when multiple users submit solutions in quick succession.
 Processing each request sequentially results in slow response times, which may also lead to connection timeouts.
-In order to address this,
 This was solved by allowing multiple instances of the GCH interpreter process to run at the same time.
 However, despite this being faster for a small number of clients, this approach in itself is not sufficient:
 If multiple clients post a code submission at the same time, the Test Runner will start a new process for each request.
