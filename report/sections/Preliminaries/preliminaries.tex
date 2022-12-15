@@ -49,7 +49,7 @@ As the server-side use of \javascript{} keeps growing in popularity, its inabili
 \typescript{} was designed to address these problems without requiring JavaScript developers to learn a new language.
 It is a syntactic superset of \javascript{} with additional features.
 This means that all \javascript{} projects are syntactically valid \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably\cite{TypeScript}.
-\typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling into \javascript{}. 
+\typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling into \javascript{}.
 
 \section{tRPC}
 tRPC is a library that enables TypeScript developers to build type safe APIs by sharing types between the frontend and backend code.
@@ -61,7 +61,7 @@ These characteristics of tRPC allowed us to build type safe API routes and elimi
 Prisma is an object-relational mapper (ORM) developed for use in Node.js and \typescript{} backends.
 Its goal is to increase developer productivity by providing a way to build type safe database queries. The results of executing these queries with Prisma return \javascript{} objects\cite{Prisma_Doc}.
 It also allows developers to define application models through a data modeling language, granting an easier way of configuring the application data sources and models\cite{Prisma_Why}.
-In this project Prisma is used to create and maintain database models, as well as querying the database. 
+In this project Prisma is used to create and maintain database models, as well as querying the database.
 
 
 \section{Next.js}
@@ -81,9 +81,9 @@ Furthermore, modern Postgres supports a wide variety of deployment options from 
 
 \section{Docker}
 Docker can be used to create uniform code execution environments with the use of images\cite{Docker_Container}.
-An image is similar to an executable package that encapsulates everything required in order to run applications. 
+An image is similar to an executable package that encapsulates everything required in order to run applications.
 When executed, the image is turned into a container.
-Containers are isolated processes of bundles of code and required dependencies. 
+Containers are isolated processes of bundles of code and required dependencies.
 This allows developers to move around prepackaged applications, ensuring that the developed software runs the same regardless of what operating system it runs on\cite{Docker_Container}.
 We use Docker to set up local development environments for different platform components. This results in an easier development process and a simplified delivery process to production.
 
@@ -128,7 +128,7 @@ To calculate the SUS score, there are three steps:
 	\item For even items: summarize the total score, then subtract the total score from 25
 	\item Add up the total scores and multiply that total by 2.5.
 \end{enumerate}
-If the system achieves a SUS score above 68, it means that the UI is above average. Otherwise, if it is below 68, it is below average\cite{adobeSUS}.
+If the system achieves a SUS score above 68, it means that the user interface is above average. Otherwise, if it is below 68, it is below average\cite{adobeSUS}.
 We use SUS in order to get an overall rating of our system.
 
 By performing a usability test utilizing structured interview and SUS, we get a concrete metric for scoring the system as well concrete feedback from the users.
