@@ -1,12 +1,8 @@
 \section{Tokens and Polling}
-To solve the aforementioned problem, we decided to implement a queue system which enqueues requests for future processing if some upper limit is reached.
-However, this introduces a new problem.
-The server can no longer directly respond to a POST request with the Test Runner results because the request may be handled at a later point in time.
-This means that if the request were enqueued for long enough, it would eventually time out.
-In order to solve this, the Test Runner web server sends back a unique token to the client immediately upon receiving a POST request.
+To prevent connection timeouts, the Test Runner web server sends back a unique token to the client immediately upon receiving a POST request.
 This token serves as a ticket for the client.
-Using it, the client can continuously poll the server for the result of processing the request.
-To achieve this, we implemented a new endpoint which expects the token as a parameter.
+Using the token, the client can continuously poll the server for result of processing the code submission.
+We implemented a new endpoint which expects the token as a parameter.
 There are three possible responses from this endpoint:
 \begin{enumerate}
     \item If the given token is not present within the queue, the response body contains a special "not found" message.
@@ -20,3 +16,6 @@ It then responds to the client with a unique token (UUID).
 This UUID is also used by the web server as a key to look up the given code submissions in the queue.
 The second endpoint expects a GET request with a UUID as a parameter that is then used to look up the result of processing the code submission with the matching UUID.
 It then responds to the client with the result of processing that submission if it was found.
+
+With the connection timeout problem solved, we needed a way to limit the number of running GHC interpreter processes.
+We did this by implementing a queue system, which we describe in the following section.
