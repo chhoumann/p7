@@ -169,7 +169,7 @@ All stress tests and benchmarks are run on computers with an AMD EPYC Processor 
 The computers used for the benchmarks run UBUNTU 20.04 as the operating system and have 32 GB of RAM.
 All stress tests begin with a warm-up phase where BenchmarkDotNet sends ten consecutive submissions to the Test Runner.
 Then, for each combination of parameters (number of requests, code submission, and polling times) the stress test is timed and repeated 40 times.
-This whole process is repeated five times to ensure outliers does not significantly affect the results.
+This whole process is repeated five times to ensure outliers do not significantly affect the results.
 
 \subsection{Baseline}
 \begin{figure}
@@ -221,7 +221,7 @@ This submission was faster to process, likely due to the exercise solution never
 \label{fig:configResults}
 \end{figure}
 
-Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times.
+Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} show the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times.
 For each plot, line T denotes the maximum number of threads allowed for testing client submissions, and C denotes the maximum capacity of the channels.
 All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and remove Test Runner results older than 90 seconds.
 Regardless of client polling time, we see that the asynchronous Test Runner with a maximum channel capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed.
