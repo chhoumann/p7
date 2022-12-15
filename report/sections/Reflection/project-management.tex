@@ -1,15 +1,16 @@
-In the following section we will describe how the project was managed, which techniques were used, as well as which issues we encountered. Throughout we will reflect on the decisions that were made in this context.
+In the following section, we will describe how the project was managed, which techniques were used, as well as which issues we encountered.
+Throughout the section, we reflect on the decisions made in this context.
 
 \section{Task Management}
-One of the primary objectives in any project is to manage the tasks that are generated throughout the project. The goal is to maintain an overview of what has been done, what needs to be done and how the tasks are distributed between developers. Additionally, project managers also often want to be able to estimate how long tasks may take to complete and their difficulty. To accomplish this, projects may utilize several project management tools and techniques. In this section we will focus on the tools that we utilized, while in section \ref{sec:agile-dev} we will focus on the techniques that were utilized to manage the project.
+One of the primary objectives in any project is to manage the tasks created throughout the project. The goal is to maintain an overview of what has been done, what needs to be done, and how the tasks are distributed between developers. Additionally, project managers also often want to be able to estimate how long tasks may take to complete and how difficult they are. To accomplish this, projects may utilize several project management tools and techniques. In this section, we will focus on the tools that we utilized. Afterwards in section \ref{sec:agile-dev}, we will focus on the techniques that were utilized to manage the project.
 
-\subsection{Github Projects}
-GitHub Projects seemed promising, as it integrates with existing developer workflows. You track issues, and as you work on them, they flow from the backlog to \textit{in progress}, to \textit{in review}, and then is at last categorized as \textit{completed}. When you submit a pull request, it goes to the review section, so other members are aware that it is pending. And when that pull request is merged, it goes to completed automatically.
-Intuitively, it makes sense to track issues like this, as it is so closely aligned with the modern Git workflow on GitHub. To start contributing to a codebase, you create a branch. Then you reference issues when you make a pull request, which will then become linked to your changes, making issues closely tied to actual code changes.
-However, we found that some members were not accustomed to this way of working, and as such, did not take the extra steps to facilitate the automation, such as marking issues as related to the project.
-When you create a pull request without referencing issues related to the project, you have to manually assign things later. Given that a pull request does not always correlate directly with issues, this is easily forgotten.
-Managing a project generally includes managing non-technical tasks as well, which is hard to track with Projects, as it is very development-specific.
-What finally led us to consider other tools were bugs related to the automated workflows not being invoked, resulting in confusion.
+\subsection{GitHub Projects}
+GitHub Projects seemed promising, as it supposedly integrates with existing developer workflows. You track issues and as you work on them, they flow from the backlog to \textit{in progress}, then to \textit{in review}, and then finally to \textit{completed}. When you submit a pull request, the related issue is moved to the \textit{in review} section, so other members are aware that it is pending. And when that pull request is merged, it is move to \textit{completed} automatically.
+Intuitively, it makes sense to track issues like this, as it is closely aligned with the modern Git workflow on GitHub. To start contributing to a codebase, you create a branch. Then you reference issues when you make a pull request, which will then become linked to your changes, making issues closely tied to actual code changes.
+However, we found that some group members were not accustomed to this way of working and.
+This led to the idea of automation failing, as we often had to manually move issues around when project members forgot to relate issues to pull requests.
+Managing a project generally includes managing non-technical tasks as well, which is hard to track with GitHub Projects, as it is designed specifically for software development.
+What ultimately led us to explore other options were the frequent bugs related to automated workflows not being invoked, resulting in confusion.
 
 \subsection{Notion}
 Notion is a platform that allows users to organize resources and manage projects in the same space. The platform allows you to customize the layout of your work space in a way that best suits the team. One particular feature of Notion that we used in this project was the Kanban board. In the Kanban board we defined four categories, similar to what we had in Github Projects, in which we could place work items:
