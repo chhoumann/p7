@@ -68,11 +68,11 @@ The backend then sends a response to the user with the requested data.
 This system component is implemented using TypeScript and Next.js.
 
 \section{Frontend} \label{sec:architecture-frontend}
-The frontend component is the user facing component of our platform.  It contains the user interface for the platform and is the main interface of the system.
-The component is designed such that its user interface and functionality depends on the role of the user.
-Whenever users make requests to the backend component, the frontend component is responsible for displaying the results of these requests to the user. The data sent is limited to the data the user is authorized for.
+The frontend component is the user facing component of our platform.  It contains the user interface for the platform.
+The component is designed such that its user interface and functionality depend on the role of the user.
+Whenever users make requests to the backend component, the frontend component is responsible for displaying the results of these requests to the user. The data sent is limited to only data the user is authorized to access.
 The component is also responsible for only providing users with user interface elements they are authorized to view.
-For instance, some edit and delete buttons are available only to lecturers.
+For instance, some edit and delete buttons are only available to lecturers.
 The component contains functionality providing users with syntax highlighting using the CodeMirror library.
 It is implemented using TypeScript and React.
 
