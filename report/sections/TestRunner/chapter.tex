@@ -1,5 +1,5 @@
 \chapter{Test Runner} \label{chap:TestRunner}
-When the Test Runner receives the request from the backend component, its singular goal is to run the tests against the code and send back the result as fast as possible.
+When the Test Runner receives the request from the backend component, its singular goal is to run the tests on the submitted code and make the result available as fast as possible.
 In order to run the tests, we run the GHC interpreter on the test code, which, in turns, needs access to the exercise submission code.
 The GHC interpreter can be run from the command line with arguments specifying the path Haskell file to run.
 In other words, the Test Runner writes the user submission and corresponding test code to a file.
