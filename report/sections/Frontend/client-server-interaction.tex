@@ -1,5 +1,5 @@
 \section{Client-Server Interaction}
-When a lecturer creates a new exercise, a modal prompts to enter details about the exercise.
+When a lecturer creates a new exercise, a modal prompts them to enter details about the exercise.
 These details include the name of the exercise, instructions for the student, an optional code template to help the student get started, as well as test code.
 This data is sent to the database where it is stored.
 When a student opens an exercise, the data is then fetched from the database.
@@ -14,19 +14,17 @@ This is done by the client sending a request to the Next.js backend, which queri
 
 In the interest of reducing the number of database queries, the result of this request is cached on the client.
 The client will eagerly request new data to stay up to date with instructions or test code updates.
-This short cache storage time is useful for when lecturers update test code during an exercise session.
+We deemed that this short cache storage time is useful for when lecturers update test code during an exercise session.
 This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
 
 When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
-In this request, the code and test is included.
+In this request, the necessary code and test code is included.
 
 To handle this mutation, the Next.js server requests the Test Runner to process the given solution and test code.
 This process is described in chapter \ref{chap:TestRunner}.
 The response of this request to the Test Runner is validated and stored as a submission in the database.
 This allows users and lecturers to access previous submissions, which includes code and a value indicating whether the submission satisfied the exercise tests.
 Lastly, the result is sent to the client and displayed on the page.
-if the submission solves the problem a success message is displayed, otherwise an error message is shown, this can be seen on figure \ref{fig:exercise_success} and \ref{fig:exercise_fail} respectively.
-Images of the platform's user interface can be seen in appendix \ref{chap:images}.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.1]{exercise_success.png}
@@ -41,3 +39,5 @@ Images of the platform's user interface can be seen in appendix \ref{chap:images
 	\caption{An example of an unsuccessful exercise submission}
 	\label{fig:exercise_fail}
 \end{figure}
+
+More images of the platform user interface can be seen in chapter \ref{chap:images} in the appendix.

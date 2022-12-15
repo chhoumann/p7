@@ -8,13 +8,13 @@
 % your operating system and its default input
 % encoding. Typically, you should use
 %   Linux  : utf8 (most modern Linux distributions)
-%            latin1
+%            latin1 
 %   Windows: ansinew
 %            latin1 (works in most cases)
 %   Mac    : applemac
 % Notice that you can manually change the input
 % encoding of your files by selecting "save as"
-% an select the desired input encoding.
+% an select the desired input encoding. 
 \usepackage[utf8]{inputenc}
 % Make latex understand and use the typographic
 % rules of the language used in the document.
@@ -58,7 +58,7 @@
 % http://en.wikibooks.org/wiki/LaTeX/Mathematics
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Defines new environments such as equation,
-% align and split
+% align and split 
 \usepackage{amsmath}
 % Adds new math symbols
 \usepackage{amssymb}
@@ -144,7 +144,7 @@
 % http://en.wikibooks.org/wiki/LaTeX/Hyperlinks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Enable hyperlinks and insert info into the pdf
-% file. Hypperref should be loaded as one of the
+% file. Hypperref should be loaded as one of the 
 % last packages
 \usepackage{hyperref}
 \hypersetup{%
@@ -205,10 +205,10 @@
 \definecolor{SaddleBrown}{rgb}{0.55, 0.27, 0.07}
 \definecolor{Orange}{rgb}{0.9, 0.427, 0}
 \lstdefinelanguage{CSharp}{
-  morecomment = [l]{//},
+  morecomment = [l]{//}, 
   morecomment = [l]{///},
   morecomment = [s]{/*}{*/},
-  morestring=[b]",
+  morestring=[b]", 
   morestring=[b]',
   basicstyle=\footnotesize\ttfamily,
   commentstyle=\color{Green}\textit,
@@ -255,15 +255,15 @@
 }
 \newcommand{\userStory}[3]{
   \begin{center}
-    \begin{tabular}{|p{0.8\textwidth}|}
+    \begin{tabular}{|p{0.8\textwidth}|} 
      \hline
      \textbf{USER STORY}\\
      As \textit{#1}\\
      I want #2\\
-     so I #3.\\ [0.5ex]
+     so I #3.\\ [0.5ex] 
      \hline
     \end{tabular}
-    \end{center}
+    \end{center}  
     }
 \usepackage{multirow}
 \usepackage{csquotes}
@@ -276,6 +276,8 @@
 \definecolor{GrayCodeBlock}{RGB}{241,241,241}
 \definecolor{BlackText}{RGB}{110,107,94}
 \definecolor{RedTypename}{RGB}{182,86,17}
+\definecolor{GreenString}{RGB}{96,172,57}
+\definecolor{PurpleKeyword}{RGB}{184,84,212}
 \definecolor{GrayComment}{RGB}{170,170,170}
 \definecolor{GoldDocumentation}{RGB}{180,165,45}
 \lstdefinelanguage{rust}
@@ -292,21 +294,21 @@
     xleftmargin=4pt,
     xrightmargin=4pt,
     backgroundcolor=\color{GrayCodeBlock},
-    basicstyle=\footnotesize\ttfamily,
+    basicstyle=\footnotesize\ttfamily\color{BlackText},
     keywords={
         true,false,
         unsafe,async,await,move,
         use,pub,crate,super,self,mod,
         struct,enum,fn,const,static,let,mut,ref,type,impl,dyn,trait,where,as,
-        break,continue,if,else,while,for,loop,match,return,yield,in,usize
+        break,continue,if,else,while,for,loop,match,return,yield,in
     },
-    keywordstyle=\color{Navy}\bfseries,
+    keywordstyle=\color{PurpleKeyword},
     ndkeywords={
         bool,u8,u16,u32,u64,u128,i8,i16,i32,i64,i128,char,str,
         Self,Option,Some,None,Result,Ok,Err,String,Box,Vec,Rc,Arc,Cell,RefCell,HashMap,BTreeMap,
-        macro_rules,Mutex,Receiver,Uuid,ReceiverStream,SystemTime,TestRunnerWork,TestRunnerResult
+        macro_rules
     },
-    ndkeywordstyle=\color{GoldDocumentation}\bfseries,
+    ndkeywordstyle=\color{RedTypename},
     comment=[l][\color{GrayComment}\slshape]{//},
     morecomment=[s][\color{GrayComment}\slshape]{/*}{*/},
     morecomment=[l][\color{GoldDocumentation}\slshape]{///},
@@ -314,6 +316,6 @@
     morecomment=[l][\color{GoldDocumentation}\slshape]{//!},
     morecomment=[s][\color{RedTypename}]{\#![}{]},
     morecomment=[s][\color{RedTypename}]{\#[}{]},
-    stringstyle=\color{Orange},
+    stringstyle=\color{GreenString},
     string=[b]"
 }

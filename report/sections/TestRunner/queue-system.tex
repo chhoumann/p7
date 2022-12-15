@@ -1,8 +1,5 @@
 \section{Queue System} \label{sec:queue-system}
-The idea with the queue system is that a specified number of concurrent threads in a thread pool continuously receive and process code submissions.
-Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into a hashmap where the UUID token serves as a key to look up the result.
-
-We have two endpoints that need to share data in order to access the aforementioned hashmap, and the Rust programming language does not allow global variables.
+We have two endpoints that need to share data, and the Rust programming language does not allow global variables.
 Therefore, we opted to create a shared state data structure using the \texttt{layer} feature in the axum framework.
 The \texttt{layer} feature is axum's default implementation of middleware for processing data across a group of endpoints.
 In our case, there are two key variables inside the shared state structure that both endpoints need access to:
@@ -26,22 +23,23 @@ async fn worker_thread(
     stream.for_each_concurrent(limit, |work| async {
         debug!("Running worker thread on UUID {}...", work.id); ~\label{line:concurrent-start}~
 
-        let res = schedule_test(work.submission).await; ~\label{line:schedule-test}~
+        let res = schedule_test(work.submission).await;
         let mut map = job_results.lock().unwrap();
         map.insert(work.id, Some(res)); ~\label{line:concurrent-end}~
     }).await;
 }
 \end{lstlisting}
 
-As shown in code snippet \ref{lst:worker-thread}, we use the \texttt{futures} crate in Rust to allocate a number of threads, which is dictated by the variable \texttt{limit} of type \texttt{usize}.
+We use the \texttt{futures} crate in Rust to allocate some number of threads dictated by the variable \texttt{limit} of type \texttt{usize}.
 The receiver channel is converted to a \texttt{ReceiverStream} using the \texttt{tokio\_stream} utility crate.
 A \texttt{ReceiverStream} is simply a wrapper which implements the \texttt{Stream} trait from the \texttt{futures} crate.
 This allows us to combine functionality from the two crates.
 In practice, implementations of the \texttt{Stream} trait simply provide a stream of values asynchronously --- essentially an asynchronous iterable.
-Using this stream, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} crate to run a number of tasks asynchronously but with the aforementioned limit.
-The \texttt{futures} crate then manages the thread pool automatically, and we only have to specify the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
 
-The \texttt{schedule\_test} function on line \ref{line:schedule-test} in code snippet \ref{snip:worker-thread} calls the Test Runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code.
+Using this, we can call \texttt{for\_each\_concurrent} from the \texttt{futures} crate to run a number of tasks asynchronously but with the aforementioned limit.
+The \texttt{futures} framework then manages the thread pool automatically, and we only need to specifiy the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
+
+The \texttt{schedule\_test} function calls the Test Runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code from the client, as described earlier.
 Once the result is computed, the thread acquires the mutex lock to the hashmap or blocks until it can acquire the lock.
 It then inserts the result into the hashmap by using the UUID as the key.
 Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other threads may access the hashmap.
@@ -49,6 +47,6 @@ Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other
 In summary, a specified number of concurrent threads in a thread pool continuously receive code submissions from the \texttt{ReceiverStream} channel.
 Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into the hashmap where the UUID serves as a key to look up the result.
 
-While this approach solved the initial problem of only being able to process one code submission at a time, a new problem is that the hashmap continuously grows over time --- data is only ever added to the hashmap and never removed.
+While this approach solved the initial problem of only being able to process one code submission at a time, a new problem is the fact that the hashmap continuously grows over time --- data is only ever added to the hashmap and never removed.
 Consequently, the memory use of the Test Runner would eventually exceed its capacity, resulting in a crash.
 In the following section, we introduce a sweeping system as a solution to this problem.
