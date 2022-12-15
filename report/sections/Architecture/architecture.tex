@@ -1,15 +1,15 @@
-In this chapter we will describe the architecture of the entire system by first showing the overall structure followed by a short description of the individual components.
-The platform allows lecturers to create a syllabus that includes problem sets, exercises and test cases for the exercises. Additionally, students can do the exercises that the lecturer has provided.
-The platform is a web application designed using a client-server architecture. Using this architecture the client communicates with a server using HTTP to send \textit{request} messages. The server waits for client requests and processes the requests when they arrive and replies to the requests with a \textit{response} message.
+In this chapter, we will describe the architecture of the entire system by first showing the overall structure followed by a short description of the individual components.
+The platform allows lecturers to create a syllabus that includes problem sets, exercises, and test cases for the exercises. Additionally, students can solve the exercises that the lecturer has provided.
+The platform is a web application designed using a client-server architecture. Using this architecture, the client communicates with a server using HTTP to send \textit{request} messages. The server waits for client requests, processes the requests when they arrive, and replies to the requests with a \textit{response} message.
 
-The platform has a frontend component containing a user interface and logic to communicate to the backend component. 
-The backend component contains business logic to handle user requests. 
-It supports role-based authentication, meaning that users have access to different functionality, depending on their role. 
-The platform has a test runner component that can check whether a student's submission is a satisfying solution to an exercise. 
+The platform has a frontend component containing a user interface and logic to communicate to the backend component.
+The backend component contains business logic to handle user requests.
+It supports role-based authentication, meaning users have access to different functionality depending on their role.
+The platform has a test runner component that can check whether a student's submission is a satisfying solution to an exercise.
 This is done by executing tests. The database component is used to persist account information, test runs, and syllabus data.
-In the following sections we elaborate on the choices made for each component, in relation to this structure.
+In the following sections, we elaborate on the choices made for each component in relation to this structure.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
-The database and test runner run as processes contained in separate Docker containers. The frontend and backend components run in the same container, as Next.js encapsulates both.
+The database and Test Runner run as processes contained in separate Docker containers. The frontend and backend components run in the same container, as Next.js encapsulates both.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{Architecture.PNG}
@@ -55,10 +55,10 @@ The \textit{Submission} entity is in a many-to-one relationship with the \textit
 The remaining entities \textit{Account}, \textit{Session} and \textit{VerificationToken} are entities which are required by authentication services and are not developed by us.
 
 \section{Backend System}
-The backend component has several responsibilities including routing, page rendering, authentication, role based data access and modification, as well as communication between other components. 
+The backend component has several responsibilities including routing, page rendering, authentication, role based data access and modification, as well as communication between other components.
 The component enables the creation of accounts for the system by using an authentication provider.
-For this project, Google is used as the provider. 
-Once a user account is created, it is assigned the default \texttt{Student} role.  
+For this project, Google is used as the provider.
+Once a user account is created, it is assigned the default \texttt{Student} role.
 Depending on the account role, the user has different permissions.
 A lecturer can create and modify syllabi, problemsets, submissions, problems and tests, while students are only able to view these. Both roles can create submissions.
 Data fetching and mutation is facilitated on the Next backend through tRPC and Prisma. In the API routes, user permissions are authorized by getting the requesting user's information and validating it.
@@ -71,14 +71,14 @@ This system component is implemented using TypeScript and Next.js.
 The frontend component is the user facing component of our platform.  It contains the user interface for the platform and is the main interface of the system.
 The component is designed such that its user interface and functionality depends on the role of the user.
 Whenever users make requests to the backend component, the frontend component is responsible for displaying the results of these requests to the user. The data sent is limited to the data the user is authorized for.
-The component is also responsible for only providing users with user interface elements they are authorized to view. 
+The component is also responsible for only providing users with user interface elements they are authorized to view.
 For instance, some edit and delete buttons are available only to lecturers.
-The component contains functionality providing users with syntax highlighting using the CodeMirror library. 
-It is implemented using TypeScript and React. 
+The component contains functionality providing users with syntax highlighting using the CodeMirror library.
+It is implemented using TypeScript and React.
 
 \section{Test Runner}
 The test runner component is responsible for determining whether a student's exercise submission solves a problem.
-It receives HTTP requests containing Haskell code and an Hspec test, and uses this to stage and perform test execution. 
+It receives HTTP requests containing Haskell code and an Hspec test, and uses this to stage and perform test execution.
 This is done using the GHC interpreter.
 The result of processing the test is then serialized to JSON and sent to the backend component.
 The test runner component is implemented as an HTTP server using the axum crate in the Rust programming language.
