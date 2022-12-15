@@ -27,7 +27,7 @@ Since the design for the page displayed in figure \ref{fig:wfExercise} does not 
 Note that the buttons related to creating new items or updating items in the list will only be available to the lecturer. The items shown in the list correspond to the page the user is on. If the user is browsing syllabi, the items contained in the list will be syllabi. If the user is browsing sessions, the list will contain sessions, and similarly for exercises. This design satisfies the use case \textbf{Solve exercises} from section \ref{sec:use-case-solve-exercises} by letting users choose sessions and exercises. Additionally, it also satisfies part of the use case \textbf{Create exercises} from section \ref{sec:use-case-create-exercises} by providing the ability to create and edit syllabi and exercises.
 
 \section{Wireframe for Creating an Exercise}
-The wireframe in figure \ref{fig:wfProblem}, shows the page that the lecturer will see, when the create exercise button when browsing exercises.
+The wireframe in figure \ref{fig:wfProblem} shows the page the lecturer will see after clicking the button for creating an exercise.
 % create exercises
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{createProblem.jpg}
@@ -36,6 +36,9 @@ The wireframe in figure \ref{fig:wfProblem}, shows the page that the lecturer wi
 	\label{fig:wfProblem}
 \end{figure}
 
-This page allows the lecturer to create an exercise with a title, test, function template and description. These are fields required to provide the information necessary for a student to solve the exercises. Additionally, test field allows a lecturer to specify the tests that student's code must pass. The function template field allows the lecturer to specify functions that the test will call, and which will be included in the editor on the solve exercise page. This satisfies the remaining requirements of the use case \textbf{Create exercises}.
+This page allows the lecturer to create an exercise with a title, test, function template, and description.
+By typing Hspec tests in the test input field, the lecturer can specify conditions that must be satisfied for a submission to be considered a valid solution.
+The function template field allows the lecturer to define a template for the exercise, which will load into the code editor upon opening the exercise.
+This satisfies the remaining requirements of the use case \textbf{Create exercises} from section \ref{sec:use-case-create-exercises}.
 
-As mentioned previously not all the use cases have been designed for, because the remaining use cases and related features were deemed as nonessential for a working version of the system. The next chapter will cover the system architecture.
+With the design of the user interface in place, we now move on to describing an overview of the system as a whole.
