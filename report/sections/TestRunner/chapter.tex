@@ -19,7 +19,7 @@ If multiple clients post a code submission at the same time, the Test Runner wil
 Given a large enough number of requests, this would crash the Test Runner web server.
 Therefore, we needed a way to limit the number of running GHC interpreter processes while at the same time storing subsequent requests for future processing.
 
-To solve the aforementioned problem, we decided to implement a queue system.
+To address the aforementioned problem where the system crashes under heavy use, we decided to implement a queue system.
 The idea is to enqueue requests for future processing if the number of currently running GHC interpreter processes reaches an upper limit.
 This limit is defined as an environmental constant in the program.
 However, this introduced a new problem.
