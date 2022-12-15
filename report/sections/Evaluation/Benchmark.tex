@@ -6,7 +6,8 @@ The goal with the stress tests and benchmarks is threefold:
 \item It helps us decide which configurations to use for the Test Runner system
 \item It helps us establish different implementations of the Test Runner component regress in terms of response times.
 \end{enumerate}
-To conduct the benchmarks, we used BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+As mentiond in chapter \ref{chap:preliminaries}, we used BenchmarkDotNet to conduct the benchmarks.
+For the benchmarks, we defined three components:
 \begin{enumerate}
   \item A client component simulating possible Test Runner client behavior.
   \item A benchmark component responsible for orchestrating benchmarks for different Test Runner versions.
@@ -34,6 +35,7 @@ One file also contains a syntactical error.
 After selecting a representative set of exercises for stress tests and benchmarks a simple operational profile was created, and from this behavioral variables were established: an expected maximum number of clients and different polling times for these clients.
 To simulate different platform client behavior, classes representing these were implemented where each class corresponds to a user for a different version of the platform.
 These clients implement representations of the necessary behavioral variables, which are annotated using BenchmarkDotNet.
+
 During stress testing, the BenchmarkDotNet framework creates all possible combinations of the implemented behavioral variables.
 The underlying implementation of the client classes use an HTTP client.
 To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline to compare against.
@@ -46,13 +48,13 @@ We suspect that when the Test Runner experiences stress, the synchronous approac
 \subsubsection{Ensuring simultaneous client submissions}
 When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests.
-To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54).
+To ensure that all submissions to the component happens mostly simultaneously, we created a method that creates a number of actions and invokes them in close succession, as shown in code snippet \ref{lst:TaskBuilder} on lines \ref{line:task-list-start} to \ref{line:task-list-end}.
 The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop.
 
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
-  public static IEnumerable<Task> BuildClientTaskList<T>(
+  public static IEnumerable<Task> BuildClientTaskList<T>( ~\label{line:task-list-start}~
     int count,
     Action<T> action
   )
@@ -73,15 +75,15 @@ public static class TaskBuilder
     }
 
     return tasks;
-  }
+  } ~\label{line:task-list-end}~
 }
 \end{lstlisting}
 
 \subsubsection{Baseline benchmark implementation}
-The baseline benchmarks seen in listing \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
+The baseline benchmarks seen in code snippet \ref{lst:baselineBench} is executed multiple times for all combinations of code submissions and number of clients.
 The benchmark itself measures the time it takes for all clients to post the code submission and receive an HTTP response with status code 200.
 If just one of the submissions cannot be processed, an exception is thrown and the benchmark stops.
-It utilizes the \texttt{BuildClientTaskList} method seen in listing \ref{lst:baselineBench}.
+It utilizes the \texttt{BuildClientTaskList} method seen in code snippet \ref{lst:baselineBench}.
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the benchmark implementation for the synchronous baseline}, label={lst:baselineBench}]
 // Attributes excluded
 public class RocketBenchmarks
@@ -112,7 +114,7 @@ public class RocketBenchmarks
 \end{lstlisting}
 
 \subsubsection{Queue system benchmark implementation}
-The benchmark for the queue system seen in listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilizes the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
+The benchmark for the queue system seen in code snippet \ref{lst:queueSystemBench} is similar to the one in code snippet \ref{lst:baselineBench}, as it utilizes the method from code snippet \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
 However, the internal implementation of the client varies, as it needs to poll for the results of the Test Runner after making an initial request.
 Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to poll for a result.
 Best case poll time needs to be established to compare it with the baseline component.
@@ -155,7 +157,7 @@ public class TicketedCodeRunnerBenchmark
 }
 \end{lstlisting}
 
-\subsection{Results}
+\section{Results}
 In this section, results of the combined stress tests and benchmarks are presented.
 First, the configuration of the stress tests are described.
 This is followed by a presentation of the results of the initial Test Runner benchmark results.
@@ -190,7 +192,7 @@ This submission was faster to process, likely due to the exercise solution never
 
 
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
       \centering
@@ -230,7 +232,7 @@ Since the configuration of the asynchronous Test Runner with five threads and wi
 The benchmark results of these configurations can be seen on figure \ref{fig:improvedConfig}.
 We see that when the Test Runner is configured correctly, the system can respond to 100 code submissions in under seven seconds.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
@@ -259,6 +261,6 @@ We see that when the Test Runner is configured correctly, the system can respond
       \caption{Response times for 100 simultaneous requests given improved configurations}
       \label{fig:100v3}
     \end{subfigure}
-  \caption{Response times for Test Runner with configurations similar to the best configuration from figure \ref{fig:configResults}. Note that this configuration is also shown on figures \ref{fig:10v3} --- \ref{fig:100v3}}
+  \caption{Response times for Test Runner with configurations similar to the best configuration from figure \ref{fig:configResults}; note that this configuration is also shown on figures \ref{fig:10v3} --- \ref{fig:100v3}}
   \label{fig:improvedConfig}
 \end{figure}
