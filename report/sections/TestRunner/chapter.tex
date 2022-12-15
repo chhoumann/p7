@@ -2,7 +2,7 @@
 When the Test Runner receives the request from the backend component, its singular goal is to run the tests on the submitted code and make the result available as fast as possible.
 In order to run the tests, we run the GHC interpreter on the test code, which, in turns, needs access to the exercise submission code.
 The GHC interpreter can be run from the command line with arguments specifying the path Haskell file to run.
-So to run the tests, the Test Runner writes the code submitted by the user, and the accompanying exercise test code, to separate files.
+So to run the tests, the Test Runner writes the code submitted by the user and the accompanying test code to separate files.
 However, if multiple users were to post a submission at the same time, the content of the file could potentially be overwritten while the GHC interpreter is running the tests.
 To address this, we generate a new directory with a unique name for each submission.
 Then, the user submission is written to two  \texttt{.hs} files inside this directory - a \texttt{code.hs} file containing the exercise submission, and a \texttt{test.hs} file containing the corresponding tests.
