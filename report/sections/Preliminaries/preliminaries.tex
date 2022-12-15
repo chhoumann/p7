@@ -45,13 +45,13 @@ Our reason for using Rust is twofold:
 Rust also features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}. Several crates were used for the development of the platform. These will be introduced in chapter \ref{chap:TestRunner}.
 
 \section{Docker}
-The main purpose of Docker is to simplify deliveries in distributed systems with the use of so-called containers\cite{Docker_Container}.
-Containers are bundles of code and required dependencies. This allows developers to move around prepackaged applications, ensuring that the developed software runs the same regardless of what operating system it runs on\cite{Docker_Container}.
-The containers themselves are created from what is known as an image.
-An image is the executable package that encapsulates everything required in order to run the application. When executed, the image is then turned into a container.
-This is possible due to the Linux kernel's build process isolation and virtualization capabilities. These also allow a single host system to share its resources with multiple application components\cite{Docker_Container}.
+Docker can be used to create uniform code execution environments with the use of images\cite{Docker_Container}.
+An image is similar to an executable package that encapsulates everything required in order to run applications. 
+When executed, the image is turned into a container.
+Containers are isolated processes of bundles of code and required dependencies. 
+This allows developers to move around prepackaged applications, ensuring that the developed software runs the same regardless of what operating system it runs on\cite{Docker_Container}.
+We use Docker to set up local development environments for different platform components. This results in an easier development process and a simplified delivery process to production.
 
-We use Docker to set up local development environments for the APIs and databases. This results in an easier development process and a simplified delivery process to production.
 
 \section{tRPC}
 tRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation.
