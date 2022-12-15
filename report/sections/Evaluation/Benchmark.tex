@@ -52,8 +52,9 @@ The method takes an inputted action and wraps it in several other actions, which
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
-  public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
-      where T : CodeRunnerClient, new()
+  public static IEnumerable<Task> BuildClientTaskList<T>
+  (int count, Action<T> action)
+   where T : CodeRunnerClient, new()
   {
     List<Action> clientActions = new(count);
     List<Task> tasks = new(count);
@@ -86,14 +87,19 @@ public class RocketBenchmarks
     public int NumberOfRequests { get; set; }
     [ParamsSource(nameof(CodeSubmissions))]
     public CodeSubmission CodeSubmission { get; set; }
-    public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
+    public static IEnumerable<CodeSubmission> 
+      CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
-      IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests,
+      IEnumerable<Task> clientActions = TaskBuilder
+      .BuildClientTaskList<CodeRunnerClient>
+      (
+        NumberOfRequests,
         client => client.Post(CodeSubmission)
-        .Result.EnsureSuccessStatusCode());
+        .Result.EnsureSuccessStatusCode()
+      );
         
       Task.WhenAll(clientActions).Wait();
     }
@@ -117,14 +123,22 @@ public class TicketedCodeRunnerBenchmark
     public int NumberOfRequests { get; set; }
     [ParamsSource(nameof(CodeSubmissions))] 
     public CodeSubmission CodeSubmission { get; set; }
-    public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
+    public static IEnumerable<CodeSubmission>
+     CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
     public void PostAndWaitForAllResultsFetched()
     {
       TimeSpan timeBetweenPolls = TimeSpan.FromSeconds(PollTime);
-      IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerQueueClient>(NumberOfConcurrentRequests, 
-        client => client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPolls));
+      IEnumerable<Task> clientActions = TaskBuilder
+      .BuildClientTaskList<CodeRunnerQueueClient>
+      (
+        NumberOfConcurrentRequests, 
+        client => client.PostAndGetHaskellResultTask(
+          CodeSubmission.code,
+          CodeSubmission.test,
+          timeBetweenPolls)
+      );
 
       Task.WhenAll(clientActions).Wait();
     }
