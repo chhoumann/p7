@@ -1,6 +1,6 @@
 \section{Benchmarking and stress testing} \label{chap:Benchmarking}
-In this chapter, we present how tests and benchmarks have been conducted, and describe the implementation. 
-The goal with the stress tests and benchmarks is threefold: 
+In this chapter, we present how tests and benchmarks have been conducted, and describe the implementation.
+The goal with the stress tests and benchmarks is threefold:
 \begin{enumerate}
 \item It helps us determine the average poll time for clients using the Test Runner under different levels of stress.
 \item It helps us decide which configurations to use for the Test Runner system
@@ -15,21 +15,21 @@ To conduct the benchmarks, we used BenchmarkDotNet (see chapter \ref{chap:prelim
 
 
 \subsection{Orchestration and Test Runner parameterization}
-The benchmark and test components are managed in their own Docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner. 
+The benchmark and test components are managed in their own Docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner.
 Information necessary to establish the connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
 These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
 For instance, the environmental constants defining the network location of the Test Runner service is passed as arguments to the Dockerfiles for the tests and the benchmark, as these must both be able to contact the Test Runner service.
 These environmental constants also allow easy adjustment of the Test Runner without rebuilding the Docker container.
-These include settings such as the size of the queue system and the maximum number of threads the Test Runner can use to process code submissions. 
+These include settings such as the size of the queue system and the maximum number of threads the Test Runner can use to process code submissions.
 It is also possible to adjust the time between sweeps and how long each Test Runner result should be stored in memory.
-This makes it easy to experiment with different values for the environment variables when performing benchmarks and stress tests.  
-The containers are orchestrated such that the benchmarks run only if the test container exits successfully --- that is, all the tests pass successfully. 
+This makes it easy to experiment with different values for the environment variables when performing benchmarks and stress tests.
+The containers are orchestrated such that the benchmarks run only if the test container exits successfully --- that is, all the tests pass successfully.
 Thus, wrongly configured containers do not result in misleading benchmark results.
 
 \subsection{Selecting test parameters}
-To achieve a varying degree of complexity for the submission content, several Haskell exercise solutions covering different concepts from course were selected, and Hspec tests based on the description of these problems were developed. 
+To achieve a varying degree of complexity for the submission content, several Haskell exercise solutions covering different concepts from course were selected, and Hspec tests based on the description of these problems were developed.
 The code and accompanying tests used in benchmarking and stress testing can be seen in Appendix \ref{chap:TestCode}.
-Each file covers a single topic from the course, including recursive type definitions and operations on such types, list comprehension, and filtering of lists. 
+Each file covers a single topic from the course, including recursive type definitions and operations on such types, list comprehension, and filtering of lists.
 One file also contains a syntactical error.
 After selecting a representative set of exercises for stress tests and benchmarks a simple operational profile was created, and from this behavioral variables were established: an expected maximum number of clients and different polling times for these clients.
 To simulate different platform client behavior, classes representing these were implemented where each class corresponds to a user for a different version of the platform.
@@ -45,19 +45,22 @@ We suspect that when the Test Runner experiences stress, the synchronous approac
 
 \subsubsection{Ensuring simultaneous client submissions}
 When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
-In the case of the Test Runner component, this means exposing it to numerous simultaneous requests. 
-To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54). 
-The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop. 
+In the case of the Test Runner component, this means exposing it to numerous simultaneous requests.
+To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54).
+The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop.
 
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
 public static class TaskBuilder
 {
-  public static IEnumerable<Task> BuildClientTaskList<T>(int count, Action<T> action)
-      where T : CodeRunnerClient, new()
+  public static IEnumerable<Task> BuildClientTaskList<T>(
+    int count,
+    Action<T> action
+  )
+  where T : CodeRunnerClient, new()
   {
     List<Action> clientActions = new(count);
     List<Task> tasks = new(count);
-    
+
     for (int i = 0; i < count; i++)
     {
         T client = new();
@@ -68,6 +71,7 @@ public static class TaskBuilder
     {
         tasks.Add(Task.Run(clientAction));
     }
+
     return tasks;
   }
 }
@@ -82,19 +86,26 @@ It utilizes the \texttt{BuildClientTaskList} method seen in listing \ref{lst:bas
 // Attributes excluded
 public class RocketBenchmarks
 {
-    [Params(10, 20, 50, 100)] 
+    public static IEnumerable<CodeSubmission> CodeSubmissions
+      => CodeLoader.Load();
+
+    [Params(10, 20, 50, 100)]
     public int NumberOfRequests { get; set; }
+
     [ParamsSource(nameof(CodeSubmissions))]
     public CodeSubmission CodeSubmission { get; set; }
-    public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
     public void PostAndWaitForResponseReceived()
     {
-      IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerClient>(NumberOfRequests,
+      IEnumerable<Task> clientActions = TaskBuilder
+        .BuildClientTaskList<CodeRunnerClient>
+      (
+        NumberOfRequests,
         client => client.Post(CodeSubmission)
-        .Result.EnsureSuccessStatusCode());
-        
+          .Result.EnsureSuccessStatusCode()
+      );
+
       Task.WhenAll(clientActions).Wait();
     }
 }
@@ -104,27 +115,40 @@ public class RocketBenchmarks
 The benchmark for the queue system seen in listing \ref{lst:queueSystemBench} is similar to the one in listing \ref{lst:baselineBench}, as it utilizes the method from listing \ref{lst:TaskBuilder} and the parameterization attributes from BenchmarkDotNet.
 However, the internal implementation of the client varies, as it needs to poll for the results of the Test Runner after making an initial request.
 Therefore, an additional parameter for the benchmark is introduced to examine how often a client should try to poll for a result.
-Best case poll time needs to be established to compare it with the baseline component. 
+Best case poll time needs to be established to compare it with the baseline component.
 However, due to the nature of online remote communication, it may be necessary to establish which polling times to avoid instead of using the best average response times.
 This is because the benchmarks do not consider the physical distance between the client and the server.
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the benchmark implementation for the asynchronous backend}, label={lst:queueSystemBench}]
 // Attributes excluded
 public class TicketedCodeRunnerBenchmark
 {
-    [Params(0.5, 1.0, 2.0, 3.0)] 
+    public static IEnumerable<CodeSubmission> CodeSubmissions
+      => CodeLoader.Load();
+
+    [Params(0.5, 1.0, 2.0, 3.0)]
     public double PollTime { get; set; }
-    [Params(10, 20, 50, 100)] 
+
+    [Params(10, 20, 50, 100)]
     public int NumberOfRequests { get; set; }
-    [ParamsSource(nameof(CodeSubmissions))] 
+
+    [ParamsSource(nameof(CodeSubmissions))]
     public CodeSubmission CodeSubmission { get; set; }
-    public static IEnumerable<CodeSubmission> CodeSubmissions => CodeLoader.Load();
 
     [Benchmark]
     public void PostAndWaitForAllResultsFetched()
     {
       TimeSpan timeBetweenPolls = TimeSpan.FromSeconds(PollTime);
-      IEnumerable<Task> clientActions = TaskBuilder.BuildClientTaskList<CodeRunnerQueueClient>(NumberOfConcurrentRequests, 
-        client => client.PostAndGetHaskellResultTask(CodeSubmission.code, CodeSubmission.test, timeBetweenPolls));
+
+      IEnumerable<Task> clientActions = TaskBuilder
+        .BuildClientTaskList<CodeRunnerQueueClient>
+      (
+        NumberOfConcurrentRequests,
+        client => client.PostAndGetHaskellResultTask(
+          CodeSubmission.code,
+          CodeSubmission.test,
+          timeBetweenPolls
+        )
+      );
 
       Task.WhenAll(clientActions).Wait();
     }
@@ -140,27 +164,27 @@ These will be used to compare the synchronous baseline with the asynchronous ver
 \subsection{Configuration}
 The baseline uses a single thread to test the submitted Haskell code.
 Thus no parameterization for this version of the Test Runner is necessary.
-Benchmarks for the asynchronous Test Runner is configured such that the number of threads and the queue size varies by five. 
+Benchmarks for the asynchronous Test Runner is configured such that the number of threads and the queue size varies by five.
 All stress tests and benchmarks are run on computers with an AMD EPYC Processor (with IBPB), four CPUs, four logical cores, and four physical cores.
 The computers used for the benchmarks run UBUNTU 20.04 as the operating system and have 32 GB of RAM.
-All stress tests begin with a warm-up phase where BenchmarkDotNet sends ten consecutive submissions to the Test Runner. 
+All stress tests begin with a warm-up phase where BenchmarkDotNet sends ten consecutive submissions to the Test Runner.
 Then, for each combination of parameters (number of requests, code submission, and polling times) the stress test is timed and repeated 40 times.
 This whole process is repeated five times to ensure outliers does not significantly affect the results.
 
 \subsection{Baseline}
-The synchronous baseline version uses only a single thread to handle all code submissions.
-Using this, we can estimate how large of an improvement the asynchronous version is over the synchronous baseline.
-
 \begin{figure}
   \centering
   \includegraphics[scale=0.80]{images/baseline.png}
   \caption{The average mean time per request for the baseline Test Runner, disregarding the code submission}
   \label{fig:baseline}
 \end{figure}
+The synchronous baseline version uses only a single thread to handle all code submissions.
+Using this, we can estimate how large of an improvement the asynchronous version is over the synchronous baseline.
+
 Figure \ref{fig:baseline} shows the average mean response time per number of requests for the baseline.
 We expect the response time to increase linearly with the number of requests as only one request is handled at a time.
 Figure \ref{fig:baseline} shows that this is indeed the case.
-The results for the benchmark of the baseline were examined further to see whether some code submissions were slower to process than others (see \ref{chap:AdditionalPlots}). 
+The results for the benchmark of the baseline were examined further to see whether some code submissions were slower to process than others (see \ref{chap:AdditionalPlots}).
 We found that only one code submission could be considered a direct outlier, namely the one containing syntactical errors.
 This submission was faster to process, likely due to the exercise solution never being executed.
 
@@ -197,12 +221,12 @@ This submission was faster to process, likely due to the exercise solution never
 \label{fig:configResults}
 \end{figure}
 
-Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times. 
-For each plot, line T denotes the maximum number of threads allowed for testing client submissions, and C denotes the maximum capacity of the channels. 
-All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and remove Test Runner results older than 90 seconds. 
+Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} shows the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times.
+For each plot, line T denotes the maximum number of threads allowed for testing client submissions, and C denotes the maximum capacity of the channels.
+All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and remove Test Runner results older than 90 seconds.
 Regardless of client polling time, we see that the asynchronous Test Runner with a maximum channel capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed.
-Compared to the baseline shown on figure \ref{fig:baseline}, it is vastly superior, requiring only a third of the time to respond to 100 simultaneous requests. 
-Since the configuration of the asynchronous Test Runner with five threads and with a channel capacity of ten yields such good results, we examined similar configurations to find a closer estimate to optimal configuration for this particular computer. 
+Compared to the baseline shown on figure \ref{fig:baseline}, it is vastly superior, requiring only a third of the time to respond to 100 simultaneous requests.
+Since the configuration of the asynchronous Test Runner with five threads and with a channel capacity of ten yields such good results, we examined similar configurations to find a closer estimate to optimal configuration for this particular computer.
 The benchmark results of these configurations can be seen on figure \ref{fig:improvedConfig}.
 We see that when the Test Runner is configured correctly, the system can respond to 100 code submissions in under seven seconds.
 

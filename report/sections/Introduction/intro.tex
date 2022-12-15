@@ -1,21 +1,11 @@
-The Haskell programming language is purely functional\cite{Haskell_landing} and builds upon the lambda calculus model of computation \cite{Haskell_book}.
-Unlike many other programming languages, Haskell can both be interpreted or compiled into an executable binary file.
-It is a statically typed language implementing many mathematical constructs such as currying, set-builder notation, recursive definitions of both types and functions, and more.
-This allows the programmer to create concise solutions that would normally be quite verbose in other \textit{Programming Paradigms}.
-Therefore, many companies such as Meta and Galois use Haskell for cryptography, avionics monitoring and spam filtering\cite{Haskell_companies}.
-Thus, Haskell and other languages within the functional programming paradigm are useful tools for software engineers.
-
-
-Haskell is taught in the \textit{Programming Paradigms} course on the 1st semester of the Software Master's Degree at \aau{}.
-Most students attending this course failed in the past.
+Most students attending the \textit{Programming Paradigms} course failed last semester.
 This resulted in a survey being sent out, and a student task force being assembled to understand the issues that caused the high failure rate.
-Here, many students mentioned not feeling experienced enough with the programming languages used in the course to teach the functional and logical \textit{Programming Paradigms}. This can be seen in appendix \ref{chap:PP-intro}.
-
+Here, many students mentioned not feeling experienced enough with the programming languages used in the course to teach the functional and logical programming paradigms.
 
 Consequently, \aau{} chose to restructure the course entirely.
-Rather than teaching many different programming languages within the functional and logical \textit{Programming Paradigms}, the course was restructured to focus only on Haskell.
+Rather than teaching many different programming languages within the functional and logical programming paradigms, the course was restructured to focus only on Haskell.
 Furthermore, the course now features more practical programming exercises with classroom discussion in-between, rather than traditional lectures followed by a separate exercise session.
-Supporting this way of teaching, the course lectures have been moved to a more specialized classroom setup. The classroom has been set up, such that it has tables for all student groups, each having a monitor that can be shared between the students. This allows the student groups to work together on solving problems given in the lecture.
+Supporting this way of teaching, the course lectures have been moved to a more specialized classroom setup. The classroom has been set up such that it has tables for all student groups, each having a monitor that can be shared between the students. This allows students to work together when solving exercises during a session.
 In addition, a primary monitor at the lecture desk enables the lecturer to view and share other groups' monitors such that student solutions can be used for classroom discussions.
 
 
@@ -29,49 +19,53 @@ Additionally, the system used to connect to and use the monitors in the classroo
 Feedback is often slow since students must wait for teaching assistants to answer questions from many groups --- these questions are often the same, or of similar nature.
 Often, students end up waiting until the time assigned for the exercise runs out, after which a solution is presented to the whole class.
 
-Overall, the new structure of the course still has limitations and problems since students are sometimes unable to verify their solution, or sometimes end up waiting so long that they do not solve the problem themselves.
+To summarize, while the new structure of the course has taken steps to improve the learning experience, it still has limitations.
+Students often wait for so long that the allocated time runs out and consequently, they never solve the problem themselves.
 
 \section{Existing Solutions}
-In order to deal with the aforementioned problems, students use third-party learning platforms such as Codewars\cite{Codewars}, Coursera\cite{Coursera}, and Codecademy\cite{Codecademy}.
-These platforms offer an alternative approach to learning programming languages and paradigms to traditional classroom teaching by offering problems the user must solve.
-However, the feedback loop for each platform is quite different.
+In order to deal with the aforementioned problems, students sometimes use third-party learning platforms such as Codewars\cite{Codewars}, Coursera\cite{Coursera}, and Codecademy\cite{Codecademy}.
+These platforms offer an alternative way of learning programming languages and paradigms to traditional classroom teaching by offering problems the user must solve.
+However, the feedback loop for each platform is not necessarily conducive for learning course material.
 
 
-For example, CodeWars focuses on competitive programming, users compete to solve problems in the fastest and most efficient way.
-When a user submits a solution to a problem, one or more tests are used to verify whether or not the submitted code solves the given problem.
+For example, CodeWars focuses on competitive programming where users compete to solve problems in the fastest and most efficient way.
+When a user submits a problem solution, one or more tests are used to verify whether or not the submission solves the given problem.
 However, the problems do not constrain the user to use specific programming language constructs in their solution.
-Therefore the solutions with the highest ratings can include language constructs that are foreign to a new programmer.
-This would certainly not be ideal in a university setting where students need to understand specific concepts for each exercise session.
+Therefore, the solutions with the highest ratings can include language constructs that are foreign to a new programmer.
+This would not be ideal in a university setting where students need to understand and apply specific concepts for each exercise session.
 
 
-Coursera offers on-demand lectures and exercises created by third parties similar to how a traditional university course might be structured.
-On Coursera, there is no way to ask other people for help if a student gets stuck on an exercise.
+Next, Coursera offers on-demand lectures and exercises created by third parties similar to how a traditional university course might be structured.
+However on Coursera, there is no way to ask other people for help if a student gets stuck on an exercise.
 Furthermore, feedback on exercises is given in written form by other course participants, meaning there is no way to get feedback from a lecturer or teaching assistant.
 
 
 Finally, while Codecademy offers instant feedback on problem solutions through tests, Codecademy has its own curriculums and thus would not be usable by a university lecturer.
-It also does not offer extensive feedback on exercise solutions but instead informs the user what might be wrong with their code.
-Thus, none of these platforms are suitable as a supplementary platform to the \textit{Programming Paradigms} course.
+While Codecademy does inform the user of problems in their code, this is only limited to compiler errors and test failures.
+There is no way to get in-depth feedback on a solution from an expert such as a lecturer.
+
+Despite offering unique approaches to teaching, none of these platforms are suitable as a supplementary platform to the \textit{Programming Paradigms} course.
+
 \section{Problem Statement}
-Current platforms for learning to program are mainly split into three types: Coding exercises, video guides, and online curriculum.
-AAU could benefit from an application that has been designed specifically for the case of teaching at AAU.
-To address the shortcomings of the current system used during exercises, an application designed to facilitate fast concrete feedback on exercises, for the students and the lecturer, could be created.
-By summarizing the main problems following the switch to the new teaching approach, and the limitations of current available solutions, an initial problem statement is written.
+Existing platforms for learning to program are mainly split into three types: Coding exercises, video guides, and online curricula.
+AAU could benefit from an application that has been designed specifically of teaching in a university setting.
+To address the shortcomings of the current approach used during exercise sessions, an application enabling fast, concrete feedback on exercise submissions for both students and the lecturer could be created.
+By summarizing the main problems following the switch to the new teaching approach, and the limitations of currently available solutions, an initial problem statement is written.
 \begin{displayquote}
     How can a web application ensure swift evaluation of students' exercise solutions?
 \end{displayquote}
 
 \section{Solution}
-To alleviate the problem defined in the problem statement, a platform supporting evaluation of Haskell code is developed. It is necessary for this platform to evaluate whether a student's Haskell program solves a given problem defined in an exercise. The platform supports the definition of these exercises as well as software tests defining solution criteria for a particular exercise. These software tests are executed using a Haskell interpreter, and results of the tests presented to the user of the platform on a web based user interface.
-Information about submitted solutions are persisted in a relational database such that they can later be presented to users of the platform.
-To examine the scalability of the solution essential parts of the platform have been stress-tested to ensure availability and reliability when performing under unexpectedly many users \cite{Sommerville10}.
+To alleviate the problem defined in the problem statement, a platform supporting evaluation of Haskell code is developed. It is necessary for this platform to evaluate whether a student's Haskell program solves a given problem defined in an exercise. The platform supports the definition of these exercises and accompanying software tests defining solution criteria for a particular exercise. These software tests are executed using a Haskell interpreter, and the results are presented to the user of the platform on a web based user interface.
+Information about submitted solutions are persisted in a relational database so they can be accessed by users again in the future.
+To examine the scalability of the solution, essential parts of the platform have been stress-tested to ensure availability and reliability when under heavy use by many concurrent users \cite{Sommerville10}.
 
 In the following chapters, we describe this platform and how it aims to solve the problem of quickly verifying whether a submitted Haskell program satisfies certain solution criteria defined in test code.
-In chapter \ref{chap:preliminaries} we present the theory and technology necessary to understand the developed solution.
+In chapter \ref{chap:preliminaries}, we present the theory and technology necessary to understand the developed solution.
 Chapter \ref{chap:Specification} introduces specifications and use cases that the developed solution must satisfy.
-Chapter \ref{chap:Design} and \ref{chap:Architecture} details the architecture and design of the solution in terms of components and user interface.
-Chapters \ref{chap:Frontend} -- \ref{chap:TestRunner} presents a detailed description of key functionality and concepts of the solution, and chapter \ref{chap:Benchmarking} describes an approach to benchmarking and stress-testing the solution.
-Finally, chapters \ref{chap:Evaluation} -- \ref{chap:Conclusion} describes results and reflections regarding this project.
+Chapter \ref{chap:Design} and \ref{chap:Architecture} detail the design and architecture of the solution in terms of components and user interface.
+Chapter \ref{chap:Frontend} and \ref{chap:TestRunner} present a detailed description of key functionality and concepts of the solution.
+Finally, chapters \ref{chap:Evaluation} to \ref{chap:Conclusion} describe results and reflections regarding the project, where section \ref{chap:Benchmarking} outlines our approach to benchmarking and stress-testing the solution.
 
 % persist information about xxxxx
 % execute haskell code and establish whether it satisfies criteria

@@ -1,19 +1,9 @@
 \chapter{Test Runner} \label{chap:TestRunner}
-In chapter \ref{chap:TestRunner}, we described how running multiple GHC interpreter processes asynchronously eventually crashes the Test Runner web server given sufficiently many simultaneous requests.
-As mentioned, we needed a way to limit the number of running GHC interpreter processes in order to prevent crashes.
-
-The Test Runner exposes an endpoint \texttt{/haskell/submit/}, which is used to post code submissions.
-Originally, we used the Rust crate Rocket to implement this endpoint.
-However, we eventually switched to using the axum crate instead, as it is developed and maintained by the same developers behind the Tokio package we make heavy use of for asynchronous programming and multithreading.
-Furthermore, it was deemed easier to implement a shared state among endpoints by leveraging axum's \texttt{layer} feature.
-We give an overview and a more technical explanation of how this was done in section \ref{sec:queue-system}.
-
-When the Test Runner receives the request from Next.js, its singular goal is to run the tests against the code and send the result of this back as fast as possible.
-In order to run the tests, we need to run the GHC interpreter on the test code, which, in turns, need access to the exercise submission code.
+When the Test Runner receives the request from the backend component, its singular goal is to run the tests on the submitted code and make the result available as fast as possible.
+In order to run the tests, we run the GHC interpreter on the test code, which, in turns, needs access to the exercise submission code.
 The GHC interpreter can be run from the command line with arguments specifying the path Haskell file to run.
-In other words, the Test Runner needs to write the user submission and corresponding test code to a file.
-However, if more users were to make a submission at the same time, the content of the file could potentially be overwritten while the GHC interpreter is running the tests.
-
+So to run the tests, the Test Runner writes the code submitted by the user and the accompanying test code to separate files.
+However, if multiple users were to post a submission at the same time, the content of the file could potentially be overwritten while the GHC interpreter is running the tests.
 To address this, we generate a new directory with a unique name for each submission.
 Then, the user submission is written to two  \texttt{.hs} files inside this directory - a \texttt{code.hs} file containing the exercise submission, and a \texttt{test.hs} file containing the corresponding tests.
 This way, we can pass the path to this isolated directory to the GHC interpreter process as an argument.
@@ -21,12 +11,20 @@ Once the tests have been run, the directory and its contents are deleted again.
 The \texttt{stdout} of the process is then read to determine whether the tests succeeded or not.
 Finally, the interpreter output and the test success flag is packaged into a JSON object and sent back to the client.
 
-Sequentially starting a new \texttt{runhaskell} process for each request was identified as a major bottleneck during testing, which will be described in detail in chapter \ref{chap:Benchmarking}.
-In order to address this, we started by refactoring the code base to allow running several instances of the GHC interpreter process at the same time.
-However, despite this running faster for a small number of clients, this approach in itself is not sufficiently stable:
-If multiple clients were to post a code submission at the same time, the Test Runner will start a new process for each request.
+Sequentially starting a new \texttt{runhaskell} process for each request is a major bottleneck when many users submit solutions in quick succession.
+Processing each request sequentially results in slow response times, which may also lead to connection timeouts.
+We solved this timeout problem by allowing multiple instances of the GHC interpreter process to run at the same time.
+However, despite this being faster for a small number of clients, this approach in itself is not sufficient.
+If multiple clients post a code submission at the same time, the Test Runner will start a new process for each request.
 Given a large enough number of requests, this would crash the Test Runner web server.
 Therefore, we needed a way to limit the number of running GHC interpreter processes while at the same time storing subsequent requests for future processing.
+
+To address the aforementioned problem where the system crashes under heavy use, we decided to implement a queue system.
+The idea is to enqueue requests for future processing if the number of currently running GHC interpreter processes reaches an upper limit.
+This limit is defined as an environmental constant in the program.
+However, this introduced a new problem.
+The server could no longer respond directly to a POST request with the Test Runner results because the request may be handled at a later point in time.
+This means that if the request were enqueued for long enough, it would eventually time out.
 
 \input{sections/TestRunner/tokens-polling.tex}
 \input{sections/TestRunner/queue-system.tex}
