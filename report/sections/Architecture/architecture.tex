@@ -5,11 +5,11 @@ The platform is a web application designed using a client-server architecture. U
 The platform has a frontend component containing a user interface and logic to communicate to the backend component.
 The backend component contains business logic to handle user requests.
 It supports role-based authentication, meaning users have access to different functionality depending on their role.
-The platform has a test runner component that can check whether a student's submission is a satisfying solution to an exercise.
+The platform has a Test Runner component that can check whether a student's submission is a satisfying solution to an exercise.
 This is done by executing tests. The database component is used to persist account information, test runs, and syllabus data.
 In the following sections, we elaborate on the choices made for each component in relation to this structure.
 The overall architecture for the system can be seen in figure \ref{fig:Architecture}.
-The database and Test Runner run as processes contained in separate Docker containers. The frontend and backend components run in the same container, as Next.js encapsulates both.
+The database and Test Runner run as processes contained in separate Docker containers. The frontend and backend components run in the same container, as Next encapsulates both.
 
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{Architecture.PNG}
@@ -77,10 +77,10 @@ The component contains functionality providing users with syntax highlighting us
 It is implemented using TypeScript and React.
 
 \section{Test Runner}
-The test runner component is responsible for determining whether a student's exercise submission solves a problem.
+The Test Runner component is responsible for determining whether a student's exercise submission solves a problem.
 It receives HTTP requests containing Haskell code and an Hspec test, and uses this to stage and perform test execution.
 This is done using the GHC interpreter.
 The result of processing the test is then serialized to JSON and sent to the backend component.
-The test runner component is implemented as an HTTP server using the axum crate in the Rust programming language.
+The Test Runner component is implemented as an HTTP server using the axum crate in the Rust programming language.
 
 In the following chapters, we will elaborate on the most important components of our system. In these chapters, we will give a detailed description of how the components work and their structure.

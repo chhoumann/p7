@@ -3,7 +3,7 @@ When a lecturer creates a new exercise, a modal prompts to enter details about t
 These details include the name of the exercise, instructions for the student, an optional code template to help the student get started, as well as test code.
 This data is sent to the database where it is stored.
 When a student opens an exercise, the data is then fetched from the database.
-This is done by the client sending a request to the Next.js backend, which queries the database and returns both exercise and test data.
+This is done by the client sending a request to the Next backend, which queries the database and returns both exercise and test data.
 
 \begin{figure}[H]
     \centering
@@ -17,10 +17,10 @@ The client will eagerly request new data to stay up to date with instructions or
 This short cache storage time is useful for when lecturers update test code during an exercise session.
 This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
 
-When a user submits their exercise solution attempt, a mutation is sent to the Next.js backend.
+When a user submits their exercise solution attempt, a mutation is sent to the Next backend.
 In this request, the code and test is included.
 
-To handle this mutation, the Next.js server requests the Test Runner to process the given solution and test code.
+To handle this mutation, the Next server requests the Test Runner to process the given solution and test code.
 This process is described in chapter \ref{chap:TestRunner}.
 The response of this request to the Test Runner is validated and stored as a submission in the database.
 This allows users and lecturers to access previous submissions, which includes code and a value indicating whether the submission satisfied the exercise tests.

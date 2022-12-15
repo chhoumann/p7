@@ -1,5 +1,5 @@
 \chapter{Communication Between Layers} \label{chap:Frontend}
-One of the primary goals of this application is to give the lecturer a way to specify what constitutes a correct problem solution. In this chapter, we describe how actions perfomed on the user interface propagate events throughout the various components. 
+One of the primary goals of this application is to give the lecturer a way to specify what constitutes a correct problem solution. In this chapter, we describe how actions perfomed on the user interface propagate events throughout the various components.
 
 \section{Authentication and Roles}
 When a user initially loads the website, they will not be signed in, and will only have minimal privileges.
@@ -20,7 +20,7 @@ Figure \ref{fig:Home page} shows the landing page after the user has signed in. 
 \end{figure}
 
 \section{Syllabi, Problem Sets, and Exercises}
-On the website, each page that displays course data makes a request to a Next.js backend API endpoint to retrieve the data from the database.
+On the website, each page that displays course data makes a request to a Next backend API endpoint to retrieve the data from the database.
 This request is made using tRPC, which allows for efficient communication between the frontend and the backend. tRPC wraps around React Query, which provides useful features such as caching and automatic refetching.
 The request input is validated to ensure that it is in the correct format.
 The user's authorization is also checked to ensure that they are allowed to access the data they have requested.
