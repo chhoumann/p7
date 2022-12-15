@@ -54,7 +54,7 @@ The \textit{Submission} entity is in a many-to-one relationship with the \textit
 
 The remaining entities \textit{Account}, \textit{Session} and \textit{VerificationToken} are entities which are required by authentication services and are not developed by us.
 
-\section{Backend System}
+\section{Backend}
 The backend component has several responsibilities including routing, page rendering, authentication, role based data access and modification, as well as communication between other components. 
 The component enables the creation of accounts for the system by using an authentication provider.
 For this project, Google is used as the provider. 
@@ -65,7 +65,7 @@ Data fetching and mutation is facilitated on the Next backend through tRPC and P
 Once the backend receives a query or mutation, the given input is validated to ensure that it is of correct structure and type.
 If the query or mutation is formatted correctly, and the user has the correct authorization, the Prisma ORM transforms it to database queries, and maps the result to \javascript{} objects.
 The backend then sends a response to the user with the requested data.
-This system component is implemented using TypeScript and Next.js.
+This system component is implemented using TypeScript and Next.
 
 \section{Frontend} \label{sec:architecture-frontend}
 The frontend component is the user facing component of our platform.  It contains the user interface for the platform and is the main interface of the system.

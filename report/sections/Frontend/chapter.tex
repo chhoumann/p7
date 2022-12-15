@@ -1,6 +1,5 @@
-\chapter{Frontend} \label{chap:Frontend}\todo{rename this section}
-One of the primary goals of this application to give the lecturer a way to specify what constitutes a correct problem solution.
-As previously mentioned in the \textbf{Use Cases} section of chapter \ref{chap:Specification}, a common approach to this is the use of test cases.
+\chapter{Communication Between Layers} \label{chap:Frontend}
+One of the primary goals of this application is to give the lecturer a way to specify what constitutes a correct problem solution. In this chapter, we describe how actions perfomed on the user interface propagate events throughout the various components. 
 
 \section{Authentication and Roles}
 When a user initially loads the website, they will not be signed in, and will only have minimal privileges.
@@ -20,7 +19,7 @@ Figure \ref{fig:Home page} shows the landing page after the user has signed in. 
     \label{fig:Home page}
 \end{figure}
 
-\section{Syllabi, Problem sets and Exercises}
+\section{Syllabi, Problem Sets, and Exercises}
 On the website, each page that displays course data makes a request to a Next.js backend API endpoint to retrieve the data from the database.
 This request is made using tRPC, which allows for efficient communication between the frontend and the backend. tRPC wraps around React Query, which provides useful features such as caching and automatic refetching.
 The request input is validated to ensure that it is in the correct format.
@@ -55,7 +54,7 @@ This is important because, without this, users with slow internet connections mi
 Once the user interface for the page is rendered, we fetch the problem, test, and previous submissions for the user.
 This allows them to see the information they need in order to solve the exercise, and also view any previous submissions.
 The code editor on the page uses CodeMirror with extensions to support multiple programming languages.
-Currently, only Haskell is supported, but it is easily extensible to include other languages.
+Currently, only the Haskell language extension is used.
 We have also developed a custom extension to propagate state to the parent component, which allows us to retrieve the code from the editor and send it to the backend.
 In addition to allowing users to submit their code, we also fetch their previous submissions from the backend.
 This allows users to revisit their previous submissions and see the date they were submitted, as well as whether they solved the exercise.

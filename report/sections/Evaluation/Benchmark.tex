@@ -6,7 +6,8 @@ The goal with the stress tests and benchmarks is threefold:
 \item It helps us decide which configurations to use for the Test Runner system
 \item It helps us establish different implementations of the Test Runner component regress in terms of response times.
 \end{enumerate}
-To conduct the benchmarks, we used BenchmarkDotNet (see chapter \ref{chap:preliminaries}) and defined three components used solely for the benchmarks:
+As mentiond in chapter \ref{chap:preliminaries}, we used BenchmarkDotNet to conduct the benchmarks. 
+For the benchmarks, we defined three components:
 \begin{enumerate}
   \item A client component simulating possible Test Runner client behavior.
   \item A benchmark component responsible for orchestrating benchmarks for different Test Runner versions.
@@ -34,6 +35,7 @@ One file also contains a syntactical error.
 After selecting a representative set of exercises for stress tests and benchmarks a simple operational profile was created, and from this behavioral variables were established: an expected maximum number of clients and different polling times for these clients.
 To simulate different platform client behavior, classes representing these were implemented where each class corresponds to a user for a different version of the platform.
 These clients implement representations of the necessary behavioral variables, which are annotated using BenchmarkDotNet.
+
 During stress testing, the BenchmarkDotNet framework creates all possible combinations of the implemented behavioral variables.
 The underlying implementation of the client classes use an HTTP client.
 To evaluate stress test and benchmark results of the developed Test Runner component, we first establish a baseline to compare against.
@@ -46,7 +48,7 @@ We suspect that when the Test Runner experiences stress, the synchronous approac
 \subsubsection{Ensuring simultaneous client submissions}
 When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests.
-To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession (see \ref{lst:TaskBuilder}, line 38 --- 54).
+To ensure that all submissions to the component happens mostly simultaneously, a method creating a number of actions and invoking them as tasks in close succession. This is seen in code snippet \ref{lst:TaskBuilder} on lines \ref{line:task-list-start} to \ref{line:task-list-end}.
 The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop.
 
 \begin{lstlisting}[language=CSharp, escapechar=~, caption={C\# code showing the \texttt{BuildClientTaskList} method, which is used to build a number of actions which are executed simultaneously in a Task}, label={lst:TaskBuilder}]
@@ -67,10 +69,10 @@ public static class TaskBuilder
         clientActions.Add(() => action.Invoke(client));
     }
 
-    foreach (Action clientAction in clientActions)
+    foreach (Action clientAction in clientActions) ~\label{line:task-list-start}~
     {
-        tasks.Add(Task.Run(clientAction));
-    }
+        tasks.Add(Task.Run(clientAction)); 
+    } ~\label{line:task-list-end}~
 
     return tasks;
   }
