@@ -3,17 +3,27 @@ Based on our specification, we created a design for the application's user inter
 In the following sections, we describe wireframes each showing a view of a page on our web application. Furthermore, each section includes a description of which use cases and features each page satisfies.
 
 \section{Wireframe for Solving Exercises}
-The wireframe in figure \ref{fig:wfExercise} shows the page intended for solving exercises.
+The wireframe in figure \ref{fig:wfExercise} shows the page intended for solving exercises. The figures \ref{fig:wfExerciseInstructions} and \ref{fig:wfExerciseResult} show 
 % primary use cases
 % solve exercises
 \begin{figure}[H]
-	\frame{\includegraphics[scale=0.225]{WireframeSolveExercise.png}}
+	\frame{\includegraphics[scale=0.5]{WireframeSolveInstruction.jpg}}
 	\centering
-	\caption{Wireframe for solving an exercise}
-	\label{fig:wfExercise}
+	\caption{Wireframe for solving an exercise showing the instructions tab}
+	\label{fig:wfExerciseInstructions}
 \end{figure}
 
-For both images in figure \ref{fig:wfExercise}, a text input field can be seen to the left. This text input field is where the user can write code to solve an exercise. On the right side of the top image of figure \ref{fig:wfExercise}, a box can be seen containing two tabs. The currently selected tab of this image is the \textit{Instructions} tab, which is where the instructions for the current exercise is displayed. On the right side of the bottom image is a similar view, except that the \textit{Result} tab has now been selected. This tab shows the result of the submitted code and whether it passed the tests for the exercise. This design satisfies the requirements that an exercise should have a description, and that a user should be able to submit and verify their code an exercise submission, as stated in the use case \textbf{Solve exercises}
+\begin{figure}[H]
+	\frame{\includegraphics[scale=0.5]{WireframeSolveResult.jpg}}
+	\centering
+	\caption{Wireframe for solving an exercise showing the result tab}
+	\label{fig:wfExerciseResult}
+\end{figure}
+
+Figures \ref{fig:wfExerciseInstructions} and \ref{fig:wfExerciseResult} show a text input field to the left. This text input field is where the user can write code to solve an exercise. On the right side of figure \ref{fig:wfExerciseInstructions}, a box can be seen containing two tabs. 
+
+
+The currently selected tab of this image is the \textit{Instructions} tab, which is where the instructions for the current exercise is displayed. On the right side of the bottom image is a similar view, except that the \textit{Result} tab has now been selected. This tab shows the result of the submitted code and whether it passed the tests for the exercise. This design satisfies the requirements that an exercise should have a description, and that a user should be able to submit and verify their code an exercise submission, as stated in the use case \textbf{Solve exercises}
 
 \section{Wireframe for Browsing}
 Since the design for the page displayed in figure \ref{fig:wfExercise} does not satisfy the entirety of the \textbf{Solve exercises} use case, we have designed a separate page to browse exercises as well as sessions and syllabi. The page structure for all of these are similar, and therefore we only show an example of a page for browsing syllabi.
