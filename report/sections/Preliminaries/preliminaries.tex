@@ -44,34 +44,25 @@ Our reason for using Rust is twofold:
 
 Rust also features a rich ecosystem of packages known as \textit{crates} managed by its package manager Cargo\cite{Cargo}. Several crates were used for the development of the platform. These will be introduced in chapter \ref{chap:TestRunner}.
 
-\section{Docker}
-Docker can be used to create uniform code execution environments with the use of images\cite{Docker_Container}.
-An image is similar to an executable package that encapsulates everything required in order to run applications. 
-When executed, the image is turned into a container.
-Containers are isolated processes of bundles of code and required dependencies. 
-This allows developers to move around prepackaged applications, ensuring that the developed software runs the same regardless of what operating system it runs on\cite{Docker_Container}.
-We use Docker to set up local development environments for different platform components. This results in an easier development process and a simplified delivery process to production.
-
-
-\section{tRPC}
-tRPC is a library that enables developers to build type safe APIs without having to deal with schemas or code generation.
-It is structured in a way that allows for types to be shared between the client and server by only importing the types instead of the actual server code.
-This, in turn, allows developers to not expose the actual server code on the \frontend{}.
-Furthermore, tRPC is created in a way that takes full advantage of the power of a full-stack TypeScript project\cite{tRPC}.
-In tRPC, a query is like a read operation, while a mutation is similar to create, update, or delete operations.
-
-\section{Prisma}
-Prisma is a 2nd generation object-relational mapper (ORM) developed for use in Node.js and \typescript{} backends.
-Its goal is to increase developer productivity by enabling development using a type-safe API for database queries that return \javascript{} objects.
-This is achieved by providing type-safe database queries, allowing validation at compile time as well as introducing constraints to prevent common pitfalls\cite{Prisma_Why}.
-Prisma enables productivity improvements by allowing developers to define application models through a data modeling language, granting an easier way of configuring the application data sources and models\cite{Prisma_Doc}.
-
 \section{TypeScript}
 As the server-side use of \javascript{} keeps growing in popularity, its inability to provide strong type checking and compile time errors often hinders it from being the preferred language.
 \typescript{} was designed to address these problems without requiring JavaScript developers to learn a new language.
 It is a syntactic superset of \javascript{} with additional features.
 This means that all \javascript{} projects are syntactically valid \typescript{}. This, in turn, allows a development team to gradually adopt \typescript{} into their project and use \typescript{} and \javascript{} interchangeably\cite{TypeScript}.
-\typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling into \javascript{}.
+\typescript{} accomplishes this while still keeping the advantages of an interpreted language by compiling into \javascript{}. 
+
+\section{tRPC}
+tRPC is a library that enables TypeScript developers to build type safe APIs by sharing types between the frontend and backend code.
+This ensures that communication between frontend and backend is always type safe.
+Furthermore, it abstracts away the different requesting methods such as creating, updating, deleting and fetching. This is done by creating either a query or a mutation. A query represents fetching data and mutation represents creating or updating data.\cite{tRPC}
+These characteristics of tRPC allowed us to build type safe API routes and eliminates the work of managing type safety across distributed services.
+
+\section{Prisma}
+Prisma is an object-relational mapper (ORM) developed for use in Node.js and \typescript{} backends.
+Its goal is to increase developer productivity by providing a way to build type safe database queries. The results of executing these queries with Prisma return \javascript{} objects\cite{Prisma_Doc}.
+It also allows developers to define application models through a data modeling language, granting an easier way of configuring the application data sources and models\cite{Prisma_Why}.
+In this project Prisma is used to create and maintain database models, as well as querying the database. 
+
 
 \section{Next.js}
 Next.js (Next) is an open-source React framework created by Vercel that enables React web applications to use server-side rendering as well as generate static websites. The Next framework was created in order to counter the potential security issues of React, which relies on client-side rendering. Next provides a solution to this by enabling websites to be fully or partially server-side rendered\cite {Nextjs_Docks}.
@@ -88,13 +79,21 @@ As a rule, the Postgres development team tries to conform to the SQL standards w
 Today, Postgres features transactions which support Atomicity, Consistency, Isolation, and Durability (ACID) properties, as well as automatic update of views, foreign keys, and procedures.
 Furthermore, modern Postgres supports a wide variety of deployment options from single machine usage to data warehouses and web services\cite{Postgres_Docs}.
 
+\section{Docker}
+Docker can be used to create uniform code execution environments with the use of images\cite{Docker_Container}.
+An image is similar to an executable package that encapsulates everything required in order to run applications. 
+When executed, the image is turned into a container.
+Containers are isolated processes of bundles of code and required dependencies. 
+This allows developers to move around prepackaged applications, ensuring that the developed software runs the same regardless of what operating system it runs on\cite{Docker_Container}.
+We use Docker to set up local development environments for different platform components. This results in an easier development process and a simplified delivery process to production.
+
 \section{Usability Testing}
 To evaluate a user interface, it can be useful to test its usability. ISO 9421 defines usability as
 \begin{quote}
 	"The effectiveness, efficiency and satisfaction with which specified users achieve specified goals in particular environments."
 \end{quote}
 
-Where effectiveness regards how well the users accomplished their goal, efficiency regards the resources expended in relation to the completeness of the goals, and lastly, satisfaction regards the comfort of the system to the users.
+Effectiveness describes how well the users accomplished their goal, efficiency regards the resources expended in relation to the completeness of the goals, and lastly, satisfaction regards the comfort of the system to the users.
 To test usability, one may perform a usability test. This is a study of the interaction that users have with a product. The test is performed by first letting the users operate the system, and then conducting a structured interview. This is done to identify usability problems in a system, and results in a list of usability problems and knowledge about how easily a user is able to interact with the system.
 Before the test, the interviewers have to ensure that a test plan is ready.
 They also need to prepare tasks and questions for the test subjects, and ensure that the necessary equipment works.
@@ -133,15 +132,3 @@ If the system achieves a SUS score above 68, it means that the UI is above avera
 We use SUS in order to get an overall rating of our system.
 
 By performing a usability test utilizing structured interview and SUS, we get a concrete metric for scoring the system as well concrete feedback from the users.
-
-\section{BenchmarkDotnet}
-Availability is a quality measurement used to describe the probability of a system being available to a user when needed. Similarly, reliability is a measurement for determining the likelihood of correct system operation within a given time frame. \cite{reliabilityAvailability}
-Stress testing is an approach that can help identify unintended behavior of a system that is only reached when the system performs under heavy workloads.
-It can also be used to approximate when the system stops functioning.
-Usually, one performs stress testing by exposing the system under test to a number of computations that are beyond its expected capabilities until it either stops or produces results too slowly to be considered usable\cite{Sommerville10}.
-The expected capabilities are often described in an operational profile\cite{OperationalProfiles}.
-Such a profile can, in combination with stress testing, be used to ensure that a system is both reliable and available, even when pushed beyond its expected workload.
-
-BenchmarkDotnet\cite{Benchmarkdotnet} is a benchmarking framework allowing time measurements of operations performed in .NET runtimes.
-It allows parameterization of measured operations and provides ways to introduce warm-up operations and adjustments.
-We use this framework to create a stress test environment that simulates stressful client behavior and measures the response times for the system under test.
