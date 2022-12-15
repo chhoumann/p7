@@ -1,6 +1,6 @@
 \section{Queue System} \label{sec:queue-system}
 The idea with the queue system is that a specified number of concurrent threads in a thread pool continuously receive and process code submissions.
-Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into a hashmap where the UUID serves as a key to look up the result.
+Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into a hashmap where the UUID token serves as a key to look up the result.
 
 We have two endpoints that need to share data in order to access the aforementioned hashmap, and the Rust programming language does not allow global variables.
 Therefore, we opted to create a shared state data structure using the \texttt{layer} feature in the axum framework.
