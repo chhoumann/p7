@@ -51,10 +51,11 @@ The \textit{Syllabus} entity corresponds to an entire syllabus for a course. The
 To support a student in submitting solutions to exercises, we have created the entity \textit{Submission}. This entity contains the attributes \textbf{Id}, which is a unique identifier, \textbf{CreatedAt}, denoting when the submission was submitted for the first time, and \textbf{UpdatedAt}, which is the time the submission was last updated. It also contains the attributes \textbf{Code}, which contains the code submitted by the student, and \textbf{Success}, which denotes whether the submission passed the tests for the problem. Finally, it has the attribute \textbf{Output}, which is the standard output from the GHC interpreter.
 The \textit{Submission} entity has a many-to-one relationship with the \textit{User} entity, since each user can have many submissions. \textit{Submission} also has a many-to-one relationship with \textit{Problem}, as a problem can have multiple submissions.
 
-The remaining entities \textit{Account}, \textit{Session} and \textit{VerificationToken} are entities which are required by authentication services and are not developed by us.
+The remaining entities \textit{Account}, \textit{Session}, and \textit{VerificationToken} are entities required by authentication services and are not developed by us.
+They were included in the Next template we use to bootstrap the application.
 
 \section{Backend System}
-The backend component has several responsibilities including routing, page rendering, authentication, role based data access and modification, as well as communication between other components.
+The backend component has several responsibilities including routing, page rendering, authentication, role based data access, modification, as well as communication between other components.
 The component enables the creation of accounts for the system by using an authentication provider.
 For this project, Google is used as the provider.
 Once a user account is created, it is assigned the default \texttt{Student} role.
@@ -62,7 +63,7 @@ Depending on the account role, the user has different permissions.
 A lecturer can create and modify syllabi, problem sets, submissions, problems and tests, while students are only able to view these. Both roles can create submissions.
 Data fetching and mutation is facilitated on the Next backend through tRPC and Prisma. In the API routes, user permissions are authorized by getting the requesting user's information and validating it.
 Once the backend receives a query or mutation, the given input is validated to ensure that it is of correct structure and type.
-If the query or mutation is formatted correctly, and the user has the correct authorization, the Prisma ORM transforms it to database queries, and maps the result to \javascript{} objects.
+If the query or mutation is formatted correctly and the user has the required authorization, the Prisma ORM transforms it to database queries and maps the result to \javascript{} objects.
 The backend then sends a response to the user with the requested data.
 This system component is implemented using TypeScript and Next.js.
 
