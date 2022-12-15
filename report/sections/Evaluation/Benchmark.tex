@@ -162,15 +162,15 @@ Then, for each combination of parameters (number of requests, code submission, a
 This whole process is repeated five times to ensure outliers does not significantly affect the results.
 
 \subsection{Baseline}
-The synchronous baseline version uses only a single thread to handle all code submissions.
-Using this, we can estimate how large of an improvement the asynchronous version is over the synchronous baseline.
-
 \begin{figure}
   \centering
   \includegraphics[scale=0.80]{images/baseline.png}
   \caption{The average mean time per request for the baseline Test Runner, disregarding the code submission}
   \label{fig:baseline}
 \end{figure}
+The synchronous baseline version uses only a single thread to handle all code submissions.
+Using this, we can estimate how large of an improvement the asynchronous version is over the synchronous baseline.
+
 Figure \ref{fig:baseline} shows the average mean response time per number of requests for the baseline.
 We expect the response time to increase linearly with the number of requests as only one request is handled at a time.
 Figure \ref{fig:baseline} shows that this is indeed the case.
