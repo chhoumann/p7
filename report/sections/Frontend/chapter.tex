@@ -8,7 +8,7 @@ In order to access any of these features, the user has to sign in.
 By pressing the sign in button, the user is redirected to a sign in page that is specific to the authentication provider used.
 In our case, it is Google.
 After logging in with the authentication provider, the user is redirected back to the website.
-At this point, the user is now logged in and our database will be updated with the user's information, as well as a token to keep track of the user's session.
+At this point, the user is now logged in and the database will be updated with the user's information, as well as a token to keep track of the user's session.
 This token is used by NextAuth to create a session for the user, which will be used to authenticate the user for subsequent requests to the site.
 The session also has a role associated with it, which determines what actions the user is allowed to take on the site.
 Figure \ref{fig:Home page} shows the landing page after the user has signed in. As can be seen, the \texttt{Courses} and \texttt{Dashboard} buttons on the navigation bar is available.
