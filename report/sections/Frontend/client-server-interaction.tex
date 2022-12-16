@@ -1,8 +1,8 @@
-\section{Client-Server Interaction}
-When a lecturer creates a new exercise, a modal prompts to enter details about the exercise.
-These details include the name of the exercise, instructions for the student, an optional code template to help the student get started, as well as test code.
-This data is sent to the database where it is stored.
-When a student opens an exercise, the data is then fetched from the database.
+\section{Creating Exercises and Submitting Solutions}
+When a lecturer creates a new exercise, a modal prompts to enter data about the exercise.
+This includes the name of the exercise, instructions for the student, an optional code template to help the student get started, as well as test code.
+The data is then sent to the database where it is stored.
+When a student opens an exercise, it is fetched from the database.
 This is done by the client sending a request to the Next backend, which queries the database and returns both exercise and test data.
 
 \begin{figure}[H]
@@ -14,7 +14,7 @@ This is done by the client sending a request to the Next backend, which queries 
 
 In the interest of reducing the number of database queries, the result of this request is cached on the client.
 The client will eagerly request new data to stay up to date with instructions or test code updates.
-This short cache storage time is useful for when lecturers update test code during an exercise session.
+This is useful for when lecturers update test code during an exercise session.
 This way, all students have the latest test code shortly after the update while still minimizing unnecessary queries.
 
 When a user submits their exercise solution attempt, a mutation is sent to the Next backend.
