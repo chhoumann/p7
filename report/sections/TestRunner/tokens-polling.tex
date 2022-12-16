@@ -10,11 +10,11 @@ There are three possible responses from this endpoint:
     \item If the given token is present within the queue and has been processed, the response body contains a special "complete" message as well as the results of running the tests on the submitted code from the request.
 \end{enumerate}
 
-In summary, the Test Runner web server features two endpoints.
+In summary, the Test Runner web server features two HTTP endpoints.
 The first endpoint expects a POST request containing a code submission which it enqueues into a worker queue along.
 It then responds to the client with a unique token (UUID).
 This UUID is also used by the web server as a key to look up the given code submissions in the queue.
-The second endpoint expects a GET request with a UUID as a parameter that is then used to look up the result of processing the code submission with the matching UUID.
+The second endpoint expects a GET request with a UUID as a parameter used to look up the result of processing the code submission with the matching UUID.
 It then responds to the client with the result of processing that submission if it was found.
 
 With the connection timeout problem solved, we needed a way to limit the number of running GHC interpreter processes.

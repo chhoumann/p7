@@ -2,8 +2,8 @@
 The idea with the queue system is that a specified number of concurrent threads in a thread pool continuously receive and process code submissions.
 Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into a hashmap where the UUID token serves as a key to look up the result.
 
-We have two endpoints that need to share data in order to access the aforementioned hashmap, and the Rust programming language does not allow global variables.
-Therefore, we opted to create a shared state data structure using the \texttt{layer} feature in the axum framework.
+We have two endpoints that need to share data in order to access the aforementioned hashmap.
+Therefore, we created a shared state data structure using the \texttt{layer} feature in the axum framework.
 The \texttt{layer} feature is axum's default implementation of middleware for processing data across a group of endpoints.
 In our case, there are two key variables inside the shared state structure that both endpoints need access to:
 \begin{enumerate}
@@ -42,13 +42,13 @@ Using this stream, we can call \texttt{for\_each\_concurrent} from the \texttt{f
 The \texttt{futures} crate then manages the thread pool automatically, and we only have to specify the work that the threads need to do, which can be seen in lines \ref{line:concurrent-start} --- \ref{line:concurrent-end}.
 
 The \texttt{schedule\_test} function on line \ref{line:schedule-test} in code snippet \ref{lst:worker-thread} calls the Test Runner, which is responsible for running the GHC interpreter and returning the results of running the tests on the submitted code.
-Once the result is computed, the thread acquires the mutex lock to the hashmap or blocks until it can acquire the lock.
-It then inserts the result into the hashmap by using the UUID as the key.
-Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other threads may access the hashmap.
+Once the result is computed, the thread acquires the mutex lock to the job results hashmap or blocks until it can acquire the lock.
+It then inserts the result into the job results hashmap by using the UUID as the key.
+Once the \texttt{map} variable goes out of scope, the mutex is unlocked so other threads may access the job results hashmap.
 
 In summary, a specified number of concurrent threads in a thread pool continuously receive code submissions from the \texttt{ReceiverStream} channel.
-Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into the hashmap where the UUID serves as a key to look up the result.
+Each submission is then processed by one of these threads, and the result of the Test Runner is packaged into the job results hashmap where the UUID serves as a key to look up the result.
 
-While this approach solved the initial problem of only being able to process one code submission at a time, a new problem is that the hashmap continuously grows over time --- data is only ever added to the hashmap and never removed.
+While this approach solved the initial problem of only being able to process one code submission at a time, a new problem is that the job results hashmap continuously grows over time --- data is only ever added to the hashmap and never removed.
 Consequently, the memory use of the Test Runner would eventually exceed its capacity, resulting in a crash.
 In the following section, we introduce a sweeping system as a solution to this problem.
