@@ -18,7 +18,7 @@ For the benchmarks, we defined three components:
 \subsection{Orchestration and Test Runner parameterization}
 The benchmark and test components are managed in their own Docker containers, and are connected to a network enabling communication between them and the container hosting the Test Runner.
 Information necessary to establish the connection between Test Runner and other components are defined as environmental constants for the containers, and are passed into the relevant Dockerfiles describing the services.
-These constants are then shared among the necessary components' Dockerfile, which then use the information to establish a connection to the Test Runner.
+These constants are then shared among the components, which then use the information to establish a connection to the Test Runner.
 For instance, the environmental constants defining the network location of the Test Runner service is passed as arguments to the Dockerfiles for the tests and the benchmark, as these must both be able to contact the Test Runner service.
 These environmental constants also allow easy adjustment of the Test Runner without rebuilding the Docker container.
 These include settings such as the size of the queue system and the maximum number of threads the Test Runner can use to process code submissions.
@@ -46,7 +46,7 @@ However, it does not poll for the Test Runner result since this version does not
 We suspect that when the Test Runner experiences stress, the synchronous approach will experience a form of starvation where all responses will take a long time to complete due to the asynchronous processing of the request, as each request will have to compete for CPU usage with all other requests.
 
 \subsubsection{Ensuring simultaneous client submissions}
-When performing stress tests, one must ensure that the behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
+When performing stress tests, one must ensure that the clients' behavior stresses the system in a manner that is realistic but still at the limit of what is probable.
 In the case of the Test Runner component, this means exposing it to numerous simultaneous requests.
 To ensure that all submissions to the component happens mostly simultaneously, we created a method that creates a number of actions and invokes them in close succession, as shown in code snippet \ref{lst:TaskBuilder} on lines \ref{line:task-list-start} to \ref{line:task-list-end}.
 The method takes an inputted action and wraps it in several other actions, which are then invoked in a loop.
@@ -184,13 +184,12 @@ The synchronous baseline version uses only a single thread to handle all code su
 Using this, we can estimate how large of an improvement the asynchronous version is over the synchronous baseline.
 
 Figure \ref{fig:baseline} shows the average mean response time per number of requests for the baseline.
-We expect the response time to increase linearly with the number of requests as only one request is handled at a time.
-Figure \ref{fig:baseline} shows that this is indeed the case.
+The figure shows that the response time increases linearly as the number of requests increases.
 The results for the benchmark of the baseline were examined further to see whether some code submissions were slower to process than others (see \ref{chap:AdditionalPlots}).
-We found that only one code submission could be considered a direct outlier, namely the one containing syntactical errors.
-This submission was faster to process, likely due to the exercise solution never being executed.
-
-
+We found that only one code submission could be considered an outlier.
+The response times for this outlier were lower due to syntactical errors in the code submission.
+Because of the syntax errors in the code submission, the test is not executed.
+This caused a drop in the average response times.
 
 \begin{figure}[H]
   \centering
@@ -224,11 +223,11 @@ This submission was faster to process, likely due to the exercise solution never
 \end{figure}
 
 Figures \ref{fig:resultstart} --- \ref{fig:resultEnd} show the mean response time of benchmarking the asynchronous Test Runner with different queue sizes, number of threads, and with clients having varying polling times.
-For each plot, line T denotes the maximum number of threads allowed for testing client submissions, and C denotes the maximum capacity of the channels.
+For each plot, line $T$ denotes the maximum number of threads allowed for testing client submissions, and $C$ denotes the maximum capacity of the channels.
 All the benchmarks shown in figures \ref{fig:resultstart} --- \ref{fig:resultEnd} sweep the result queue every ten seconds, and remove Test Runner results older than 90 seconds.
 Regardless of client polling time, we see that the asynchronous Test Runner with a maximum channel capacity of ten and a maximum of five threads surpasses all other configurations in terms of speed.
 Compared to the baseline shown on figure \ref{fig:baseline}, it is vastly superior, requiring only a third of the time to respond to 100 simultaneous requests.
-Since the configuration of the asynchronous Test Runner with five threads and with a channel capacity of ten yields such good results, we examined similar configurations to find a closer estimate to optimal configuration for this particular computer.
+Since the configuration of the asynchronous Test Runner with $T = 5$ and $C = 10$ yields such good results, we examined similar configurations to find a closer estimate to optimal configuration for this particular computer.
 The benchmark results of these configurations can be seen on figure \ref{fig:improvedConfig}.
 We see that when the Test Runner is configured correctly, the system can respond to 100 code submissions in under seven seconds.
 
