@@ -48,15 +48,15 @@ Overall, our website supports create, read, update, and delete actions for lectu
 \end{figure}
 
 \section{Problem View and Code Editor}
-When a user visits a page on our website, we fetch the code template exercise from the backend in order to prevent flashing in the template after the page has loaded.
-This is important because, without this, users with slow internet connections might see the template being overwritten after they have already started writing in it. That is, if you don't disable the input field entirely until the page has finished loading data. Both these approaches could lead to confusion and frustration for the user, so we decided to fetch the template before the page is rendered.
+When a user visits an exercise page, we fetch the code template before rendering the web page to prevent flashing it in after the page has loaded.
+This is important because, without this, users with slow internet connections might see the template being overwritten after they have already started writing in it --- that is, if you don't disable the input field entirely until the page has finished loading data. Both these approaches could lead to confusion and frustration for the user, so we decided to fetch the template before the page is rendered.
 
-Once the user interface for the page is rendered, we fetch the problem, test, and previous submissions for the user.
-This allows them to see the information they need in order to solve the exercise, and also view any previous submissions.
+Once the user interface for the page is rendered on the client, we fetch the problem, test, and previous submissions for the user.
+This allows them to see the exercise definition and any previous submissions.
 The code editor on the page uses CodeMirror with extensions to support multiple programming languages.
 Currently, only the Haskell language extension is used.
-We have also developed a custom extension to propagate state to the parent component, which allows us to retrieve the code from the editor and send it to the backend.
-In addition to allowing users to submit their code, we also fetch their previous submissions from the backend.
+We have developed a custom extension to propagate state to the parent component, which allows us to retrieve the code from the editor and send it to the backend.
+In addition to allowing users to submit their solution, we also fetch their previous submissions from the backend.
 This allows users to revisit their previous submissions and see the date they were submitted, as well as whether they solved the exercise.
 This can be useful for users who want to track their progress or review their previous work.
 
