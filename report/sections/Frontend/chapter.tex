@@ -1,5 +1,5 @@
 \chapter{Communication Between Layers} \label{chap:Frontend}
-One of the primary goals of this application is to give the lecturer a way to specify what constitutes a correct problem solution. In this chapter, we describe how actions perfomed on the user interface propagate events throughout the various components.
+One of the primary goals of this application is to give the lecturer a way to specify what constitutes a correct problem solution. In this chapter, we describe how actions performed on the user interface propagate events throughout the various components.
 
 \section{Authentication and Roles}
 When a user initially loads the website, they will not be signed in, and will only have minimal privileges.
@@ -21,10 +21,10 @@ Figure \ref{fig:Home page} shows the landing page after the user has signed in. 
 
 \section{Syllabi, Problem Sets, and Exercises}
 On the website, each page that displays course data makes a request to a Next backend API endpoint to retrieve the data from the database.
-This request is made using tRPC, which allows for efficient communication between the frontend and the backend. tRPC wraps around React Query, which provides useful features such as caching and automatic refetching.
+This request is made using tRPC, which allows for efficient communication between the frontend component and the backend component. tRPC wraps around React Query, which provides useful features such as caching and automatic refetching.
 The request input is validated to ensure that it is in the correct format.
 The user's authorization is also checked to ensure that they are allowed to access the data they have requested.
-Once the input has been validated, the database is queried using Prisma to retrieve the requested data.
+Once the input has been validated, the database is queried by the backend using Prisma to retrieve the requested data.
 
 The actions that a user is allowed to take on a page depend on their role. For example, a lecturer may have the ability to create, edit, and delete syllabi, problem sets, and exercises, whereas a student may only be able to view the information on the page.
 Figure \ref{fig:problemsets_teacher_view} and \ref{fig:exercise_overview} shows exercises as seen from a lecturer's and a students perspective respectively.
@@ -59,11 +59,5 @@ We have also developed a custom extension to propagate state to the parent compo
 In addition to allowing users to submit their code, we also fetch their previous submissions from the backend.
 This allows users to revisit their previous submissions and see the date they were submitted, as well as whether they solved the exercise.
 This can be useful for users who want to track their progress or review their previous work.
-
-% - Session extension så vi kan handle auth igennem session. Tilføjet rolle til session så vi kan håndtere permissions på forskellige sider.
-% - Sidernes indhold muteres baseret på brugerens rolle. Håndtere også hvis du ikke er logget ind.
-% - TRPC til at hendte data fra databasen. Sker via API kald, således at eksempelvis SQL kald ikke sker direkte fra frontenden.
-% - Solve problem siden. Henter templates når du loader siden. Henter template før UI bliver renderet. Når ui render henter vi problem, test og tidligere submissions.
-% - Code editor. Codemirror med custom extension.
 
 \input{sections/Frontend/client-server-interaction.tex}
