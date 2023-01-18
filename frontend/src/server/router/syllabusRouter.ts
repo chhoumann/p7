@@ -2,15 +2,10 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import * as trpc from "@trpc/server";
 import { prisma } from "../db/client";
-import { Prisma, Syllabus } from "@prisma/client";
+import { Syllabus } from "@prisma/client";
 
 const postInput = z.object({
     name: z.string(),
-});
-
-const postOutput = z.object({
-    success: z.boolean(),
-    result: z.string(),
 });
 
 export const syllabusRouter = createRouter()
