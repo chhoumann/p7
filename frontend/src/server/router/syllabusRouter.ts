@@ -47,7 +47,16 @@ export const syllabusRouter = createRouter()
     })
     .mutation("postSyllabus", {
         input: postInput,
-        async resolve({ input: { name } }) {
+        async resolve({ input: { name }, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user || session.user.role !== 'teacher') {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized"
+                })
+            }
+
             try {
                 await prisma.syllabus.create({
                     data: {
@@ -70,7 +79,16 @@ export const syllabusRouter = createRouter()
             old: z.string(),
             new: z.string(),
         }),
-        async resolve({ input }) {
+        async resolve({ input, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user || session.user.role !== 'teacher') {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized"
+                })
+            }
+
             try {
                 await prisma.syllabus.update({
                     where: {
@@ -93,7 +111,16 @@ export const syllabusRouter = createRouter()
     })
     .mutation("deleteSyllabus", {
         input: z.string(),
-        async resolve({ input: name }) {
+        async resolve({ input: name, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user || session.user.role !== 'teacher') {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized"
+                })
+            }
+
             try {
                 await prisma.syllabus.delete({
                     where: {

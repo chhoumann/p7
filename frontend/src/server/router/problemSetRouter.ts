@@ -49,7 +49,16 @@ export const problemSetsRouter = createRouter()
     })
     .mutation("postProblemSet", {
         input: zodObjProblemSet,
-        async resolve({ input }) {
+        async resolve({ input, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user || session.user.role !== 'teacher') {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized"
+                })
+            }
+
             try {
                 await prisma.problemSet.create({ data: input });
                 return {
@@ -67,7 +76,16 @@ export const problemSetsRouter = createRouter()
     })
     .mutation("deleteProblemSet", {
         input: z.string(),
-        async resolve({ input: id }) {
+        async resolve({ input: id, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user || session.user.role !== 'teacher') {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized"
+                })
+            }
+
             try {
                 await prisma.problemSet.delete({
                     where: {
@@ -91,7 +109,16 @@ export const problemSetsRouter = createRouter()
             topic: z.string(),
             date: z.string(),
         }),
-        async resolve({ input }) {
+        async resolve({ input, ctx }) {
+            const { session } = ctx;
+
+            if (!session || !session.user || session.user.role !== 'teacher') {
+                throw new trpc.TRPCError({
+                    code: "UNAUTHORIZED",
+                    message: "Unauthorized"
+                })
+            }
+            
             try {
                 await prisma.problemSet.update({
                     where: {
