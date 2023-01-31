@@ -1,4 +1,7 @@
 # P7
+This project aimed to make a unified platform for students to solve programming exercises in Haskell.
+Users would register for an account and then work on teacher-defined exercises. The exercises would be tested for successful completion automatically and the user would be able to see their progress.
+
 
 ## Backend setup
 _The following commands you are in the `backend/webserver` folder._
